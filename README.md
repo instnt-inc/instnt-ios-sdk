@@ -48,6 +48,9 @@ Note that a Workflow ID is required in order to properly execute this function. 
   }
 ```
 
+Here `isSandBox` is the flags which determines to work with the sandbox or production backend server.
+If `isSandBox` is true, sandbox backend server is used, Unless production backend server is used. 
+
 3. Collect data from the user. Alerts will be shown if the user misses a field or enters incorrectly formatted data.
 
 4. Implement `SwiftyInstntDelegate` Protocol

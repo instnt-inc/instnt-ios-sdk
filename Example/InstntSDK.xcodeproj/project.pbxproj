@@ -30,7 +30,7 @@
 		7F0172794677FB2689144642 /* Pods-InstntSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstntSDK_Tests.debug.xcconfig"; path = "Target Support Files/Pods-InstntSDK_Tests/Pods-InstntSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		8E716A623E40BACDB4DE26FC /* Pods_InstntSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InstntSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E27282360E95AB68108FD2BB /* Pods-InstntSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstntSDK_Example.release.xcconfig"; path = "Target Support Files/Pods-InstntSDK_Example/Pods-InstntSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
-		FA178326508F47786B0746FB /* InstntSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = InstntSDK.podspec; path = ../InstntSDK.podspec; sourceTree = "<group>"; };
+		FA178326508F47786B0746FB /* InstntSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = InstntSDK.podspec; path = ../InstntSDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

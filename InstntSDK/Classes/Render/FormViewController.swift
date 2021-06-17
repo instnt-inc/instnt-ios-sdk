@@ -209,7 +209,7 @@ class FormViewController: UIViewController {
         formData["client_referer_host"] = URL(string: formCodes.serviceURL)?.host ?? ""
         
         SVProgressHUD.show()
-        APIClient.shared.submitForm(to: formCodes.submitURL, formData: formData) { [weak self] (response, message) in
+        APIClient.shared.submitForm(to: formCodes.submitURL, formData: formData) { [weak self] (response, _, message) in
             SVProgressHUD.dismiss()
             
             if let response = response {

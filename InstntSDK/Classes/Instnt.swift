@@ -20,6 +20,8 @@ public class Instnt: NSObject {
     public static let shared = Instnt()
     
     private (set) var formId: String = ""
+    private (set) var formCodes: FormCodes? = nil
+    
     private var isSandbox: Bool {
         return APIClient.shared.isSandbox
     }
@@ -33,6 +35,7 @@ public class Instnt: NSObject {
         APIClient.shared.isSandbox = false
     }
     
+    // MARK: - Public Function
     public func setup(with formId: String, isSandBox: Bool = false) {
         self.formId = formId
         APIClient.shared.isSandbox = isSandBox
@@ -52,7 +55,7 @@ public class Instnt: NSObject {
             return
         }
         
-        APIClient.shared.getFormCodes(with: formId) { [weak self] (formCodes, message) in
+        APIClient.shared.getFormCodes(with: formId) { [weak self] (formCodes, _, message) in
             if let formCodes = formCodes {
                 let formViewController = FormViewController()
                 let navigationViewController = UINavigationController(rootViewController: formViewController)
@@ -64,6 +67,42 @@ public class Instnt: NSObject {
             } else {
                 completion(false, message)
             }
+        }
+    }
+    
+    // MARK: - Custom Usage
+    public func getFormCodes(_ completion: @escaping (([String: Any]?) -> Void)) {
+        APIClient.shared.getFormCodes(with: formId) { [weak self] (fromCodes, responseJSON, _) in
+            self?.formCodes = fromCodes
+            
+            completion(responseJSON)
+        }
+    }
+    
+    public func submitFormData(_ data: [String: Any], completion: @escaping (([String: Any]?) -> Void)) {
+        guard let formCodes = formCodes else {
+            if Thread.isMainThread {
+                completion(nil)
+            } else {
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+            }
+            return
+        }
+        
+        var formData: [String: Any] = data
+        formData["form_key"] = formCodes.id
+        formData["fingerprint"] = [
+            "requestId": formCodes.fingerprint,
+            "visitorId": formCodes.fingerprint,
+            "visitorFound": true
+        ]
+        formData["client_referer_url"] = formCodes.serviceURL
+        formData["client_referer_host"] = URL(string: formCodes.serviceURL)?.host ?? ""
+        
+        APIClient.shared.submitForm(to: formCodes.submitURL, formData: formData) { (_, responseJSON, _) in
+            completion(responseJSON)
         }
     }
 }

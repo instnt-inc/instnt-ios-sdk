@@ -25,46 +25,46 @@ class APIClient: NSObject {
     }
     
     // MARK: - Get FormCodes
-    func getFormCodes(with key: String, completion: @escaping ((FormCodes?, String?) -> Void)) {
+    func getFormCodes(with key: String, completion: @escaping ((FormCodes?, [String: Any]?, String?) -> Void)) {
         let endpoint = "\(baseEndpoint)/getformcodes/\(key)?format=json"
         
         AF.request(endpoint, method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
             switch response.result {
             case .success(let data):
                 guard let responseJSON = data as? [String: Any] else {
-                    completion(nil, nil)
+                    completion(nil, nil, "Unknown Response")
                     return
                 }
                 
                 let messsage = responseJSON["errorMessage"] as? String
                 let formCodes = FormCodes(JSON: responseJSON)
                 
-                completion(formCodes, messsage)
+                completion(formCodes, responseJSON, messsage)
             case .failure(let error):
                 print("getFormCodes Error: \(error.localizedDescription)")
-                completion(nil, nil)
+                completion(nil, nil, error.localizedDescription)
             }
         }
     }
     
     // MARK: - Submit
-    func submitForm(to endpoint: String, formData: [String: Any], completion: @escaping ((FormSubmitResponse?, String?) -> Void)) {
+    func submitForm(to endpoint: String, formData: [String: Any], completion: @escaping ((FormSubmitResponse?, [String: Any]?, String?) -> Void)) {
         var paramters: [String: Any] = formData
-        paramters["device_attributes"] = getDeviceAttributes()
+//        paramters["device_attributes"] = getDeviceAttributes()
         
         AF.request(endpoint, method: .post, parameters: paramters, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
             switch response.result {
             case .success(let data):
                 guard let responseJSON = data as? [String: Any] else {
-                    completion(nil, "Unknown Response")
+                    completion(nil, nil, "Unknown Response")
                     return
                 }
                 let message = responseJSON["errorMessage"] as? String
                 let response = FormSubmitResponse(JSON: responseJSON)
                 
-                completion(response, message)
+                completion(response, responseJSON, message)
             case .failure(let error):
-                completion(nil, error.localizedDescription)
+                completion(nil, nil, error.localizedDescription)
             }
         }
     }

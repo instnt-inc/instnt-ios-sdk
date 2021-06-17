@@ -84,3 +84,52 @@ When a user taps the `Submit` button on the Signup page, all data from the user 
 `instntDidSubmit` is called when the data is submitted successfully.
   - `decision`: Form submission result. One of the following three values is returned: `ACCPET`, `REJECT` and `REVIEW`
   - `jwt`: Instnt JWT token
+
+
+## Custom Usage
+
+InstntSDK provides the following two functions for submitting custom forms to the Instnt API.
+
+```swift
+func getFormCodes(_ completion: @escaping (([String: Any]?) -> Void))
+func submitFormData(_ data: [String: Any], completion: @escaping (([String: Any]?) -> Void))
+```
+
+1. Call `getFormCodes` function first to prepare the form submission.
+```swift
+  import InstntSDK
+  
+  class ViewController: UIViewController {
+      func getFormCodes() {
+        let formId = "v879876100000"
+        Instnt.shared.setup(with: formId, isSandBox: true)
+       
+        SVProgressHUD.show()
+        Instnt.shared.getFormCodes() {(responseJSON) in
+            SVProgressHUD.dismiss()
+            
+            print("respose=\(responseJSON)")
+        }
+      }
+  }
+```
+If the request fails, `responseJSON` will be nil. If success, the response will contains form code.
+
+2. Call `submitFormData` function with user data.
+```swift
+  class ViewController: UIViewController {
+      //...
+      func submitForm() {
+        let formData: [String: Any] = ["field 1": "value 1", "field 2": "value 2"] // define custom data here
+        SVProgressHUD.show()
+        Instnt.shared.submitFormData() {(responseJSON) in
+            SVProgressHUD.dismiss()
+            
+            print("respose=\(responseJSON)")
+        }
+      }
+  }
+```
+
+ `responseJSON` will contain the form submission result.
+

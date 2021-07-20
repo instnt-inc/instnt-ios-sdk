@@ -10,7 +10,7 @@ import SVProgressHUD
 import SnapKit
 import InstntSDK
 
-class ViewController: UIViewController {
+class DefaultFormViewController: UIViewController {
 
     @IBOutlet weak var keyField: UITextField!
     @IBOutlet weak var sandboxSwitch: UISwitch!
@@ -55,7 +55,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UITextFieldDelegate {
+extension DefaultFormViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
@@ -63,7 +63,7 @@ extension ViewController: UITextFieldDelegate {
     }
 }
 
-extension ViewController: InstntDelegate {
+extension DefaultFormViewController: InstntDelegate {
     func instntDidCancel(_ sender: Instnt) {
         jwtTextView.text = "No JWT"
         

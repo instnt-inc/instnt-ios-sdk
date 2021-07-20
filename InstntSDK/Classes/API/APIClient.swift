@@ -49,9 +49,8 @@ class APIClient: NSObject {
     
     // MARK: - Submit
     func submitForm(to endpoint: String, formData: [String: Any], completion: @escaping ((FormSubmitResponse?, [String: Any]?, String?) -> Void)) {
-        var paramters: [String: Any] = formData
-//        paramters["device_attributes"] = getDeviceAttributes()
-        
+        let paramters: [String: Any] = formData
+       
         AF.request(endpoint, method: .post, parameters: paramters, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
             switch response.result {
             case .success(let data):

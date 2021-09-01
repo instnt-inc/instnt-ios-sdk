@@ -1,6 +1,6 @@
 # InstntSDK
 
-This documentation covers the basics of Instnt SDK. For a detailed overview of Instnt's functionality, visit the [Instnt documentation library](https://support.instnt.org/hc/en-us/articles/360055345112-Integration-Overview)
+This documentation covers the basics of the Instnt iOS SDK. For a detailed overview of Instnt's functionality, visit the [Instnt documentation library](https://support.instnt.org/hc/en-us/articles/360055345112-Integration-Overview)
 
 ## Requirements
 
@@ -29,15 +29,14 @@ Note that a Workflow ID is required in order to properly execute this function. 
 
 1. Create a form in the Instnt dashboard and get the Workflow ID.
 
-2. Install InstntSDK through Cocoapods.
+2. Install InstntSDK through [CocoaPods](https://cocoapods.org) by adding the following line to your Podfile:
 
-InstntSDK is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
 ```ruby
   pod 'InstntSDK'
 ```
 
-3. Implement the following code to present the form associated with the Workflow ID
+3. Implement the following code to present the form associated with the Workflow ID:
+
 ```swift
   import InstntSDK
   
@@ -59,12 +58,12 @@ it, simply add the following line to your Podfile:
   }
 ```
 
-Here `isSandBox` is the flags which determines to work with the sandbox or production backend server.
-If `isSandBox` is true, sandbox backend server is used, Unless production backend server is used. 
+`isSandBox` contains the flags that determine whether to work with either the sandbox or the production server.
+If `isSandBox` is true, the sandbox server is used, otherwise the implementation points to the production server by default. 
 
-3. Collect data from the user. Alerts will be shown if the user misses a field or enters incorrectly formatted data.
+3. Collect data from the user. Alerts are shown if the user misses a field or enters incorrectly formatted data.
 
-4. Implement `InstntDelegate` Protocol
+4. Implement the `InstntDelegate` Protocol:
 
 ```swift
   extension ViewController: InstntDelegate {
@@ -78,7 +77,7 @@ If `isSandBox` is true, sandbox backend server is used, Unless production backen
   }
 ```
 
-When a user taps the `Submit` button on the Signup page, all data from the user is submitted. You can retrieve the submission result via `InstntDelegate` functions
+When a user taps the `Submit` button on the Signup page, all data from the user is submitted. You can retrieve the submission result via the `InstntDelegate` functions below:
 
 `instntDidCancel` is called when the user taps the Cancel button.
 `instntDidSubmit` is called when the data is submitted successfully.
@@ -88,14 +87,14 @@ When a user taps the `Submit` button on the Signup page, all data from the user 
 
 ## Custom Usage
 
-InstntSDK provides the following two functions for submitting custom forms to the Instnt API.
+InstntSDK provides the following two functions for submitting custom forms to Instnt's API.
 
 ```swift
 func getFormCodes(_ completion: @escaping (([String: Any]?) -> Void))
 func submitFormData(_ data: [String: Any], completion: @escaping (([String: Any]?) -> Void))
 ```
 
-1. Call `getFormCodes` function first to prepare the form submission.
+1. Call the `getFormCodes` function first to prepare form submission.
 ```swift
   import InstntSDK
   
@@ -113,7 +112,7 @@ func submitFormData(_ data: [String: Any], completion: @escaping (([String: Any]
       }
   }
 ```
-If the request fails, `responseJSON` will be nil. If success, the response will contains form code.
+If the request fails, `responseJSON` will be nil. If the request succeeeds, the response contains a form code.
 
 2. Call `submitFormData` function with user data.
 ```swift

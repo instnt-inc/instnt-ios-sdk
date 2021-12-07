@@ -12,7 +12,7 @@ import DeviceKit
 class APIClient: NSObject {
     static let shared = APIClient()
     
-    private let sandboxBaseEndpoint         = "https://sandbox-api.instnt.org/public"
+    private let sandboxBaseEndpoint         = "https://dev-api.instnt.org/public"
     private let productionBaseEndpoint      = "https://api.instnt.org/public"
     private var baseEndpoint: String {
         return isSandbox ? sandboxBaseEndpoint : productionBaseEndpoint

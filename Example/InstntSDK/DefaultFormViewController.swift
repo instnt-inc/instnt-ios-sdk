@@ -19,7 +19,7 @@ class DefaultFormViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        keyField.text = "v879876100000"
+        keyField.text = "v163875646772327"
         jwtTextView.text = "No JWT"
     }
     

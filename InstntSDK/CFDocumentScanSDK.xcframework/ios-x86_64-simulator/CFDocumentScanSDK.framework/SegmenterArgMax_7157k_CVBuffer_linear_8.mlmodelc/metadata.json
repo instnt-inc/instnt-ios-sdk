@@ -1,0 +1,69 @@
+[
+  {
+    "metadataOutputVersion" : "3.0",
+    "shortDescription" : "8-bit per quantized weight, using linear.",
+    "outputSchema" : [
+      {
+        "height" : "385",
+        "colorspace" : "Grayscale",
+        "isOptional" : "0",
+        "width" : "385",
+        "isColor" : "0",
+        "formattedType" : "Image (Grayscale 385 × 385)",
+        "hasSizeFlexibility" : "0",
+        "type" : "Image",
+        "shortDescription" : "Predicted Image",
+        "name" : "SemanticPredictions__0"
+      }
+    ],
+    "storagePrecision" : "Int8",
+    "modelParameters" : [
+
+    ],
+    "author" : "Gursimar Singh",
+    "specificationVersion" : 3,
+    "computePrecision" : "Float16",
+    "isUpdatable" : "0",
+    "availability" : {
+      "macOS" : "10.14",
+      "tvOS" : "12.0",
+      "watchOS" : "5.0",
+      "iOS" : "12.0",
+      "macCatalyst" : "12.0"
+    },
+    "modelType" : {
+      "name" : "MLModelType_neuralNetwork"
+    },
+    "inputSchema" : [
+      {
+        "height" : "385",
+        "colorspace" : "RGB",
+        "isOptional" : "0",
+        "width" : "385",
+        "isColor" : "1",
+        "formattedType" : "Image (Color 385 × 385)",
+        "hasSizeFlexibility" : "0",
+        "type" : "Image",
+        "shortDescription" : "",
+        "name" : "ImageTensor__0"
+      }
+    ],
+    "userDefinedMetadata" : {
+      "coremltoolsVersion" : "3.1"
+    },
+    "generatedClassName" : "SegmenterArgMax_7157k_CVBuffer_linear_8",
+    "neuralNetworkLayerTypeHistogram" : {
+      "Concat" : 2,
+      "ReduceArgmax" : 1,
+      "ActivationLinear" : 68,
+      "ActivationReLU" : 42,
+      "Multiply" : 2,
+      "ResizeBilinear" : 5,
+      "Add" : 11,
+      "PoolingAverage" : 1,
+      "UnaryThreshold" : 34,
+      "Convolution" : 60
+    },
+    "method" : "predict"
+  }
+]

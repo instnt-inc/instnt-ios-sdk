@@ -1,0 +1,1114 @@
+{
+  "layer_shapes" : {
+    "image_pooling\/Relu:0" : {
+      "k" : 256,
+      "w" : 1,
+      "n" : 1,
+      "h" : 1
+    },
+    "relu_MobilenetV2\/expanded_conv_14\/expand\/Relu6:0" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_1\/expand\/Relu6:0" : {
+      "k" : 96,
+      "w" : 193,
+      "n" : 1,
+      "h" : 193
+    },
+    "MobilenetV2\/expanded_conv_11\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 96,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_14\/depthwise\/Relu6:0" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "MobilenetV2\/expanded_conv_6\/expand\/Relu6:0" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "relu_MobilenetV2\/expanded_conv_12\/expand\/Relu6:0_clip" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "decoder\/feature_projection0\/Relu:0" : {
+      "k" : 48,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_7\/expand\/Relu6:0_clip" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_11\/depthwise\/Relu6:0" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_12\/expand\/Relu6:0_neg" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "ResizeBilinear_2:0" : {
+      "k" : 2,
+      "w" : 385,
+      "n" : 1,
+      "h" : 385
+    },
+    "MobilenetV2\/expanded_conv_3\/expand\/Relu6:0" : {
+      "k" : 144,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_13\/depthwise\/Relu6:0_neg" : {
+      "k" : 576,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_9\/depthwise\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv\/depthwise\/Relu6:0_clip" : {
+      "k" : 32,
+      "w" : 193,
+      "n" : 1,
+      "h" : 193
+    },
+    "relu_MobilenetV2\/expanded_conv_11\/depthwise\/Relu6:0_clip" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_9\/depthwise\/Relu6:0_clip" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/Conv\/Relu6:0" : {
+      "k" : 32,
+      "w" : 193,
+      "n" : 1,
+      "h" : 193
+    },
+    "relu_MobilenetV2\/expanded_conv_2\/expand\/Relu6:0" : {
+      "k" : 144,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_16\/depthwise\/Relu6:0_clip" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_8\/depthwise\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_7\/expand\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_4\/expand\/Relu6:0_clip" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "relu_MobilenetV2\/expanded_conv_3\/depthwise\/Relu6:0_clip" : {
+      "k" : 144,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "MobilenetV2\/expanded_conv\/depthwise\/Relu6:0" : {
+      "k" : 32,
+      "w" : 193,
+      "n" : 1,
+      "h" : 193
+    },
+    "relu_MobilenetV2\/expanded_conv_13\/expand\/Relu6:0" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_13\/expand\/Relu6:0" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_3\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 32,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "relu_MobilenetV2\/expanded_conv_2\/depthwise\/Relu6:0_clip" : {
+      "k" : 144,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "MobilenetV2\/expanded_conv_11\/expand\/Relu6:0" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_16\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 320,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "MobilenetV2\/expanded_conv_2\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 24,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "MobilenetV2\/expanded_conv_4\/expand\/Relu6:0" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "decoder\/ResizeBilinear:0" : {
+      "k" : 256,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "decoder\/decoder_conv1_pointwise\/Relu:0" : {
+      "k" : 256,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_6\/expand\/Relu6:0" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "relu_MobilenetV2\/expanded_conv_1\/expand\/Relu6:0_clip" : {
+      "k" : 96,
+      "w" : 193,
+      "n" : 1,
+      "h" : 193
+    },
+    "relu_MobilenetV2\/expanded_conv_11\/expand\/Relu6:0_neg" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_16\/expand\/Relu6:0_clip" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_8\/expand\/Relu6:0_clip" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_3\/expand\/Relu6:0" : {
+      "k" : 144,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "MobilenetV2\/expanded_conv_8\/expand\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_9\/depthwise\/Relu6:0_neg" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_11\/expand\/Relu6:0_clip" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_7\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 64,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_6\/depthwise\/Relu6:0_neg" : {
+      "k" : 192,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_16\/depthwise\/Relu6:0_neg" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "concat:0" : {
+      "k" : 512,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_8\/expand\/Relu6:0_neg" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "decoder\/decoder_conv0_depthwise\/Relu:0" : {
+      "k" : 304,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/Conv\/Relu6:0_clip" : {
+      "k" : 32,
+      "w" : 193,
+      "n" : 1,
+      "h" : 193
+    },
+    "decoder\/concat:0" : {
+      "k" : 304,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "MobilenetV2\/expanded_conv_15\/depthwise\/Relu6:0" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_5\/expand\/Relu6:0_clip" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "MobilenetV2\/expanded_conv_15\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 160,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_3\/depthwise\/Relu6:0_neg" : {
+      "k" : 144,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "relu_MobilenetV2\/expanded_conv_7\/expand\/Relu6:0_neg" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_7\/expand\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_12\/expand\/Relu6:0" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_9\/expand\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "ImageTensor__0" : {
+      "k" : 3,
+      "w" : 385,
+      "n" : 1,
+      "h" : 385
+    },
+    "MobilenetV2\/expanded_conv_13\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 160,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "MobilenetV2\/expanded_conv_1\/depthwise\/Relu6:0" : {
+      "k" : 96,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_4\/expand\/Relu6:0" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "MobilenetV2\/expanded_conv_13\/depthwise\/Relu6:0" : {
+      "k" : 576,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "MobilenetV2\/expanded_conv_10\/expand\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_10\/depthwise\/Relu6:0_clip" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_6\/expand\/Relu6:0_neg" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "relu_MobilenetV2\/expanded_conv_10\/depthwise\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_10\/expand\/Relu6:0_neg" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "decoder\/ResizeBilinear_1:0" : {
+      "k" : 48,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_15\/depthwise\/Relu6:0_clip" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "MobilenetV2\/expanded_conv_10\/depthwise\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "mul:0" : {
+      "k" : 3,
+      "w" : 385,
+      "n" : 1,
+      "h" : 385
+    },
+    "relu_MobilenetV2\/expanded_conv_2\/expand\/Relu6:0_clip" : {
+      "k" : 144,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "MobilenetV2\/expanded_conv_2\/depthwise\/Relu6:0" : {
+      "k" : 144,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_16\/expand\/Relu6:0_neg" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_5\/expand\/Relu6:0_neg" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "relu_MobilenetV2\/expanded_conv_2\/depthwise\/Relu6:0_neg" : {
+      "k" : 144,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_15\/expand\/Relu6:0_clip" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_6\/depthwise\/Relu6:0_clip" : {
+      "k" : 192,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_8\/expand\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_10\/expand\/Relu6:0_clip" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_3\/depthwise\/Relu6:0" : {
+      "k" : 144,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "relu_MobilenetV2\/expanded_conv_4\/expand\/Relu6:0_neg" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "MobilenetV2\/expanded_conv\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 16,
+      "w" : 193,
+      "n" : 1,
+      "h" : 193
+    },
+    "MobilenetV2\/expanded_conv_9\/add:0" : {
+      "k" : 64,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_14\/add:0" : {
+      "k" : 160,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_5\/expand\/Relu6:0" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "AvgPool2D\/AvgPool:0" : {
+      "k" : 320,
+      "w" : 1,
+      "n" : 1,
+      "h" : 1
+    },
+    "relu_MobilenetV2\/expanded_conv_5\/depthwise\/Relu6:0_clip" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "relu_MobilenetV2\/expanded_conv_14\/depthwise\/Relu6:0_neg" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "MobilenetV2\/expanded_conv_12\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 96,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_3\/expand\/Relu6:0_neg" : {
+      "k" : 144,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_11\/expand\/Relu6:0" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_4\/depthwise\/Relu6:0_clip" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "MobilenetV2\/expanded_conv_8\/add:0" : {
+      "k" : 64,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_4\/depthwise\/Relu6:0" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "MobilenetV2\/expanded_conv_10\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 96,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/Conv\/Relu6:0" : {
+      "k" : 32,
+      "w" : 193,
+      "n" : 1,
+      "h" : 193
+    },
+    "relu_MobilenetV2\/expanded_conv_10\/depthwise\/Relu6:0_neg" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_7\/add:0" : {
+      "k" : 64,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_2\/expand\/Relu6:0_neg" : {
+      "k" : 144,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_7\/depthwise\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_4\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 32,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "MobilenetV2\/expanded_conv_5\/depthwise\/Relu6:0" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "relu_MobilenetV2\/expanded_conv_13\/depthwise\/Relu6:0_clip" : {
+      "k" : 576,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_9\/expand\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_15\/expand\/Relu6:0_neg" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_6\/depthwise\/Relu6:0" : {
+      "k" : 192,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_1\/expand\/Relu6:0_neg" : {
+      "k" : 96,
+      "w" : 193,
+      "n" : 1,
+      "h" : 193
+    },
+    "MobilenetV2\/expanded_conv_16\/expand\/Relu6:0" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "MobilenetV2\/expanded_conv_5\/add:0" : {
+      "k" : 32,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "MobilenetV2\/expanded_conv_9\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 64,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_6\/depthwise\/Relu6:0" : {
+      "k" : 192,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_5\/depthwise\/Relu6:0" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "MobilenetV2\/expanded_conv_8\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 64,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_11\/add:0" : {
+      "k" : 96,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "ResizeBilinear:0" : {
+      "k" : 256,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "aspp0\/Relu:0" : {
+      "k" : 256,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "decoder\/decoder_conv1_depthwise\/Relu:0" : {
+      "k" : 256,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_14\/expand\/Relu6:0_clip" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "MobilenetV2\/expanded_conv_4\/add:0" : {
+      "k" : 32,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "SemanticPredictions__0" : {
+      "k" : 1,
+      "w" : 385,
+      "n" : 1,
+      "h" : 385
+    },
+    "relu_MobilenetV2\/expanded_conv_4\/depthwise\/Relu6:0" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "concat_projection\/Relu:0" : {
+      "k" : 256,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "ArgMax:0" : {
+      "k" : 1,
+      "w" : 385,
+      "n" : 1,
+      "h" : 385
+    },
+    "relu_MobilenetV2\/expanded_conv_14\/depthwise\/Relu6:0_clip" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "MobilenetV2\/expanded_conv_7\/depthwise\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_10\/expand\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_16\/expand\/Relu6:0" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_3\/depthwise\/Relu6:0" : {
+      "k" : 144,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "relu_MobilenetV2\/expanded_conv_12\/depthwise\/Relu6:0_neg" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_2\/add:0" : {
+      "k" : 24,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_8\/depthwise\/Relu6:0_neg" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_12\/depthwise\/Relu6:0" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_8\/depthwise\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_2\/depthwise\/Relu6:0" : {
+      "k" : 144,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/Conv\/Relu6:0_neg" : {
+      "k" : 32,
+      "w" : 193,
+      "n" : 1,
+      "h" : 193
+    },
+    "MobilenetV2\/expanded_conv_15\/add:0" : {
+      "k" : 160,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_14\/expand\/Relu6:0_neg" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_16\/depthwise\/Relu6:0" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_5\/depthwise\/Relu6:0_neg" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "relu_MobilenetV2\/expanded_conv_1\/depthwise\/Relu6:0" : {
+      "k" : 96,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "sub:0" : {
+      "k" : 3,
+      "w" : 385,
+      "n" : 1,
+      "h" : 385
+    },
+    "MobilenetV2\/expanded_conv_9\/depthwise\/Relu6:0" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_8\/depthwise\/Relu6:0_clip" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_15\/expand\/Relu6:0" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_9\/expand\/Relu6:0_clip" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_15\/depthwise\/Relu6:0" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_7\/depthwise\/Relu6:0_clip" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv\/depthwise\/Relu6:0" : {
+      "k" : 32,
+      "w" : 193,
+      "n" : 1,
+      "h" : 193
+    },
+    "relu_MobilenetV2\/expanded_conv_7\/depthwise\/Relu6:0_neg" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_1\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 24,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_14\/depthwise\/Relu6:0" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_1\/depthwise\/Relu6:0_clip" : {
+      "k" : 96,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_12\/depthwise\/Relu6:0_clip" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_13\/expand\/Relu6:0_clip" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_15\/expand\/Relu6:0" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "MobilenetV2\/expanded_conv_14\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 160,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "relu_MobilenetV2\/expanded_conv_4\/depthwise\/Relu6:0_neg" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "relu_MobilenetV2\/expanded_conv_6\/expand\/Relu6:0_clip" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "relu_MobilenetV2\/expanded_conv_9\/expand\/Relu6:0_neg" : {
+      "k" : 384,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_13\/depthwise\/Relu6:0" : {
+      "k" : 576,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "MobilenetV2\/expanded_conv_1\/expand\/Relu6:0" : {
+      "k" : 96,
+      "w" : 193,
+      "n" : 1,
+      "h" : 193
+    },
+    "relu_MobilenetV2\/expanded_conv\/depthwise\/Relu6:0_neg" : {
+      "k" : 32,
+      "w" : 193,
+      "n" : 1,
+      "h" : 193
+    },
+    "relu_MobilenetV2\/expanded_conv_15\/depthwise\/Relu6:0_neg" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "decoder\/decoder_conv0_pointwise\/Relu:0" : {
+      "k" : 256,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "logits\/semantic\/BiasAdd:0" : {
+      "k" : 2,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "MobilenetV2\/expanded_conv_6\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 64,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_12\/add:0" : {
+      "k" : 96,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_13\/expand\/Relu6:0_neg" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_5\/project\/BatchNorm\/FusedBatchNorm:0" : {
+      "k" : 32,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "relu_MobilenetV2\/expanded_conv_1\/depthwise\/Relu6:0_neg" : {
+      "k" : 96,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_12\/depthwise\/Relu6:0" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "relu_MobilenetV2\/expanded_conv_11\/depthwise\/Relu6:0_neg" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_5\/expand\/Relu6:0" : {
+      "k" : 192,
+      "w" : 49,
+      "n" : 1,
+      "h" : 49
+    },
+    "ResizeBilinear_1:0" : {
+      "k" : 2,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_3\/expand\/Relu6:0_clip" : {
+      "k" : 144,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "relu_MobilenetV2\/expanded_conv_11\/depthwise\/Relu6:0" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    },
+    "MobilenetV2\/expanded_conv_16\/depthwise\/Relu6:0" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "MobilenetV2\/expanded_conv_14\/expand\/Relu6:0" : {
+      "k" : 960,
+      "w" : 13,
+      "n" : 1,
+      "h" : 13
+    },
+    "MobilenetV2\/expanded_conv_2\/expand\/Relu6:0" : {
+      "k" : 144,
+      "w" : 97,
+      "n" : 1,
+      "h" : 97
+    },
+    "MobilenetV2\/expanded_conv_12\/expand\/Relu6:0" : {
+      "k" : 576,
+      "w" : 25,
+      "n" : 1,
+      "h" : 25
+    }
+  }
+}

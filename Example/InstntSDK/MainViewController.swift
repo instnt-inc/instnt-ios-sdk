@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import InstntSDK
 
 class MainViewController: UIViewController {
 
@@ -33,6 +34,15 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func onCustomForm(_ sender: Any) {
-        performSegue(withIdentifier: "MainToCustom", sender: nil)
+        //performSegue(withIdentifier: "MainToCustom", sender: nil)
+        
+        
+        let documentSettings = DocumentSettings(documentType: .licence, documentSide: .back
+                                                , captureMode: .manual, backFocusThreshold: 110, nativeBackFocusThreshold: 110, backGlareThreshold: 2.5, nativeBackGlareThreshold: 2.5, backCaptureAttempts: 3)
+        Instnt.shared.scanDocument(from: self, documentSettings: documentSettings)
     }
+}
+
+extension MainViewController {
+    
 }

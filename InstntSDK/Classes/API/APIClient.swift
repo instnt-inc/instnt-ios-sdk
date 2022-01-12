@@ -49,6 +49,7 @@ class APIClient: NSObject {
     
     // MARK: - Submit
     func submitForm(to endpoint: String, formData: [String: Any], completion: @escaping ((FormSubmitResponse?, [String: Any]?, String?) -> Void)) {
+        
         let paramters: [String: Any] = formData
        
         AF.request(endpoint, method: .post, parameters: paramters, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
@@ -65,6 +66,69 @@ class APIClient: NSObject {
             case .failure(let error):
                 completion(nil, nil, error.localizedDescription)
             }
+        }
+    }
+    
+    public func createTransation(to endpoint: String, data: CreateTransaction) {
+        let endpoint = "\(baseEndpoint)/transactions/"
+        var parameters: [String: Any] = [:]
+        do {
+            try parameters = data.asDictionary()
+        } catch let errror { print("Error converting dic %@", errror.localizedDescription)}
+        AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseData { response in
+              debugPrint(response)
+              guard let data = response.data else { return }
+                do {
+                    let de = JSONDecoder()
+                    de.keyDecodingStrategy = .convertFromSnakeCase
+                    let res = try de.decode(ResultCreateTransaction.self, from: data)
+                    print(res)
+                }
+                catch {
+                    print(error)
+                }
+        }
+    }
+    
+    private func createTransationAttachments(to endpoint: String, transactionId: String, data: CreateTransactionAttachment) {
+        let endpoint = "\(baseEndpoint)/transactions/\(transactionId)/attachments"
+        var parameters: [String: Any] = [:]
+        do {
+            try parameters = data.asDictionary()
+        } catch let errror { print("Error converting dic %@", errror.localizedDescription)}
+        AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseData { response in
+              debugPrint(response)
+              guard let data = response.data else { return }
+                do {
+                    let de = JSONDecoder()
+                    de.keyDecodingStrategy = .convertFromSnakeCase
+                    let res = try de.decode(ResultCreateTransactionAttachment.self, from: data)
+                    print(res)
+                }
+                catch {
+                    print(error)
+                }
+        }
+    }
+    
+    public func verifyDocumentation(to endpoint: String, data: VerifyDocument) {
+        let endpoint = "\(baseEndpoint)/docverify/authenticate/v1.0"
+        var parameters: [String: Any] = [:]
+        do {
+            try parameters = data.asDictionary()
+        } catch let errror { print("Error converting dic %@", errror.localizedDescription)}
+        AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseData { response in
+              debugPrint(response)
+              guard let data = response.data else { return }
+                do {
+                    let de = JSONDecoder()
+                    de.keyDecodingStrategy = .convertFromSnakeCase
+                    let res = try de.decode(ResultCreateTransaction.self, from: data)
+                    print(res)
+                }
+                catch {
+                    print(error)
+                }
         }
     }
 }

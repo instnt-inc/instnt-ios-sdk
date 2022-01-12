@@ -10,8 +10,7 @@ import SnapKit
 import ActionSheetPicker_3_0
 import IQKeyboardManagerSwift
 import SVProgressHUD
-
-protocol FormViewControllerDelegate: class {
+protocol FormViewControllerDelegate: AnyObject {
     func formViewControllerDidCancel(_ sender: FormViewController)
     func formViewControllerDidSubmitForm(_ sender: FormViewController, response: FormSubmitResponse)
 }

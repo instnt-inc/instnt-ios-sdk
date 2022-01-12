@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-protocol FormViewDelegate: class {
+protocol FormViewDelegate: AnyObject {
     func formCodeViewFieldShouldBeginEditting(_ formCodeView: FormView, formFieldTextInputView: FormFieldTextInputView) -> Bool
 }
 

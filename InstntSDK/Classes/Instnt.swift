@@ -105,6 +105,10 @@ public class Instnt: NSObject {
             completion(responseJSON)
         }
     }
+    
+    public func scanDocument(from vc: UIViewController, documentSettings: DocumentSettings) {
+        DocumentScan.shared.scanDocument(from: vc, documentSettings: documentSettings)
+    }
 }
 
 extension Instnt: FormViewControllerDelegate {

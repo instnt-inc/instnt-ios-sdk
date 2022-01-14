@@ -5,7 +5,10 @@
 //  Created by Nate Eckerson on 5/25/21.
 //
 
+
 import UIKit
+import SVProgressHUD
+
 
 @objc public protocol InstntDelegate: NSObjectProtocol {
     func instntDidCancel(_ sender: Instnt)
@@ -27,18 +30,27 @@ public class Instnt: NSObject {
     }
     
     public weak var delegate: InstntDelegate? = nil
+    public var transactionID: String?
+    private var documentType: DocumentType = .licence
+    private var documentSide: DocumentSide = .front
+    private var parentVC: UIViewController?
     
     private override init() {
         super.init()
         
         formId = ""
-        APIClient.shared.isSandbox = false
+        APIClient.shared.isSandbox = true
     }
+    
+    // conviniece init
     
     // MARK: - Public Function
     public func setup(with formId: String, isSandBox: Bool = false) {
         self.formId = formId
         APIClient.shared.isSandbox = isSandBox
+        Instnt.shared.getTransactionID(completion: { result in
+        
+        })
     }
     
     public func showForm(from viewController: UIViewController, completion: @escaping ((Bool, String?) -> Void)) {
@@ -106,10 +118,89 @@ public class Instnt: NSObject {
         }
     }
     
-    public func scanDocument(from vc: UIViewController, documentSettings: DocumentSettings) {
-        DocumentScan.shared.scanDocument(from: vc, documentSettings: documentSettings)
+    public func scanDocument(from vc: UIViewController, documentType: DocumentType) {
+        parentVC = vc
+        self.documentType = documentType
+        let documentSettings = DocumentSettings(documentType: .licence, documentSide: self.documentSide, captureMode: .manual)
+        DocumentScan.shared.scanDocument(from: vc, documentSettings: documentSettings, delegate: self)
+    }
+    
+    func getTransactionID(completion: @escaping(Result<String, InstntError>) -> Void) {
+        let transactionRequest = CreateTransaction.init(formKey: "v163875646772327", hideFormFields: true, idmetricsVersion: "4.5.0.5", format: "json", redirect: false)
+        APIClient.shared.createTransaction(data: transactionRequest, completion: { result in
+            switch result {
+            case .success(let transactionID):
+                self.transactionID = transactionID
+                completion(.success(transactionID))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        })
+    }
+    
+    private func getUploadUrl(completion: @escaping(Result<String, InstntError>) -> Void) {
+        let requestGetuploadURL = RequestGetUploadUrl.init(transactionType: "IMAGE", documentType: "DRIVERS_LICENSE", docSuffix: "F", transactionStatus: "NEW");
+        if let transactionID = transactionID {
+            APIClient.shared.getUploadUrl(transactionId: transactionID, data: requestGetuploadURL, completion: completion)
+        }
+        
+    }
+    
+    private func uploadDocument(url: String, data: CaptureResult, completion: @escaping(Result<Void, InstntError>) -> Void) {
+        APIClient.shared.upload(url: url, data: data, completion: completion)
+    }
+    
+    private func uploadAttachment(data: CaptureResult, completion: @escaping(Result<Void, InstntError>) -> Void) {
+        self.getUploadUrl(completion: { result in
+            switch result {
+            case .success(let url):
+                self.uploadDocument(url: url, data: data, completion: { result in
+                    completion(.success((())))
+                })
+            case .failure(_):
+                break
+            }
+            
+        })
+    }
+    
+    public func sendOTP(phoneNumber: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
+        let requestSendOTP = RequestSendOTP(requestData: "{\"phoneNumber\": \"\(phoneNumber)\"}", isVerify: false)
+        APIClient.shared.sendOTP(requestData: requestSendOTP, completion: completion)
+    }
+    
+    public func verifyOTP(phoneNumber: String, otp: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
+        let requestVerifyOTP = RequestVerifyOTP(requestData: "{\"phoneNumber\": \"\(phoneNumber)\", \"otpCode\": \"\(otp)\"}", isVerify: true)
+        APIClient.shared.verifyOTP(requestData: requestVerifyOTP, completion: completion)
+    }
+    public func verifyDocuments() {
+        guard let transactionID = transactionID else {
+            return
+        }
+
+        let verifyDocument = VerifyDocument(formKey: Instnt.shared.formId, documentType: self.documentType.rawValue, instnttxnid:  transactionID)
+        APIClient.shared.verifyDocuments(requestData: verifyDocument, completion: { result in
+            switch result {
+            case .success(_):
+                print("verify succes")
+                break
+            case.failure(let error):
+                print("verify failed with errro %@", error)
+            }
+            
+        })
+        
+    }
+    
+    public func getTransactionStatus() {
+        
+    }
+    
+    public func submitData() {
+        
     }
 }
+
 
 extension Instnt: FormViewControllerDelegate {
     func formViewControllerDidCancel(_ sender: FormViewController) {
@@ -118,5 +209,35 @@ extension Instnt: FormViewControllerDelegate {
     
     func formViewControllerDidSubmitForm(_ sender: FormViewController, response: FormSubmitResponse) {
         delegate?.instntDidSubmit(self, decision: response.decision, jwt: response.jwt)
+    }
+}
+
+extension Instnt: DocumentScanDelegate {    
+    public func onScanFinish(captureResult: CaptureResult) {
+        SVProgressHUD.show()
+        Instnt.shared.uploadAttachment(data: captureResult, completion: { result in
+            SVProgressHUD.dismiss()
+            switch result {
+            case .success(_):
+                if let parentVC = self.parentVC {
+                    if self.documentSide == .front {
+                        self.documentSide = .back
+                        DispatchQueue.main.async {
+                            self.scanDocument(from: parentVC, documentType: self.documentType)
+                        }
+                    } else if self.documentSide == .back {
+                        self.verifyDocuments()
+                    }
+                }
+            case .failure(_):
+                break
+            }
+        })
+        
+        
+    }
+    
+    public func onScanCancelled(error: String) {
+        print(error)
     }
 }

@@ -6,4 +6,5 @@ target 'InstntSDK_Example' do
   pod 'InstntSDK', :path => '../'
   pod 'IQKeyboardManagerSwift'
   
+  
 end

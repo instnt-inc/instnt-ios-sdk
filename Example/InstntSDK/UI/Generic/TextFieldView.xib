@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="TextFieldView" customModule="InstntSDK_Example">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="55"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="b8l-Ia-9xo" customClass="HSUnderLineTextField" customModule="Qaf_Rider" customModuleProvider="target">
+                    <rect key="frame" x="40" y="10" width="334" height="35"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="35" id="SIi-VI-MXM"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="b8l-Ia-9xo" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="1wd-vX-fe1"/>
+                <constraint firstAttribute="bottom" secondItem="b8l-Ia-9xo" secondAttribute="bottom" constant="10" id="APq-XU-N31"/>
+                <constraint firstAttribute="trailing" secondItem="b8l-Ia-9xo" secondAttribute="trailing" constant="40" id="UKI-tC-5oA"/>
+                <constraint firstItem="b8l-Ia-9xo" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="ldu-sb-0kg"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="textField" destination="b8l-Ia-9xo" id="dDb-C6-LRx"/>
+            </connections>
+            <point key="canvasLocation" x="137.68115942028987" y="144.64285714285714"/>
+        </view>
+    </objects>
+</document>

@@ -10,12 +10,16 @@ import CFDocumentScanSDK
 import AVFoundation
 import CoreLocation
 
-
+@objc public protocol DocumentScanDelegate: NSObjectProtocol {
+    func onScanFinish(captureResult: CaptureResult)
+    func onScanCancelled(error: String)
+}
 
 class DocumentScan: NSObject {
     static let shared = DocumentScan()
     private let locationManager = CLLocationManager()
     private lazy var scanHandler = DSHandler(delegate: self)
+    weak var delegate: DocumentScanDelegate? = nil
     
     private override init() {
         super.init()
@@ -65,23 +69,32 @@ class DocumentScan: NSObject {
         }
     }
     
-    public func scanDocument(options: DSOptions) {
-        // rear facing camera
-        // original defination: capture.scanDocument(documentSettings, captureResult);
-        // pass those settings to scanHandler
-        
-        //       let options = DSID1Options()
-        //options.side = .Back
-        //options.detectFace = true
-        //options.captureMode = .Auto
-        
-        scanHandler.options = options
-        //present(scanHandler.scanController, animated: true)
-        scanHandler.start()
+    func scanDocument(from vc: UIViewController, documentSettings: DocumentSettings, delegate:DocumentScanDelegate) {
+        self.delegate = delegate
+        if documentSettings.documentType == .passport {
+            let options = DSPassportOptions()
+            options.captureMode = .Auto
+            
+            scanHandler.options = options
+            vc.present(scanHandler.scanController, animated: true)
+            scanHandler.start()
+
+        } else if documentSettings.documentType == .licence {
+            
+            let options = DSID1Options()
+            options.side = documentSettings.documentSide == .back ? .Back: .Front
+            options.detectFace = documentSettings.documentSide == .front ? true: false
+            options.captureMode = documentSettings.captureMode == .automatic ? .Auto: .Manual
+            options.detectBarcodeOrMRZ = documentSettings.documentSide == .back ? true: false
+            options.showReviewScreen = true
+            scanHandler.options = options
+            vc.present(scanHandler.scanController, animated: true)
+            scanHandler.start()
+        }
     }
     
     func scanSelfie() {
-        // front facing camera facing camera
+       
     }
 }
 
@@ -98,32 +111,22 @@ extension DocumentScan: CLLocationManagerDelegate {
 extension DocumentScan: DSHandlerDelegate {
     func handleScan(result: DSResult) {
         // passthose results back to the delegate as CaptureResult
-      print("Scan Result: \(result)")
+        let img = result.image
+        let strBase64 = img!.base64EncodedData()
         
+        var focus : Bool!
+        if result.captureAnalysis.focus > 0.6{
+            focus = true
+        }else{
+            focus = false
+        }
         
-       /* A DSResult also contains a detailed capture analysis. Combined with the image data, these fields allow you to decide which images, if any, are valid for processing.
-
-        Property
-        Description
-        isImageCropped
-        Indicates if the SDK was able to crop the non flash image or not
-        isFlashImageCropped
-        Indicates if the SDK was able to crop the flash image or not
-        confidence
-        Indicates SDK’s confidence level on the image quality. Value ranges between 0 and 1. Recommended 0.60 +
-        captureAnalysis.distanceConfidence
-        Indicates SDK’s confidence level on the distance between the camera and Document. Value ranges between 0 and 1. Recommended 0.60 +
-        captureAnalysis.faceDetected
-        Indicates if the SDK could see a human face in the document image. */
-        
-        // More
-        
-        //file:///Users/ac31tzz/Learn/CFDocumentScanSDK-Documentation-5.5.3/guides/parsing-responses.html
+        let capture = CaptureResult(resultBase64: strBase64, frontfocus: focus, frontGlare: false, backfocus: focus, backGlare: false, isFaceFaceDetected: result.captureAnalysis.faceDetected, isBarcodeDetected: false)
+        delegate?.onScanFinish(captureResult: capture)
     }
     
     func captureError(_ error: DSError) {
-        
-        print("Scan Error: \(error)")
-        
+        let error = InstntError(errorConstant: .error_CAPTURE)
+        delegate?.onScanCancelled(error: error.localizedDescription)
     }
 }

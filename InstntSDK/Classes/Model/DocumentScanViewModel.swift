@@ -7,60 +7,66 @@
 
 import Foundation
 public struct DocumentSettings {
-    public init(documentType: documentType, documentSide: documentSide, captureMode: captureMode, backFocusThreshold: Int, nativeBackFocusThreshold: Int, backGlareThreshold: Float, nativeBackGlareThreshold: Float, backCaptureAttempts: Int) {
+    public init(documentType: DocumentType, documentSide: DocumentSide, captureMode: CaptureMode) {
         self.documentType = documentType
         self.documentSide = documentSide
         self.captureMode = captureMode
-        self.backFocusThreshold = backFocusThreshold
-        self.nativeBackFocusThreshold = nativeBackFocusThreshold
-        self.backGlareThreshold = backGlareThreshold
-        self.nativeBackGlareThreshold = nativeBackGlareThreshold
-        self.backCaptureAttempts = backCaptureAttempts
     }
     
-    let documentType: documentType
-    let documentSide: documentSide
-    let captureMode: captureMode
-    let backFocusThreshold: Int
-    let nativeBackFocusThreshold: Int
-    let backGlareThreshold: Float
-    let nativeBackGlareThreshold: Float
-    let backCaptureAttempts: Int
-    
+    let documentType: DocumentType
+    let documentSide: DocumentSide
+    let captureMode: CaptureMode
 }
 
-public enum documentType {
-    case licence
-    case passport
+public enum DocumentType: String {
+    case licence = "Licence"
+    case passport = "Passport"
 }
 
-public enum documentSide  {
+public enum DocumentSide  {
     case back
     case front
 }
 
-public enum captureMode {
+public enum CaptureMode {
     case automatic
     case manual
 }
 
-struct CaptureResult {
-    let resultBase64: String
-    let frontfocus: Bool?
-    let frontGlare: Bool?
-    let backfocus: Bool?
-    let backGlare: Bool?
-    let isFaceFaceDetected: Bool?
-    let isBarcodeDetected: Bool?
+public class CaptureResult : NSObject{    
+    public var resultBase64: Data
+    var frontfocus: Bool?
+    var frontGlare: Bool?
+    var backfocus: Bool?
+    var backGlare: Bool?
+    var isFaceFaceDetected: Bool?
+    var isBarcodeDetected: Bool?
+    
+    init(resultBase64: Data, frontfocus:Bool, frontGlare:Bool, backfocus:Bool, backGlare:Bool, isFaceFaceDetected:Bool, isBarcodeDetected:Bool) {
+        self.resultBase64 = resultBase64
+        self.frontfocus = frontfocus
+        self.frontGlare = frontGlare
+        self.backfocus = backfocus
+        self.backGlare = backGlare
+        self.isFaceFaceDetected = isFaceFaceDetected
+        self.isBarcodeDetected = isBarcodeDetected
+
+    }
 }
 
-struct CaptureResultData {
-    let eventCount: Int
-    let faceDetectionStatus: faceDetectionStatus
-    let image: String
+public class CaptureResultData: NSObject {
+    var eventCount: Int
+    var faceDetectionStatus: faceDetectionStatus
+    var image: String
+    
+    init(eventCount:Int, faceDetectionStatus:faceDetectionStatus, image:String) {
+        self.eventCount = eventCount
+        self.faceDetectionStatus = faceDetectionStatus
+        self.image = image
+    }
 }
 
-enum StatusCode: String {
+public enum StatusCode: String {
     case noFaceFound = "no faces found"
     case badFocus = "bad focus"
     case badGlare = "bad glare"

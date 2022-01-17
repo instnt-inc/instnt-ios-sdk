@@ -62,7 +62,7 @@ class CustomFormPresenter: BasePresenter {
         self.vc?.stackView.addOptionalArrangedSubview(formKey)
     }
     private func addSandboxSwitch() {
-        switchView?.decorateView(title: "FormKey", completion: { isOn in
+        switchView?.decorateView(title: "SandBox", completion: { isOn in
        
         })
         self.vc?.stackView.addOptionalArrangedSubview(switchView)
@@ -73,12 +73,14 @@ class CustomFormPresenter: BasePresenter {
             if let formKey = self.formKey?.textField.text, formKey.count == 16  {
                 SVProgressHUD.show()
                 Instnt.shared.setup(with: formKey, isSandBox: self.switchView?.uiswitch.isOn ?? true, completion: { result in
-                    SVProgressHUD.dismiss()
                     self.addResponse()
                     self.getFormAfterSuccess()
                     switch result {
                     case .success(let transactionID):
-                        self.lblView?.lblText.text = "Set up is succeded with transaction Id \(transactionID)"
+                        Instnt.shared.getFormCodes { response in
+                            SVProgressHUD.dismiss()
+                            self.lblView?.lblText.text = "Set up is succeded with transaction Id \(transactionID)"
+                        }
                     case .failure(let error):
                         self.lblView?.lblText.text = "Set up is failed with \(error.localizedDescription), please try again later"
                     }
@@ -88,8 +90,7 @@ class CustomFormPresenter: BasePresenter {
                     return
                 }
                 errorVC.showSimpleAlert("Please Enter 16 digits form key", target: errorVC)
-            }
-           
+            }            
         })
         self.vc?.stackView.addOptionalArrangedSubview(setUpBtn)
     }

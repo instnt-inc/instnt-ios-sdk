@@ -52,6 +52,7 @@ class VerifyOTPPresenter: BasePresenter {
                 SVProgressHUD.dismiss()
                 switch result {
                 case .success:
+                    Instnt.shared.formData["otpCode"] = self.otp?.textField.text
                     guard let vc = Utils.getStoryboardInitialViewController("Address") as? AddressVC else {
                         return
                     }

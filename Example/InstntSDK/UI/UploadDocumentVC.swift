@@ -11,6 +11,7 @@ import InstntSDK
 import CFDocumentScanSDK
 import SVProgressHUD
 
+
 class UploadDocumentVC: UIViewController {
     @IBOutlet var stackView: UIStackView!
     
@@ -43,15 +44,22 @@ class UploadDocumentVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addNextButton()
+        Instnt.shared.delegate = self
 
     }
     
-    func addNextButton() {
+    private func addNextButton() {
         self.stackView.addSpacerView()
         buttonView?.decorateView(type: .next, completion: {
             Instnt.shared.scanDocument(from: self, documentType: DocumentType.licence)
         })
         self.stackView.addOptionalArrangedSubview(buttonView)
+    }
+    
+    private func onSubmit() {
+        Instnt.shared.submitFormData(Instnt.shared.formData) { response in
+            print("Submit form respose %@", response ?? "")
+        }
     }
     
     func uncheck(){
@@ -109,5 +117,25 @@ extension UIButton {
             }, completion: nil)
         }
         
+    }
+}
+
+extension UploadDocumentVC: InstntDelegate {
+    func instntDidCancel(_ sender: Instnt) {
+        print("Sign Up is cancelled")
+    }
+    
+    func instntDidSubmit(_ sender: Instnt, decision: String, jwt: String) {
+        print("Form is submitted successfully")
+    }
+    
+    func instntDocumentScanError() {
+        print("Document scan failed, please try again later")
+    }
+    
+    func instntDocumentVerified() {
+        Instnt.shared.submitFormData(Instnt.shared.formData, completion: {_ in
+            print("Data was uploaded successfully")
+        })
     }
 }

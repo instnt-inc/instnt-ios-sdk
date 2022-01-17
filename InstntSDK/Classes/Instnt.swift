@@ -13,12 +13,16 @@ import SVProgressHUD
 @objc public protocol InstntDelegate: NSObjectProtocol {
     func instntDidCancel(_ sender: Instnt)
     func instntDidSubmit(_ sender: Instnt, decision: String, jwt: String)
+    func instntDocumentVerified()
+    func instntDocumentScanError()
 }
 
 public class Instnt: NSObject {
     public static let decisionTypeAccept = "ACCEPT"
     public static let decisionTypeReject = "REJECT"
     public static let decisionTypeReview = "REVIEW"
+    
+    public var formData: [String: Any] = [:]
     
     public static let shared = Instnt()
     
@@ -103,12 +107,16 @@ public class Instnt: NSObject {
         }
         
         var formData: [String: Any] = data
+        formData["signature"] = self.transactionID
+        formData["OTPSignature"] = self.transactionID
         formData["form_key"] = formCodes.id
+        
         formData["fingerprint"] = [
             "requestId": formCodes.fingerprint,
             "visitorId": formCodes.fingerprint,
             "visitorFound": true
         ]
+        
         formData["client_referer_url"] = formCodes.serviceURL
         formData["client_referer_host"] = URL(string: formCodes.serviceURL)?.host ?? ""
         
@@ -159,7 +167,6 @@ public class Instnt: NSObject {
             case .failure(_):
                 break
             }
-            
         })
     }
     
@@ -172,7 +179,7 @@ public class Instnt: NSObject {
         let requestVerifyOTP = RequestVerifyOTP(requestData: "{\"phoneNumber\": \"\(phoneNumber)\", \"otpCode\": \"\(otp)\"}", isVerify: true)
         APIClient.shared.verifyOTP(requestData: requestVerifyOTP, completion: completion)
     }
-    public func verifyDocuments() {
+    public func verifyDocuments(completion: @escaping(Result<Void, InstntError>) -> Void) {
         guard let transactionID = transactionID else {
             return
         }
@@ -182,20 +189,16 @@ public class Instnt: NSObject {
             switch result {
             case .success(_):
                 print("verify succes")
+                completion(.success(()))
                 break
             case.failure(let error):
                 print("verify failed with errro %@", error)
+                completion(.failure(InstntError(errorConstant: .error_EXTERNAL)))
             }
-            
         })
-        
     }
     
     public func getTransactionStatus() {
-        
-    }
-    
-    public func submitData() {
         
     }
 }
@@ -225,7 +228,9 @@ extension Instnt: DocumentScanDelegate {
                             self.scanDocument(from: parentVC, documentType: self.documentType)
                         }
                     } else if self.documentSide == .back {
-                        self.verifyDocuments()
+                        self.verifyDocuments(completion: {_ in
+                            self.delegate?.instntDocumentVerified()
+                        })
                     }
                 }
             case .failure(_):

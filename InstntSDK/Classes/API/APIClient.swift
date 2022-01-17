@@ -61,6 +61,7 @@ class APIClient: NSObject {
                     return
                 }
                 let message = responseJSON["errorMessage"] as? String
+                print("Submit formData errorMessage %@", message)
                 let response = FormSubmitResponse(JSON: responseJSON)
                 
                 completion(response, responseJSON, message)

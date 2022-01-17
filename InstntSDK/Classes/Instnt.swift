@@ -45,12 +45,11 @@ public class Instnt: NSObject {
     // conviniece init
     
     // MARK: - Public Function
-    public func setup(with formId: String, isSandBox: Bool = false) {
+    public func setup(with formId: String, isSandBox: Bool = false, completion: @escaping(Result<String, InstntError>) -> Void) {
         self.formId = formId
         APIClient.shared.isSandbox = isSandBox
-        Instnt.shared.getTransactionID(completion: { result in
-        
-        })
+        APIClient.shared.formKey = formId
+        Instnt.shared.getTransactionID(completion: completion)
     }
     
     public func showForm(from viewController: UIViewController, completion: @escaping ((Bool, String?) -> Void)) {
@@ -126,7 +125,7 @@ public class Instnt: NSObject {
     }
     
     func getTransactionID(completion: @escaping(Result<String, InstntError>) -> Void) {
-        let transactionRequest = CreateTransaction.init(formKey: "v163875646772327", hideFormFields: true, idmetricsVersion: "4.5.0.5", format: "json", redirect: false)
+        let transactionRequest = CreateTransaction.init(formKey: self.formId, hideFormFields: true, idmetricsVersion: "4.5.0.5", format: "json", redirect: false)
         APIClient.shared.createTransaction(data: transactionRequest, completion: { result in
             switch result {
             case .success(let transactionID):

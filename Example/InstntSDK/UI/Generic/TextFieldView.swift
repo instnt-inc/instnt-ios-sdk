@@ -55,11 +55,14 @@ class TextFieldView: UIView {
         case .country:
             textField.keyboardType = .default
             textField.placeholder = NSLocalizedString("Coutry", comment: "")
+        case .formKey:
+            textField.keyboardType = .default
+            textField.placeholder = NSLocalizedString("FormKey", comment: "")            
         }
     }
     func validate(textfieldType: TextFieldTypes, text: String) -> Bool {
         switch textfieldType {
-        case .firstName, .lastName, .address, .city, .state, .zipcode, .country:
+        case .firstName, .lastName, .address, .city, .state, .zipcode, .country, .formKey:
             return text.count > 0
         case .otp:
             return text.count == 6

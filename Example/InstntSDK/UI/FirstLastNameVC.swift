@@ -16,6 +16,5 @@ class FirstLastNameVC: BaseViewController {
 
     override func viewDidLoad() {
         presenter?.presentScene()
-        Instnt.shared.setup(with: "v163875646772327", isSandBox: true)
     }
 }

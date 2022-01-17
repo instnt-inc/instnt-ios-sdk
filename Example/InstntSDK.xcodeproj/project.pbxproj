@@ -8,12 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
-		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
+		607FACDB1AFB9204008FA782 /* CustomForm.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* CustomForm.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		84C6CA0B2699928B00722B80 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C6CA0A2699928B00722B80 /* MainViewController.swift */; };
 		84C6CA0D269997E800722B80 /* CustomFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C6CA0C269997E800722B80 /* CustomFormViewController.swift */; };
 		9121E403645D5DBF87115CE3 /* Pods_InstntSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E716A623E40BACDB4DE26FC /* Pods_InstntSDK_Example.framework */; };
+		FC03C57E2791E56F0061A8B1 /* UploadDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC03C57D2791E56F0061A8B1 /* UploadDocument.storyboard */; };
+		FC03C5802791EBA10061A8B1 /* CustomFormPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC03C57F2791EBA10061A8B1 /* CustomFormPresenter.swift */; };
+		FC03C5872791FB710061A8B1 /* SwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC03C5852791FB700061A8B1 /* SwitchView.swift */; };
+		FC03C5882791FB710061A8B1 /* SwitchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC03C5862791FB710061A8B1 /* SwitchView.xib */; };
+		FC03C58B279202110061A8B1 /* LabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC03C589279202110061A8B1 /* LabelView.swift */; };
+		FC03C58C279202110061A8B1 /* LabelView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC03C58A279202110061A8B1 /* LabelView.xib */; };
 		FC04D36A278F524400420E6E /* VerifyOTPPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC04D34A278F523C00420E6E /* VerifyOTPPresenter.swift */; };
 		FC04D36B278F524400420E6E /* UIViewController+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC04D34B278F523D00420E6E /* UIViewController+Utils.swift */; };
 		FC04D36C278F524400420E6E /* EmailPhoneVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC04D34C278F523D00420E6E /* EmailPhoneVC.swift */; };
@@ -26,7 +32,7 @@
 		FC04D373278F524400420E6E /* BasePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC04D353278F523F00420E6E /* BasePresenter.swift */; };
 		FC04D374278F524400420E6E /* EmailPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC04D354278F523F00420E6E /* EmailPhone.storyboard */; };
 		FC04D375278F524400420E6E /* FirstLastNamePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC04D355278F523F00420E6E /* FirstLastNamePresenter.swift */; };
-		FC04D376278F524400420E6E /* SelectDocTypeVCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC04D356278F523F00420E6E /* SelectDocTypeVCViewController.swift */; };
+		FC04D376278F524400420E6E /* UploadDocumentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC04D356278F523F00420E6E /* UploadDocumentVC.swift */; };
 		FC04D377278F524400420E6E /* FirstLastNameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC04D357278F523F00420E6E /* FirstLastNameVC.swift */; };
 		FC04D378278F524400420E6E /* AddressVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC04D358278F524000420E6E /* AddressVC.swift */; };
 		FC04D379278F524400420E6E /* TextFieldTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC04D359278F524000420E6E /* TextFieldTypes.swift */; };
@@ -54,7 +60,7 @@
 		607FACD01AFB9204008FA782 /* InstntSDK_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstntSDK_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CustomForm.storyboard; sourceTree = "<group>"; };
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		633F81F66686BAB410F6BA24 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -63,6 +69,12 @@
 		8E716A623E40BACDB4DE26FC /* Pods_InstntSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InstntSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E27282360E95AB68108FD2BB /* Pods-InstntSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstntSDK_Example.release.xcconfig"; path = "Target Support Files/Pods-InstntSDK_Example/Pods-InstntSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
 		FA178326508F47786B0746FB /* InstntSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = InstntSDK.podspec; path = ../InstntSDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		FC03C57D2791E56F0061A8B1 /* UploadDocument.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = UploadDocument.storyboard; sourceTree = "<group>"; };
+		FC03C57F2791EBA10061A8B1 /* CustomFormPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFormPresenter.swift; sourceTree = "<group>"; };
+		FC03C5852791FB700061A8B1 /* SwitchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchView.swift; sourceTree = "<group>"; };
+		FC03C5862791FB710061A8B1 /* SwitchView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwitchView.xib; sourceTree = "<group>"; };
+		FC03C589279202110061A8B1 /* LabelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelView.swift; sourceTree = "<group>"; };
+		FC03C58A279202110061A8B1 /* LabelView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LabelView.xib; sourceTree = "<group>"; };
 		FC04D34A278F523C00420E6E /* VerifyOTPPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyOTPPresenter.swift; sourceTree = "<group>"; };
 		FC04D34B278F523D00420E6E /* UIViewController+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Utils.swift"; sourceTree = "<group>"; };
 		FC04D34C278F523D00420E6E /* EmailPhoneVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailPhoneVC.swift; sourceTree = "<group>"; };
@@ -75,7 +87,7 @@
 		FC04D353278F523F00420E6E /* BasePresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePresenter.swift; sourceTree = "<group>"; };
 		FC04D354278F523F00420E6E /* EmailPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EmailPhone.storyboard; sourceTree = "<group>"; };
 		FC04D355278F523F00420E6E /* FirstLastNamePresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstLastNamePresenter.swift; sourceTree = "<group>"; };
-		FC04D356278F523F00420E6E /* SelectDocTypeVCViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectDocTypeVCViewController.swift; sourceTree = "<group>"; };
+		FC04D356278F523F00420E6E /* UploadDocumentVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadDocumentVC.swift; sourceTree = "<group>"; };
 		FC04D357278F523F00420E6E /* FirstLastNameVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstLastNameVC.swift; sourceTree = "<group>"; };
 		FC04D358278F524000420E6E /* AddressVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressVC.swift; sourceTree = "<group>"; };
 		FC04D359278F524000420E6E /* TextFieldTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTypes.swift; sourceTree = "<group>"; };
@@ -143,8 +155,6 @@
 				FC04D349278F51E200420E6E /* UI */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				84C6CA0A2699928B00722B80 /* MainViewController.swift */,
-				84C6CA0C269997E800722B80 /* CustomFormViewController.swift */,
-				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
@@ -183,6 +193,8 @@
 			isa = PBXGroup;
 			children = (
 				FC04D352278F523F00420E6E /* MyButton.swift */,
+				FC03C5852791FB700061A8B1 /* SwitchView.swift */,
+				FC03C5862791FB710061A8B1 /* SwitchView.xib */,
 				FC04D367278F524300420E6E /* SpacerView.swift */,
 				FC04D368278F524400420E6E /* SpacerView.xib */,
 				FC04D35D278F524100420E6E /* String+Utils.swift */,
@@ -201,6 +213,8 @@
 				FC04D34E278F523E00420E6E /* ButtonView.xib */,
 				FC04D35A278F524000420E6E /* Color+UIColor.swift */,
 				FC04D363278F524200420E6E /* Constants.swift */,
+				FC03C589279202110061A8B1 /* LabelView.swift */,
+				FC03C58A279202110061A8B1 /* LabelView.xib */,
 			);
 			path = Generic;
 			sourceTree = "<group>";
@@ -218,10 +232,14 @@
 				FC04D361278F524200420E6E /* FirstLastName.storyboard */,
 				FC04D355278F523F00420E6E /* FirstLastNamePresenter.swift */,
 				FC04D357278F523F00420E6E /* FirstLastNameVC.swift */,
-				FC04D356278F523F00420E6E /* SelectDocTypeVCViewController.swift */,
+				FC03C57D2791E56F0061A8B1 /* UploadDocument.storyboard */,
+				FC04D356278F523F00420E6E /* UploadDocumentVC.swift */,
 				FC04D366278F524300420E6E /* VerifyOTP.storyboard */,
 				FC04D34A278F523C00420E6E /* VerifyOTPPresenter.swift */,
 				FC04D351278F523E00420E6E /* VerifyOTPVC.swift */,
+				FC03C57F2791EBA10061A8B1 /* CustomFormPresenter.swift */,
+				84C6CA0C269997E800722B80 /* CustomFormViewController.swift */,
+				607FACD91AFB9204008FA782 /* CustomForm.storyboard */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -292,9 +310,12 @@
 			files = (
 				FC04D36F278F524400420E6E /* TextFieldView.xib in Resources */,
 				FC04D370278F524400420E6E /* Address.storyboard in Resources */,
+				FC03C57E2791E56F0061A8B1 /* UploadDocument.storyboard in Resources */,
 				FC04D386278F524400420E6E /* VerifyOTP.storyboard in Resources */,
+				FC03C5882791FB710061A8B1 /* SwitchView.xib in Resources */,
 				FC04D374278F524400420E6E /* EmailPhone.storyboard in Resources */,
-				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
+				607FACDB1AFB9204008FA782 /* CustomForm.storyboard in Resources */,
+				FC03C58C279202110061A8B1 /* LabelView.xib in Resources */,
 				FC04D381278F524400420E6E /* FirstLastName.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				FC04D36E278F524400420E6E /* ButtonView.xib in Resources */,
@@ -373,6 +394,7 @@
 				FC04D389278F524400420E6E /* ButtonView.swift in Sources */,
 				FC04D380278F524400420E6E /* BaseViewController.swift in Sources */,
 				84C6CA0B2699928B00722B80 /* MainViewController.swift in Sources */,
+				FC03C5872791FB710061A8B1 /* SwitchView.swift in Sources */,
 				FC04D385278F524400420E6E /* ButtonTypes.swift in Sources */,
 				FC04D36C278F524400420E6E /* EmailPhoneVC.swift in Sources */,
 				FC04D37E278F524400420E6E /* UIStackView+Views.swift in Sources */,
@@ -382,12 +404,14 @@
 				FC04D382278F524400420E6E /* UIView+Utils.swift in Sources */,
 				FC04D36B278F524400420E6E /* UIViewController+Utils.swift in Sources */,
 				FC04D377278F524400420E6E /* FirstLastNameVC.swift in Sources */,
+				FC03C5802791EBA10061A8B1 /* CustomFormPresenter.swift in Sources */,
+				FC03C58B279202110061A8B1 /* LabelView.swift in Sources */,
 				FC04D37B278F524400420E6E /* EmailPhonePresenter.swift in Sources */,
 				FC04D384278F524400420E6E /* TextFieldView.swift in Sources */,
 				FC04D378278F524400420E6E /* AddressVC.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				FC04D372278F524400420E6E /* MyButton.swift in Sources */,
-				FC04D376278F524400420E6E /* SelectDocTypeVCViewController.swift in Sources */,
+				FC04D376278F524400420E6E /* UploadDocumentVC.swift in Sources */,
 				FC04D375278F524400420E6E /* FirstLastNamePresenter.swift in Sources */,
 				84C6CA0D269997E800722B80 /* CustomFormViewController.swift in Sources */,
 				FC04D379278F524400420E6E /* TextFieldTypes.swift in Sources */,
@@ -399,12 +423,12 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		607FACD91AFB9204008FA782 /* Main.storyboard */ = {
+		607FACD91AFB9204008FA782 /* CustomForm.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				607FACDA1AFB9204008FA782 /* Base */,
 			);
-			name = Main.storyboard;
+			name = CustomForm.storyboard;
 			sourceTree = "<group>";
 		};
 		607FACDE1AFB9204008FA782 /* LaunchScreen.xib */ = {

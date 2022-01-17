@@ -19,6 +19,7 @@ class APIClient: NSObject {
     }
     
     var isSandbox: Bool = false
+    var formKey = ""
     
     private override init() {
         super.init()

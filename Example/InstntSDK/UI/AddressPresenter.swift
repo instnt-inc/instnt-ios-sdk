@@ -58,7 +58,7 @@ class AddressPresenter: BasePresenter {
         self.buildView()
     }
 
-    func buildView() {
+    private func buildView() {
         addAddress()
         addCity()
         addState()
@@ -67,39 +67,38 @@ class AddressPresenter: BasePresenter {
         addButton()
     }
     
-    func addAddress() {
+    private func addAddress() {
         address?.decorateTextField(textfieldType: .address)
         self.vc?.stackView.addOptionalArrangedSubview(address)
     }
     
-    func addCity() {
+    private func addCity() {
         city?.decorateTextField(textfieldType: .city)
         self.vc?.stackView.addOptionalArrangedSubview(city)
     }
     
-    func addState() {
+    private func addState() {
         state?.decorateTextField(textfieldType: .state)
         self.vc?.stackView.addOptionalArrangedSubview(state)
     }
     
-    func addZip() {
+    private func addZip() {
         zip?.decorateTextField(textfieldType: .zipcode)
         self.vc?.stackView.addOptionalArrangedSubview(zip)
     }
     
-    func addCountry() {
+    private func addCountry() {
         country?.decorateTextField(textfieldType: .country)
         self.vc?.stackView.addOptionalArrangedSubview(country)
     }
     
-    func addButton() {
+    private func addButton() {
         buttonView?.decorateView(type: .next, completion: {
-            guard let vc = Utils.getStoryboardInitialViewController("Main") as? SelectDocTypeVCViewController else {
+            guard let vc = Utils.getStoryboardInitialViewController("UploadDocument") as? UploadDocumentVC else {
                 return
             }
             self.vc?.navigationController?.pushViewController(vc, animated: true)
         })
         self.vc?.stackView.addOptionalArrangedSubview(buttonView)
-    }
-    
+    }    
 }

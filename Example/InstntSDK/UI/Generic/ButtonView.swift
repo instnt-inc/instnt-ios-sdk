@@ -30,6 +30,13 @@ class ButtonView: UIView {
         case .verifyOTP:
             button.backgroundColor = UIColor.black
             button .setTitle(NSLocalizedString("Verify OTP", comment: ""), for: .normal)
+        case .setUp:
+            button.backgroundColor = UIColor.black
+            button .setTitle(NSLocalizedString("Set Up", comment: ""), for: .normal)
+        case .getForm:
+            button.backgroundColor = UIColor.black
+            button .setTitle(NSLocalizedString("Get Form", comment: ""), for: .normal)
+            
         
         }
     }

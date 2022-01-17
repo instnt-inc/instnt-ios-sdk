@@ -11,18 +11,25 @@ import InstntSDK
 import CFDocumentScanSDK
 import SVProgressHUD
 
-class SelectDocTypeVCViewController: UIViewController {
+class UploadDocumentVC: UIViewController {
     @IBOutlet var stackView: UIStackView!
-
-    @IBOutlet private var multiRadioButton: [UIButton]!{
+    
+    @IBOutlet private var driverLicenceBtn: UIButton! {
         didSet{
-            multiRadioButton.forEach { (button) in
-                button.tintColor = .black
-                button.setImage(UIImage(named:"circle_radio_unselected"), for: .normal)
-                button.setImage(UIImage(named:"circle_radio_selected"), for: .selected)
-            }
+            driverLicenceBtn.tintColor = .black
+            driverLicenceBtn.setImage(UIImage(named:"circle_radio_unselected"), for: .normal)
+            driverLicenceBtn.setImage(UIImage(named:"circle_radio_selected"), for: .selected)
         }
     }
+    
+    @IBOutlet private var passportBtn: UIButton! {
+        didSet{
+            passportBtn.tintColor = .black
+            passportBtn.setImage(UIImage(named:"circle_radio_unselected"), for: .normal)
+            passportBtn.setImage(UIImage(named:"circle_radio_selected"), for: .selected)
+        }
+    }
+
 
     @IBOutlet weak var docView: UIView!
     
@@ -35,7 +42,6 @@ class SelectDocTypeVCViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        Instnt.shared.setup(with: "v163875646772327", isSandBox: true)
         addNextButton()
 
     }
@@ -49,12 +55,19 @@ class SelectDocTypeVCViewController: UIViewController {
     }
     
     func uncheck(){
-        multiRadioButton.forEach { (button) in
-            button.isSelected = false
+        driverLicenceBtn.isSelected = false
+        passportBtn.isSelected = false
+    }
+    
+    @IBAction private func onClickLicence(_ sender: UIButton){
+        uncheck()
+        sender.checkboxAnimation {
+            print(sender.titleLabel?.text ?? "")
+            print(sender.isSelected)
         }
     }
     
-    @IBAction private func radioBtnAction(_ sender: UIButton){
+    @IBAction private func onClickPassport(_ sender: UIButton){
         uncheck()
         sender.checkboxAnimation {
             print(sender.titleLabel?.text ?? "")

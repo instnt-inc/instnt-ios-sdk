@@ -12,12 +12,9 @@ import DeviceKit
 class APIClient: NSObject {
     static let shared = APIClient()
     
-    private let sandboxBaseEndpoint         = "https://dev2-api.instnt.org/public"
-    private let productionBaseEndpoint      = "https://api.instnt.org/public"
-    private var baseEndpoint: String {
-        return isSandbox ? sandboxBaseEndpoint : productionBaseEndpoint
-    }
-    
+//    private let sandboxBaseEndpoint         = "https://dev2-api.instnt.org/public"
+//    private let productionBaseEndpoint      = "https://api.instnt.org/public"
+    var baseEndpoint: String = ""
     var isSandbox: Bool = false
     var formKey = ""
     
@@ -61,7 +58,7 @@ class APIClient: NSObject {
                     return
                 }
                 let message = responseJSON["errorMessage"] as? String
-                print("Submit formData errorMessage %@", message)
+                print("Submit formData errorMessage %@", message ?? "")
                 let response = FormSubmitResponse(JSON: responseJSON)
                 
                 completion(response, responseJSON, message)
@@ -71,7 +68,7 @@ class APIClient: NSObject {
         }
     }
     
-    public func createTransaction(data: CreateTransaction, completion: @escaping(Result<String, InstntError>) -> Void) {
+    public func createTransaction(data: CreateTransaction, completion: @escaping(Result<ResultCreateTransaction, InstntError>) -> Void) {
         let endpoint = "\(baseEndpoint)/transactions/"
         var parameters: [String: Any] = [:]
         do {
@@ -82,9 +79,9 @@ class APIClient: NSObject {
               guard let data = response.data else { return }
                 do {
                     let de = JSONDecoder()
-                    de.keyDecodingStrategy = .convertFromSnakeCase
+                    //de.keyDecodingStrategy = .convertFromSnakeCase
                     let res = try de.decode(ResultCreateTransaction.self, from: data)
-                    completion(.success(res.instnttxnid))
+                    completion(.success(res))
                     print(res)
                 }
                 catch {

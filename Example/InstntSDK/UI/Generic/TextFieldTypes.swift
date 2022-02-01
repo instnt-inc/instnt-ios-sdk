@@ -19,4 +19,5 @@ enum TextFieldTypes {
     case zipcode
     case country
     case formKey
+    case endPoint
 }

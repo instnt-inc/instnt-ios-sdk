@@ -23,8 +23,8 @@ class CustomFormPresenter: BasePresenter {
         return view
     }()
     
-    lazy var switchView: SwitchView? = {
-        guard let view = Utils.getViewFromNib(name: "SwitchView") as? SwitchView  else {
+    lazy var endPoint: TextFieldView? = {
+        guard let view = Utils.getViewFromNib(name: "TextFieldView") as? TextFieldView  else {
             return nil
         }
         return view
@@ -44,6 +44,16 @@ class CustomFormPresenter: BasePresenter {
         return view
     }()
     
+//    private let sandboxBaseEndpoint         = "https://dev2-api.instnt.org/public"
+//    private let productionBaseEndpoint      = "https://api.instnt.org/public"
+//    private var baseEndpoint: String {
+//        return isSandbox ? sandboxBaseEndpoint : productionBaseEndpoint
+//    }
+//
+//    var isSandbox: Bool = false
+//    var formKey = ""
+    
+    
     override func presentScene() {
         super.presentScene()
         self.buildView()
@@ -51,7 +61,8 @@ class CustomFormPresenter: BasePresenter {
     
     private func buildView() {
         addFormKey()
-        addSandboxSwitch()
+        addEndPoint()
+        //addSandboxSwitch()
         self.vc?.stackView.addSpacerView()
         addSetUpButton()
     }
@@ -61,26 +72,31 @@ class CustomFormPresenter: BasePresenter {
         formKey?.textField.text = "v163875646772327"
         self.vc?.stackView.addOptionalArrangedSubview(formKey)
     }
-    private func addSandboxSwitch() {
-        switchView?.decorateView(title: "SandBox", completion: { isOn in
-       
-        })
-        self.vc?.stackView.addOptionalArrangedSubview(switchView)
+    
+    private func addEndPoint() {
+        endPoint?.decorateTextField(textfieldType: .endPoint)
+        endPoint?.textField.text = "https://dev2-api.instnt.org/public"
+        self.vc?.stackView.addOptionalArrangedSubview(endPoint)
     }
+    
+//    private func addSandboxSwitch() {
+//        switchView?.decorateView(title: "SandBox", completion: { isOn in
+//
+//        })
+//        self.vc?.stackView.addOptionalArrangedSubview(switchView)
+//    }
     
     private func addSetUpButton() {
         setUpBtn?.decorateView(type: .setUp, completion: {
             if let formKey = self.formKey?.textField.text, formKey.count == 16  {
                 SVProgressHUD.show()
-                Instnt.shared.setup(with: formKey, isSandBox: self.switchView?.uiswitch.isOn ?? true, completion: { result in
-                    self.addResponse()
-                    self.getFormAfterSuccess()
+                Instnt.shared.setup(with: formKey, endPOint: self.endPoint?.textField.text ?? "", completion: { result in
+                    SVProgressHUD.dismiss()
                     switch result {
                     case .success(let transactionID):
-                        Instnt.shared.getFormCodes { response in
-                            SVProgressHUD.dismiss()
-                            self.lblView?.lblText.text = "Set up is succeded with transaction Id \(transactionID)"
-                        }
+                        self.addResponse()
+                        self.getFormAfterSuccess()
+                        self.lblView?.lblText.text = "Set up is succeded with transaction Id \(transactionID)"
                     case .failure(let error):
                         self.lblView?.lblText.text = "Set up is failed with \(error.localizedDescription), please try again later"
                     }
@@ -102,14 +118,15 @@ class CustomFormPresenter: BasePresenter {
     }
     
     private func getFormAfterSuccess() {
-        self.setUpBtn?.decorateView(type: .getForm, completion: {
-            SVProgressHUD.show()
-            Instnt.shared.getFormCodes { response in
-                SVProgressHUD.dismiss()
-                self.gotoFirstName()
-            }
-            
-        })
+        self.gotoFirstName()
+//        self.setUpBtn?.decorateView(type: .getForm, completion: {
+//            SVProgressHUD.show()
+//            Instnt.shared.getFormCodes { response in
+//                SVProgressHUD.dismiss()
+//                self.gotoFirstName()
+//            }
+//
+//        })
     }
     
     private func gotoFirstName() {

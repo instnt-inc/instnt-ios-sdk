@@ -12,6 +12,7 @@ struct CreateTransaction: Encodable {
     let hideFormFields: Bool
     let idmetricsVersion, format: String
     let redirect: Bool
+    
 
     enum CodingKeys: String, CodingKey {
         case formKey = "form_key"
@@ -23,9 +24,19 @@ struct CreateTransaction: Encodable {
 
 struct ResultCreateTransaction: Decodable {
     let instnttxnid: String
+    let otp_verification: Bool
+    
+    public init(from decoder:Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        instnttxnid = try values.decode(String.self, forKey: .instnttxnid)
+        otp_verification = try values.decode(Bool.self, forKey: .otp_verification)
+    }
+    
     enum CodingKeys: String, CodingKey {
         case instnttxnid
+        case otp_verification
     }
+    
 }
 
 struct RequestGetUploadUrl: Encodable {

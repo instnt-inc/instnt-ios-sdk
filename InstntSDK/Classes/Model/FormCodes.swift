@@ -19,6 +19,7 @@ struct FormCodes {
     private (set) var submitURL: String
     private (set) var userId: Int
     private (set) var fingerprint: String
+    private (set) var otpVerification: String
     
     init?(JSON: [String: Any]) {
         guard let id = JSON["form_key_id"] as? String,
@@ -29,7 +30,8 @@ struct FormCodes {
               let hostURL = JSON["static_asset_root"] as? String,
               let submitURL = JSON["signed_submit_form_url"] as? String,
               let userId = JSON["user_id"] as? Int,
-              let fingerprint = JSON["fingerprintjs_browser_token"] as? String else {
+              let fingerprint = JSON["fingerprintjs_browser_token"] as? String,
+              let otpVerification = JSON["otp_verification"] as? String else {
             return nil
         }
         
@@ -44,5 +46,6 @@ struct FormCodes {
         self.submitURL = submitURL
         self.userId = userId
         self.fingerprint = fingerprint
+        self.otpVerification = otpVerification
     }
 }

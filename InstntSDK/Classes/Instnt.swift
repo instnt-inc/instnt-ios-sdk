@@ -35,6 +35,7 @@ public class Instnt: NSObject {
     
     public weak var delegate: InstntDelegate? = nil
     public var transactionID: String?
+    public var isOTPSupported: Bool?
     private var documentType: DocumentType = .licence
     private var documentSide: DocumentSide = .front
     private var parentVC: UIViewController?
@@ -49,9 +50,9 @@ public class Instnt: NSObject {
     // conviniece init
     
     // MARK: - Public Function
-    public func setup(with formId: String, isSandBox: Bool = false, completion: @escaping(Result<String, InstntError>) -> Void) {
+    public func setup(with formId: String, endPOint: String, completion: @escaping(Result<String, InstntError>) -> Void) {
         self.formId = formId
-        APIClient.shared.isSandbox = isSandBox
+        APIClient.shared.baseEndpoint = endPOint
         APIClient.shared.formKey = formId
         Instnt.shared.getTransactionID(completion: completion)
     }
@@ -136,7 +137,8 @@ public class Instnt: NSObject {
         let transactionRequest = CreateTransaction.init(formKey: self.formId, hideFormFields: true, idmetricsVersion: "4.5.0.5", format: "json", redirect: false)
         APIClient.shared.createTransaction(data: transactionRequest, completion: { result in
             switch result {
-            case .success(let transactionID):
+            case .success(let resultTransation):
+                let transactionID = resultTransation.instnttxnid
                 self.transactionID = transactionID
                 completion(.success(transactionID))
             case .failure(let error):
@@ -196,10 +198,6 @@ public class Instnt: NSObject {
                 completion(.failure(InstntError(errorConstant: .error_EXTERNAL)))
             }
         })
-    }
-    
-    public func getTransactionStatus() {
-        
     }
 }
 

@@ -47,6 +47,7 @@ class VerifyOTPPresenter: BasePresenter {
         buttonView?.decorateView(type: .verifyOTP, completion: {
             let phone = self.phoneNumber ?? ""
             let otp = self.otp?.textField.text ?? ""
+            
             SVProgressHUD.show()
             Instnt.shared.verifyOTP(phoneNumber: phone, otp: otp, completion: { result in
                 SVProgressHUD.dismiss()

@@ -12,8 +12,7 @@ import CFDocumentScanSDK
 import SVProgressHUD
 
 
-class UploadDocumentVC: UIViewController {
-    @IBOutlet var stackView: UIStackView!
+class UploadDocumentVC: BaseViewController {
     
     @IBOutlet private var driverLicenceBtn: UIButton! {
         didSet{
@@ -121,21 +120,46 @@ extension UIButton {
 }
 
 extension UploadDocumentVC: InstntDelegate {
-    func instntDidCancel(_ sender: Instnt) {
-        print("Sign Up is cancelled")
+    func instntDidCancel() {
+        self.showSimpleAlert("Sign Up is cancelled", target: self)
     }
     
-    func instntDidSubmit(_ sender: Instnt, decision: String, jwt: String) {
-        print("Form is submitted successfully")
+    func instntDidSubmitSuccess(decision: String, jwt: String) {
+        print("instntDidSubmitSuccess")
+        self.showSimpleAlert("Form is submitted and decision is \(decision)", target: self, completed: {
+            guard let nvc = Utils.getStoryboardInitialViewController("CustomForm") as? UINavigationController else {
+                return
+            }
+            guard let vc = nvc.viewControllers.first else {
+                return
+            }
+            self.navigationController?.pushViewController(vc, animated: true)
+        })
+    }
+    
+    func instntDidSubmitFailure(error: String) {
+        print("instntDidSubmitFailure")
+        self.showSimpleAlert("Form submission is failed with error: \(error)", target: self, completed: {
+            guard let nvc = Utils.getStoryboardInitialViewController("CustomForm") as? UINavigationController else {
+                return
+            }
+            guard let vc = nvc.viewControllers.first else {
+                return
+            }
+            self.navigationController?.pushViewController(vc, animated: true)
+        })
     }
     
     func instntDocumentScanError() {
-        print("Document scan failed, please try again later")
+        self.showSimpleAlert("Document scan failed, please try again later", target: self)
     }
     
     func instntDocumentVerified() {
-        Instnt.shared.submitFormData(Instnt.shared.formData, completion: {_ in
-            print("Data was uploaded successfully")
+        self.showSimpleAlert("Document was uploaded successfully, please submit now", target: self)
+        self.buttonView?.decorateView(type: .submitForm, completion: {
+            Instnt.shared.submitFormData(Instnt.shared.formData, completion: {_ in
+                print("Data was uploaded successfully")
+            })
         })
     }
 }

@@ -11,9 +11,6 @@ import DeviceKit
 
 class APIClient: NSObject {
     static let shared = APIClient()
-    
-//    private let sandboxBaseEndpoint         = "https://dev2-api.instnt.org/public"
-//    private let productionBaseEndpoint      = "https://api.instnt.org/public"
     var baseEndpoint: String = ""
     var isSandbox: Bool = false
     var formKey = ""
@@ -68,7 +65,7 @@ class APIClient: NSObject {
         }
     }
     
-    public func createTransaction(data: CreateTransaction, completion: @escaping(Result<ResultCreateTransaction, InstntError>) -> Void) {
+    func createTransaction(data: CreateTransaction, completion: @escaping(Result<ResultCreateTransaction, InstntError>) -> Void) {
         let endpoint = "\(baseEndpoint)/transactions/"
         var parameters: [String: Any] = [:]
         do {
@@ -91,12 +88,14 @@ class APIClient: NSObject {
         }
     }
     
-    public func getUploadUrl(transactionId: String, data: RequestGetUploadUrl, completion: @escaping(Result<String, InstntError>) -> Void) {
+    func getUploadUrl(transactionId: String, data: RequestGetUploadUrl, completion: @escaping(Result<String, InstntError>) -> Void) {
         let endpoint = "\(baseEndpoint)/transactions/\(transactionId)/attachments/"
         var parameters: [String: Any] = [:]
         do {
             try parameters = data.asDictionary()
         } catch let errror { print("Error converting dic %@", errror.localizedDescription)}
+        debugPrint(endpoint)
+        debugPrint(parameters)
         AF.request(endpoint, method: .post, parameters: parameters, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
             debugPrint(response)
             switch response.result {
@@ -116,7 +115,7 @@ class APIClient: NSObject {
     }
     
     
-     public func upload(url: String, data: CaptureResult, completion: @escaping(Result<Void, InstntError>) -> Void) {
+    func upload(url: String, data: CaptureResult, completion: @escaping(Result<Void, InstntError>) -> Void) {
          guard let uploadUrl = URL(string: url) else {
              return
          }
@@ -144,7 +143,7 @@ class APIClient: NSObject {
              executePostRequest.resume()
      }
     
-    public func verifyDocuments(requestData: VerifyDocument, completion: @escaping(Result<Void, InstntError>) -> Void) {
+    func verifyDocuments(requestData: VerifyDocument, completion: @escaping(Result<Void, InstntError>) -> Void) {
         let endpoint = "\(baseEndpoint)/docverify/authenticate/v1.0"
         var parameters: [String: Any] = [:]
         do {
@@ -158,7 +157,7 @@ class APIClient: NSObject {
         }
     }
     
-    public func sendOTP(requestData: RequestSendOTP, completion: @escaping(Result<Void, InstntError>) -> Void) {
+    func sendOTP(requestData: RequestSendOTP, completion: @escaping(Result<Void, InstntError>) -> Void) {
         let endpoint = "\(baseEndpoint)/otp/phone/verify/v1.0"
         var parameters: [String: Any] = [:]
         do {
@@ -180,7 +179,7 @@ class APIClient: NSObject {
         }
     }
     
-    public func verifyOTP(requestData: RequestVerifyOTP, completion: @escaping(Result<Void, InstntError>) -> Void) {
+    func verifyOTP(requestData: RequestVerifyOTP, completion: @escaping(Result<Void, InstntError>) -> Void) {
         let endpoint = "\(baseEndpoint)/otp/phone/verify/v1.0"
         var parameters: [String: Any] = [:]
         do {

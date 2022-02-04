@@ -119,14 +119,6 @@ class CustomFormPresenter: BasePresenter {
     
     private func getFormAfterSuccess() {
         self.gotoFirstName()
-//        self.setUpBtn?.decorateView(type: .getForm, completion: {
-//            SVProgressHUD.show()
-//            Instnt.shared.getFormCodes { response in
-//                SVProgressHUD.dismiss()
-//                self.gotoFirstName()
-//            }
-//
-//        })
     }
     
     private func gotoFirstName() {

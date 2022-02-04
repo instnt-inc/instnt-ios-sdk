@@ -33,9 +33,9 @@ class ButtonView: UIView {
         case .setUp:
             button.backgroundColor = UIColor.black
             button .setTitle(NSLocalizedString("Set Up", comment: ""), for: .normal)
-        case .getForm:
+        case .submitForm:
             button.backgroundColor = UIColor.black
-            button .setTitle(NSLocalizedString("Get Form", comment: ""), for: .normal)
+            button .setTitle(NSLocalizedString("Submit Form", comment: ""), for: .normal)
             
         
         }

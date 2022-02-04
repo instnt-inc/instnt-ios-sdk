@@ -11,31 +11,31 @@ import SVProgressHUD
 
 
 @objc public protocol InstntDelegate: NSObjectProtocol {
-    func instntDidCancel(_ sender: Instnt)
-    func instntDidSubmit(_ sender: Instnt, decision: String, jwt: String)
+    func instntDidCancel()
+    func instntDidSubmitSuccess(decision: String, jwt: String)
+    func instntDidSubmitFailure(error: String)
     func instntDocumentVerified()
     func instntDocumentScanError()
 }
 
 public class Instnt: NSObject {
-    public static let decisionTypeAccept = "ACCEPT"
-    public static let decisionTypeReject = "REJECT"
-    public static let decisionTypeReview = "REVIEW"
+    public enum DecisionType: String {
+        case accept = "ACCEPT"
+        case reject = "REJECT"
+        case review = "REVIEW"
+    }
     
     public var formData: [String: Any] = [:]
     
     public static let shared = Instnt()
     
     private (set) var formId: String = ""
-    private (set) var formCodes: FormCodes? = nil
-    
-    private var isSandbox: Bool {
-        return APIClient.shared.isSandbox
-    }
-    
     public weak var delegate: InstntDelegate? = nil
     public var transactionID: String?
     public var isOTPSupported: Bool?
+    private var fingerprint: String = ""
+    private var serviceURL: String = ""
+    private var submitURL: String = ""
     private var documentType: DocumentType = .licence
     private var documentSide: DocumentSide = .front
     private var parentVC: UIViewController?
@@ -57,72 +57,40 @@ public class Instnt: NSObject {
         Instnt.shared.getTransactionID(completion: completion)
     }
     
-    public func showForm(from viewController: UIViewController, completion: @escaping ((Bool, String?) -> Void)) {
-        guard !formId.isEmpty else {
-            let message = "Empty Form Id!"
-            if Thread.isMainThread {
-                completion(false, message)
-            } else {
-                DispatchQueue.main.async {
-                    completion(false, message)
-                }
-            }
-            
-            return
-        }
-        
-        APIClient.shared.getFormCodes(with: formId) { [weak self] (formCodes, _, message) in
-            if let formCodes = formCodes {
-                let formViewController = FormViewController()
-                let navigationViewController = UINavigationController(rootViewController: formViewController)
-                formViewController.formCodes = formCodes
-                formViewController.delegate = self
-                viewController.present(navigationViewController, animated: true) {
-                    completion(true, nil)
-                }
-            } else {
-                completion(false, message)
-            }
-        }
-    }
-    
-    // MARK: - Custom Usage
-    public func getFormCodes(_ completion: @escaping (([String: Any]?) -> Void)) {
-        APIClient.shared.getFormCodes(with: formId) { [weak self] (fromCodes, responseJSON, _) in
-            self?.formCodes = fromCodes
-            
-            completion(responseJSON)
-        }
-    }
-    
     public func submitFormData(_ data: [String: Any], completion: @escaping (([String: Any]?) -> Void)) {
-        guard let formCodes = formCodes else {
-            if Thread.isMainThread {
-                completion(nil)
-            } else {
-                DispatchQueue.main.async {
-                    completion(nil)
-                }
-            }
-            return
-        }
-        
+        SVProgressHUD.show()
         var formData: [String: Any] = data
         formData["signature"] = self.transactionID
-        formData["OTPSignature"] = self.transactionID
-        formData["form_key"] = formCodes.id
+        if Instnt.shared.isOTPSupported ?? false {
+            formData["OTPSignature"] = self.transactionID
+        }
+        formData["form_key"] = formId
         
         formData["fingerprint"] = [
-            "requestId": formCodes.fingerprint,
-            "visitorId": formCodes.fingerprint,
+            "requestId": self.fingerprint,
+            "visitorId": self.fingerprint,
             "visitorFound": true
         ]
         
-        formData["client_referer_url"] = formCodes.serviceURL
-        formData["client_referer_host"] = URL(string: formCodes.serviceURL)?.host ?? ""
+        formData["client_referer_url"] = self.serviceURL
+        formData["client_referer_host"] = URL(string: self.serviceURL)?.host ?? ""
         
-        APIClient.shared.submitForm(to: formCodes.submitURL, formData: formData) { (_, responseJSON, _) in
+        APIClient.shared.submitForm(to: self.submitURL, formData: formData) { (response, responseJSON, error) in
+            SVProgressHUD.dismiss()
             completion(responseJSON)
+            print("submitFormData \(String(describing: responseJSON))")
+            if response?.success == true,
+               error == nil,
+               let decision = response?.decision,
+               let jwt = response?.jwt {
+                self.delegate?.instntDidSubmitSuccess(decision: decision, jwt: jwt)
+            } else {
+                if let error = error {
+                    self.delegate?.instntDidSubmitFailure(error: error)
+                } else if response?.success == false {
+                    self.delegate?.instntDidSubmitFailure(error: "Unknown error: Please try again")
+                }
+            }
         }
     }
     
@@ -139,7 +107,11 @@ public class Instnt: NSObject {
             switch result {
             case .success(let resultTransation):
                 let transactionID = resultTransation.instnttxnid
+                self.isOTPSupported = resultTransation.otp_verification
                 self.transactionID = transactionID
+                self.fingerprint = resultTransation.fingerprintjs_browser_token
+                self.serviceURL = resultTransation.backend_service_url
+                self.submitURL = resultTransation.signed_submit_form_url
                 completion(.success(transactionID))
             case .failure(let error):
                 completion(.failure(error))
@@ -198,17 +170,6 @@ public class Instnt: NSObject {
                 completion(.failure(InstntError(errorConstant: .error_EXTERNAL)))
             }
         })
-    }
-}
-
-
-extension Instnt: FormViewControllerDelegate {
-    func formViewControllerDidCancel(_ sender: FormViewController) {
-        delegate?.instntDidCancel(self)
-    }
-    
-    func formViewControllerDidSubmitForm(_ sender: FormViewController, response: FormSubmitResponse) {
-        delegate?.instntDidSubmit(self, decision: response.decision, jwt: response.jwt)
     }
 }
 

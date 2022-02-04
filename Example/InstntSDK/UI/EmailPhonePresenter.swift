@@ -55,6 +55,20 @@ class EmailPhonePresenter: BasePresenter {
     }
     
     func addButton() {
+        if Instnt.shared.isOTPSupported == false  {
+            buttonView?.decorateView(type: .next, completion: {
+                Instnt.shared.formData["mobileNumber"] = self.phone?.textField.text
+                Instnt.shared.formData["email"] = self.email?.textField.text
+                if Instnt.shared.isOTPSupported == false {
+                    guard let vc = Utils.getStoryboardInitialViewController("Address") as? AddressVC else {
+                        return
+                    }
+                    self.vc?.navigationController?.pushViewController(vc, animated: true)
+                }
+            })
+            self.vc?.stackView.addOptionalArrangedSubview(buttonView)
+            return
+        }
         
         buttonView?.decorateView(type: .submitOTP, completion: {
             let phone = self.phone?.textField.text ?? ""
@@ -76,7 +90,6 @@ class EmailPhonePresenter: BasePresenter {
                     }
                 }
             })
-            
         })
         self.vc?.stackView.addOptionalArrangedSubview(buttonView)
     }

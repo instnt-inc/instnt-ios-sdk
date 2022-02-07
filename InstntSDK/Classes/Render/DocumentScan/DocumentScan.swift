@@ -9,17 +9,24 @@ import Foundation
 import CFDocumentScanSDK
 import AVFoundation
 import CoreLocation
+import IDMetricsSelfieCapture
 
-@objc public protocol DocumentScanDelegate: NSObjectProtocol {
-    func onScanFinish(captureResult: CaptureResult)
-    func onScanCancelled(error: String)
+public protocol DocumentScanDelegate: NSObjectProtocol {
+    func onDocumentScanFinish(captureResult: CaptureResult)
+    func onDocumentScanCancelled(error: InstntError)
+}
+
+public protocol SelfieScanDelegate: NSObjectProtocol {
+    func onSelfieScanCancelled(error: InstntError)
+    func onSelfieScanFinish(captureResult: CaptureSelfieResult)
 }
 
 class DocumentScan: NSObject {
     static let shared = DocumentScan()
     private let locationManager = CLLocationManager()
     private lazy var scanHandler = DSHandler(delegate: self)
-    weak var delegate: DocumentScanDelegate? = nil
+    weak var documentScanDelegate: DocumentScanDelegate? = nil
+    weak var selfieScandelegate: SelfieScanDelegate? = nil
     
     private override init() {
         super.init()
@@ -72,7 +79,7 @@ class DocumentScan: NSObject {
     }
     
     func scanDocument(from vc: UIViewController, documentSettings: DocumentSettings, delegate:DocumentScanDelegate) {
-        self.delegate = delegate
+        self.documentScanDelegate = delegate
         if documentSettings.documentType == .passport {
             let options = DSPassportOptions()
             options.captureMode = .Auto
@@ -95,8 +102,15 @@ class DocumentScan: NSObject {
         }
     }
     
-    func scanSelfie() {
-       
+    func scanSelfie(from vc: UIViewController, delegate: SelfieScanDelegate) {
+        let settings = CFASelfieSettings()
+        settings?.showConfirmationScreen = true
+        settings?.captureMode = .ManualCapture
+        settings?.enableFarSelfie = true
+        self.selfieScandelegate = delegate
+        if let selfieScan = CFASelfieController.sharedInstance() as? CFASelfieController {
+            selfieScan.scanSelfie(vc, selfieSettings: settings, selfieScanDelegate: self)
+        }
     }
 }
 
@@ -117,18 +131,34 @@ extension DocumentScan: DSHandlerDelegate {
         let strBase64 = img!.base64EncodedData()
         
         var focus : Bool!
-        if result.captureAnalysis.focus > 0.6{
+        if result.captureAnalysis.focus > 0.6 {
             focus = true
-        }else{
+        } else {
             focus = false
         }
         
         let capture = CaptureResult(resultBase64: strBase64, frontfocus: focus, frontGlare: false, backfocus: focus, backGlare: false, isFaceFaceDetected: result.captureAnalysis.faceDetected, isBarcodeDetected: false)
-        delegate?.onScanFinish(captureResult: capture)
+        documentScanDelegate?.onDocumentScanFinish(captureResult: capture)
     }
     
     func captureError(_ error: DSError) {
         let error = InstntError(errorConstant: .error_CAPTURE)
-        delegate?.onScanCancelled(error: error.localizedDescription)
+        documentScanDelegate?.onDocumentScanCancelled(error: error)
     }
+}
+
+extension DocumentScan: CFASelfieScanDelegate {
+    func onFinishSelfieScan(_ selfieScanData: CFASelfieScanData!) {
+        let selfieResult = CaptureSelfieResult(resultBase64: selfieScanData.selfieData)
+        selfieScandelegate?.onSelfieScanFinish(captureResult: selfieResult)
+    }
+
+    func onCancelSelfieScan() {
+        
+    }
+
+    func onFinishSelfieScanWithError(_ errorCode: Int32, errorMessage: String!) {
+
+    }
+
 }

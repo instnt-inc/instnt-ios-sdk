@@ -50,7 +50,13 @@ public class CaptureResult : NSObject{
         self.backGlare = backGlare
         self.isFaceFaceDetected = isFaceFaceDetected
         self.isBarcodeDetected = isBarcodeDetected
+    }
+}
 
+public class CaptureSelfieResult : NSObject{
+    public var resultBase64: Data
+    init(resultBase64: Data) {
+        self.resultBase64 = resultBase64
     }
 }
 

@@ -10,12 +10,13 @@ import UIKit
 import SVProgressHUD
 
 
-@objc public protocol InstntDelegate: NSObjectProtocol {
+ public protocol InstntDelegate: NSObjectProtocol {
     func instntDidCancel()
     func instntDidSubmitSuccess(decision: String, jwt: String)
     func instntDidSubmitFailure(error: String)
     func instntDocumentVerified()
     func instntDocumentScanError()
+    func instntSelfieScanError()
 }
 
 public class Instnt: NSObject {
@@ -75,6 +76,17 @@ public class Instnt: NSObject {
         formData["client_referer_url"] = self.serviceURL
         formData["client_referer_host"] = URL(string: self.serviceURL)?.host ?? ""
         
+        var deviceInfo: [String: String] = [:]
+        
+        deviceInfo["screen_resolution_value"] = "\(Utils.getViewHeight()) * \(Utils.getViewWidth()) Pixels"
+        deviceInfo["screen_size"] = "\(Utils.diagonalScreenSize()) inches"
+        deviceInfo["screen_density"] = "\(Utils.getDPI()) dpi"
+        deviceInfo["osversion"] = "\(Utils.getOSVersion())"
+        deviceInfo["model"] = "\(Utils.getDeviceModel())"
+        deviceInfo["serial"] = "\(Utils.getSerialNumber())"
+        formData["mobileDeviceInfo"] = deviceInfo
+        
+        
         APIClient.shared.submitForm(to: self.submitURL, formData: formData) { (response, responseJSON, error) in
             SVProgressHUD.dismiss()
             completion(responseJSON)
@@ -99,6 +111,11 @@ public class Instnt: NSObject {
         self.documentType = documentType
         let documentSettings = DocumentSettings(documentType: .licence, documentSide: self.documentSide, captureMode: .manual)
         DocumentScan.shared.scanDocument(from: vc, documentSettings: documentSettings, delegate: self)
+    }
+    
+    public func scanSelfie(from vc: UIViewController) {
+        parentVC = vc
+        DocumentScan.shared.scanSelfie(from: vc, delegate: self)
     }
     
     func getTransactionID(completion: @escaping(Result<String, InstntError>) -> Void) {
@@ -127,19 +144,17 @@ public class Instnt: NSObject {
         
     }
     
-    private func uploadDocument(url: String, data: CaptureResult, completion: @escaping(Result<Void, InstntError>) -> Void) {
+    private func uploadDocument(url: String, data: Data, completion: @escaping(Result<Void, InstntError>) -> Void) {
         APIClient.shared.upload(url: url, data: data, completion: completion)
     }
     
-    private func uploadAttachment(data: CaptureResult, completion: @escaping(Result<Void, InstntError>) -> Void) {
+    private func uploadAttachment(data: Data, completion: @escaping(Result<Void, InstntError>) -> Void) {
         self.getUploadUrl(completion: { result in
             switch result {
             case .success(let url):
-                self.uploadDocument(url: url, data: data, completion: { result in
-                    completion(.success((())))
-                })
-            case .failure(_):
-                break
+                self.uploadDocument(url: url, data: data, completion: completion)
+            case .failure(let error):
+                completion(.failure(error))
             }
         })
     }
@@ -173,10 +188,10 @@ public class Instnt: NSObject {
     }
 }
 
-extension Instnt: DocumentScanDelegate {    
-    public func onScanFinish(captureResult: CaptureResult) {
+extension Instnt: DocumentScanDelegate {
+    public func onDocumentScanFinish(captureResult: CaptureResult) {
         SVProgressHUD.show()
-        Instnt.shared.uploadAttachment(data: captureResult, completion: { result in
+        Instnt.shared.uploadAttachment(data: captureResult.resultBase64, completion: { result in
             SVProgressHUD.dismiss()
             switch result {
             case .success(_):
@@ -187,20 +202,46 @@ extension Instnt: DocumentScanDelegate {
                             self.scanDocument(from: parentVC, documentType: self.documentType)
                         }
                     } else if self.documentSide == .back {
-                        self.verifyDocuments(completion: {_ in
-                            self.delegate?.instntDocumentVerified()
-                        })
+                        DispatchQueue.main.async {
+                            self.scanSelfie(from: parentVC)
+                        }
+                       
                     }
                 }
-            case .failure(_):
-                break
+            case .failure(let error):
+                print("uploadAttachment error \(String(describing: error.message))")
+                self.delegate?.instntDocumentScanError()
             }
         })
-        
-        
     }
     
-    public func onScanCancelled(error: String) {
+    public func onDocumentScanCancelled(error: InstntError) {
+        self.delegate?.instntDocumentScanError()
+        print("onDocumentScanCancelled error \(String(describing: error.message))")
         print(error)
+    }
+}
+
+extension Instnt: SelfieScanDelegate {
+    
+    public func onSelfieScanCancelled(error: InstntError) {
+        self.delegate?.instntSelfieScanError()
+        print("onSelfieScanCancelled error \(String(describing: error.message))")
+    }
+    
+    public func onSelfieScanFinish(captureResult: CaptureSelfieResult) {
+        SVProgressHUD.show()
+        Instnt.shared.uploadAttachment(data: captureResult.resultBase64, completion: { result in
+            SVProgressHUD.dismiss()
+            switch result {
+            case .success(_):
+                self.verifyDocuments(completion: {_ in
+                    self.delegate?.instntDocumentVerified()
+                })
+            case .failure(let error):
+                print("uploadAttachment error \(String(describing: error.message))")
+                self.delegate?.instntDocumentScanError()
+            }
+        })
     }
 }

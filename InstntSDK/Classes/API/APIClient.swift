@@ -101,28 +101,30 @@ class APIClient: NSObject {
             switch response.result {
             case .success(let data):
                 guard let responseJSON = data as? [String: Any] else {
+                    completion(.failure(InstntError(errorConstant: .error_PARSER)))
                    return
                 }
                 if let s3Key = responseJSON["s3_key"] as? String {
                     completion(.success(s3Key))
                 } else {
-                    completion(.failure(InstntError(errorConstant: .error_EXTERNAL)))
+                    completion(.failure(InstntError(errorConstant: .error_PARSER)))
                 }
             case .failure(let error):
-                print("getFormCodes Error: \(error.localizedDescription)")
+                completion(.failure(InstntError(errorConstant: .error_EXTERNAL, message: error.localizedDescription, statusCode: error.responseCode ?? 00)))
+                print("getUploadUrl Error: \(error.localizedDescription)")
             }
         }
     }
     
     
-    func upload(url: String, data: CaptureResult, completion: @escaping(Result<Void, InstntError>) -> Void) {
+    func upload(url: String, data: Data, completion: @escaping(Result<Void, InstntError>) -> Void) {
          guard let uploadUrl = URL(string: url) else {
              return
          }
          var postRequest = URLRequest.init(url: uploadUrl)
          postRequest.httpMethod = "PUT"
          postRequest.headers = ["Content-Type": "image/jpeg"];
-         postRequest.httpBody = data.resultBase64
+         postRequest.httpBody = data
              let uploadSession = URLSession.shared
              let executePostRequest = uploadSession.dataTask(with: postRequest as URLRequest) { (data, response, error) -> Void in
                  if let urlresponse = response as? HTTPURLResponse
@@ -150,9 +152,11 @@ class APIClient: NSObject {
             try parameters = requestData.asDictionary()
         } catch let errror { print("Error converting dic %@", errror.localizedDescription)}
         AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseData { response in
-            if response.response?.statusCode == 200 {
+            if response.response?.statusCode == 200 || response.response?.statusCode == 201 {
                 debugPrint("verifyDocuments Success with 200");
                 completion(.success(()))
+            } else if response.error != nil {
+                completion(.failure(InstntError(errorConstant: .error_EXTERNAL, message: response.error?.localizedDescription, statusCode: response.response?.statusCode ?? 0)))
             }
         }
     }
@@ -165,7 +169,14 @@ class APIClient: NSObject {
         } catch let errror { print("Error converting dic %@", errror.localizedDescription)}
         AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseData { response in
             debugPrint(response)
-            guard let data = response.data else { return }
+            if let error = response.error  {
+                completion(.failure(InstntError(errorConstant: .error_EXTERNAL, message: error.localizedDescription, statusCode: response.response?.statusCode ?? 0)))
+                return
+            }
+            guard let data = response.data else {
+                completion(.failure(InstntError(errorConstant: .error_EXTERNAL, message: response.error?.localizedDescription, statusCode: response.response?.statusCode ?? 0)))
+                return
+            }
             do {
                 let de = JSONDecoder()
                 de.keyDecodingStrategy = .convertFromSnakeCase
@@ -174,6 +185,7 @@ class APIClient: NSObject {
                 print(res)
             }
             catch {
+                completion(.failure(InstntError(errorConstant: .error_PARSER, message: response.error?.localizedDescription, statusCode: response.response?.statusCode ?? 0)))
                 print(error)
             }
         }

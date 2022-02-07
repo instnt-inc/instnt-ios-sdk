@@ -13,9 +13,6 @@ import func CommonCrypto.CC_MD5
 import typealias CommonCrypto.CC_LONG
 
 class Utils {
-    static let companyCode = "Qaf Rider"
-    static let platForm = "iOS"
-
     class func getStoryboardInitialViewController(_ storyboard: String) -> UIViewController {
         let board = UIStoryboard(name: storyboard, bundle: nil)
         return board.instantiateInitialViewController()!
@@ -52,10 +49,6 @@ class Utils {
     class func getDevice() -> String {
         return UIDevice.current.model
     }
-
-    
-
-    
 }
 extension NSObject {
     public var theClassName: String {

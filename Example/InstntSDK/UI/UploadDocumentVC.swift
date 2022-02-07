@@ -151,7 +151,15 @@ extension UploadDocumentVC: InstntDelegate {
     }
     
     func instntDocumentScanError() {
-        self.showSimpleAlert("Document scan failed, please try again later", target: self)
+        self.showSimpleAlert("Document scan failed, please try again later", target: self, completed: {
+            self.navigationController?.popViewController(animated: true)
+        })
+    }
+    
+    func instntSelfieScanError() {
+        self.showSimpleAlert("Selfie scan failed, please try again later", target: self, completed: {
+            self.navigationController?.popViewController(animated: true)
+        })
     }
     
     func instntDocumentVerified() {

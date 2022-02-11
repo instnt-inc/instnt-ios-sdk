@@ -19,7 +19,7 @@ public struct DocumentSettings {
 }
 
 public enum DocumentType: String {
-    case licence = "Licence"
+    case license = "License"
     case passport = "Passport"
 }
 

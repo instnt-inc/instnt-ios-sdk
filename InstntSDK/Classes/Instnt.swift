@@ -37,7 +37,7 @@ public class Instnt: NSObject {
     private var fingerprint: String = ""
     private var serviceURL: String = ""
     private var submitURL: String = ""
-    private var documentType: DocumentType = .licence
+    private var documentType: DocumentType = .license
     private var documentSide: DocumentSide = .front
     private var parentVC: UIViewController?
     
@@ -90,6 +90,7 @@ public class Instnt: NSObject {
         APIClient.shared.submitForm(to: self.submitURL, formData: formData) { (response, responseJSON, error) in
             SVProgressHUD.dismiss()
             completion(responseJSON)
+            debugPrint(response ?? "")
             print("submitFormData \(String(describing: responseJSON))")
             if response?.success == true,
                error == nil,
@@ -109,7 +110,7 @@ public class Instnt: NSObject {
     public func scanDocument(from vc: UIViewController, documentType: DocumentType) {
         parentVC = vc
         self.documentType = documentType
-        let documentSettings = DocumentSettings(documentType: .licence, documentSide: self.documentSide, captureMode: .manual)
+        let documentSettings = DocumentSettings(documentType: .license, documentSide: self.documentSide, captureMode: .manual)
         DocumentScan.shared.scanDocument(from: vc, documentSettings: documentSettings, delegate: self)
     }
     
@@ -160,13 +161,19 @@ public class Instnt: NSObject {
     }
     
     public func sendOTP(phoneNumber: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
-        let requestSendOTP = RequestSendOTP(requestData: "{\"phoneNumber\": \"\(phoneNumber)\"}", isVerify: false)
-        APIClient.shared.sendOTP(requestData: requestSendOTP, completion: completion)
+        let requestSendOTP = RequestSendOTP(phone: phoneNumber)
+        guard let transactionID = transactionID else {
+            return
+        }
+        APIClient.shared.sendOTP(requestData: requestSendOTP, transactionId: transactionID, completion: completion)
     }
     
     public func verifyOTP(phoneNumber: String, otp: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
+        guard let transactionID = transactionID else {
+            return
+        }
         let requestVerifyOTP = RequestVerifyOTP(requestData: "{\"phoneNumber\": \"\(phoneNumber)\", \"otpCode\": \"\(otp)\"}", isVerify: true)
-        APIClient.shared.verifyOTP(requestData: requestVerifyOTP, completion: completion)
+        APIClient.shared.verifyOTP(requestData: requestVerifyOTP, transactionId: transactionID, completion: completion)
     }
     public func verifyDocuments(completion: @escaping(Result<Void, InstntError>) -> Void) {
         guard let transactionID = transactionID else {
@@ -174,7 +181,7 @@ public class Instnt: NSObject {
         }
 
         let verifyDocument = VerifyDocument(formKey: Instnt.shared.formId, documentType: self.documentType.rawValue, instnttxnid:  transactionID)
-        APIClient.shared.verifyDocuments(requestData: verifyDocument, completion: { result in
+        APIClient.shared.verifyDocuments(requestData: verifyDocument, transactionId: transactionID, completion: { result in
             switch result {
             case .success(_):
                 print("verify succes")

@@ -15,13 +15,14 @@ public enum ErrorConstants: Int {
     case error_NETWORK_TIMEOUT
     case error_PARSER
     case error_INVALID_OTP
+    case error_INVALID_PHONE
+    case error_INVALID_DATA
 }
 
 open class InstntError: Error {
     public var errorConstant: ErrorConstants
     public var message: String?
     public var statusCode: Int = 999
-    public var api: String?
 
     public init(errorConstant: ErrorConstants, code: String? = nil, message: String? = nil, statusCode: Int = 999) {
         self.errorConstant = errorConstant
@@ -45,9 +46,13 @@ open class InstntError: Error {
         case .error_NO_CONNECTIVITY:
             message = NSLocalizedString("ERROR_NO_CONNECTIVITY", comment: "")
         case .error_INVALID_OTP:
-            message = NSLocalizedString("error_INVALID_OTP", comment: "")
+            message = NSLocalizedString("The OTP is invalid, please try again", comment: "")
+        case .error_INVALID_PHONE:
+            message = NSLocalizedString("The Phone number is invalid, please try again", comment: "")
         case .error_UPLOAD:
             message = NSLocalizedString("Error Uploading document, please try again later.", comment: "")
+        case .error_INVALID_DATA:
+            message = NSLocalizedString("Invalid data, please try again later.", comment: "")
         }
 
         return NSLocalizedString(message, comment: "Error Message")

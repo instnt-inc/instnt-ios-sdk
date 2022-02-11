@@ -50,7 +50,7 @@ class UploadDocumentVC: BaseViewController {
     private func addNextButton() {
         self.stackView.addSpacerView()
         buttonView?.decorateView(type: .next, completion: {
-            Instnt.shared.scanDocument(from: self, documentType: DocumentType.licence)
+            Instnt.shared.scanDocument(from: self, documentType: DocumentType.license)
         })
         self.stackView.addOptionalArrangedSubview(buttonView)
     }

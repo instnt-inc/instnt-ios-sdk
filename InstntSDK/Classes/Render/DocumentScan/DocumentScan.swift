@@ -88,7 +88,7 @@ class DocumentScan: NSObject {
             vc.present(scanHandler.scanController, animated: true)
             scanHandler.start()
 
-        } else if documentSettings.documentType == .licence {
+        } else if documentSettings.documentType == .license {
             
             let options = DSID1Options()
             options.side = documentSettings.documentSide == .back ? .Back: .Front
@@ -126,7 +126,6 @@ extension DocumentScan: CLLocationManagerDelegate {
 
 extension DocumentScan: DSHandlerDelegate {
     func handleScan(result: DSResult) {
-        // passthose results back to the delegate as CaptureResult
         let img = result.image
         let strBase64 = img!.base64EncodedData()
         

@@ -70,19 +70,30 @@ struct ResultverifyDocument: Decodable {
 }
 
 struct RequestSendOTP: Encodable {
-    let requestData: String
-    let isVerify: Bool
+    let phone: String
 }
 
 struct ResultSendOTP: Decodable {
-    
+    let response: Response
+    struct Response: Codable {
+        let id: String
+        let errors: [String]
+        let valid: Bool
+    }
 }
 
 struct RequestVerifyOTP: Encodable {
     let requestData: String
     let isVerify: Bool
+   
 }
 
 struct ResultVerifyOTP: Decodable {
+    let response: Response
+    struct Response: Codable {
+        let id: String
+        let errors: [String]
+        let valid: Bool
+    }
     
 }

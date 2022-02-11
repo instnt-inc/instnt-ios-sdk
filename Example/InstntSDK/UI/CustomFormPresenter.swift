@@ -88,7 +88,7 @@ class CustomFormPresenter: BasePresenter {
     
     private func addSetUpButton() {
         setUpBtn?.decorateView(type: .setUp, completion: {
-            if let formKey = self.formKey?.textField.text, formKey.count == 16  {
+            if let formKey = self.formKey?.textField.text {
                 SVProgressHUD.show()
                 Instnt.shared.setup(with: formKey, endPOint: self.endPoint?.textField.text ?? "", completion: { result in
                     SVProgressHUD.dismiss()
@@ -101,12 +101,7 @@ class CustomFormPresenter: BasePresenter {
                         self.lblView?.lblText.text = "Set up is failed with \(error.localizedDescription), please try again later"
                     }
                 })
-            } else {
-                guard let errorVC = self.vc else {
-                    return
-                }
-                errorVC.showSimpleAlert("Please Enter 16 digits form key", target: errorVC)
-            }            
+            } 
         })
         self.vc?.stackView.addOptionalArrangedSubview(setUpBtn)
     }

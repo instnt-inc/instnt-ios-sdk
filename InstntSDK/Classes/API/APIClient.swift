@@ -48,6 +48,7 @@ class APIClient: NSObject {
         let paramters: [String: Any] = formData
        
         AF.request(endpoint, method: .post, parameters: paramters, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
+            debugPrint(response)
             switch response.result {
             case .success(let data):
                 guard let responseJSON = data as? [String: Any] else {
@@ -145,13 +146,14 @@ class APIClient: NSObject {
              executePostRequest.resume()
      }
     
-    func verifyDocuments(requestData: VerifyDocument, completion: @escaping(Result<Void, InstntError>) -> Void) {
-        let endpoint = "\(baseEndpoint)/docverify/authenticate/v1.0"
+    func verifyDocuments(requestData: VerifyDocument, transactionId: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
+        let endpoint = "\(baseEndpoint)/transactions/\(transactionId)/attachments/verify/"
         var parameters: [String: Any] = [:]
         do {
             try parameters = requestData.asDictionary()
         } catch let errror { print("Error converting dic %@", errror.localizedDescription)}
         AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseData { response in
+            debugPrint(response)
             if response.response?.statusCode == 200 || response.response?.statusCode == 201 {
                 debugPrint("verifyDocuments Success with 200");
                 completion(.success(()))
@@ -161,7 +163,26 @@ class APIClient: NSObject {
         }
     }
     
-    func sendOTP(requestData: RequestSendOTP, completion: @escaping(Result<Void, InstntError>) -> Void) {
+    func sendOTP(requestData: RequestSendOTP, transactionId: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
+        let endpoint = "\(baseEndpoint)/transactions/\(transactionId)/otp"
+        var parameters: [String: Any] = [:]
+        do {
+            try parameters = requestData.asDictionary()
+        } catch let errror { print("Error converting dic %@", errror.localizedDescription)}
+        AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseData { response in
+            debugPrint(response)
+            if response.response?.statusCode == 200 || response.response?.statusCode == 201 {
+                debugPrint("verifyDocuments Success with 200");
+                completion(.success(()))
+            } else if response.error != nil {
+                completion(.failure(InstntError(errorConstant: .error_EXTERNAL, message: response.error?.localizedDescription, statusCode: response.response?.statusCode ?? 0)))
+            } else {
+                completion(.failure(InstntError(errorConstant: .error_INVALID_PHONE)))
+            }
+        }
+    }
+    
+    func verifyOTP(requestData: RequestVerifyOTP, transactionId: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
         let endpoint = "\(baseEndpoint)/otp/phone/verify/v1.0"
         var parameters: [String: Any] = [:]
         do {
@@ -169,60 +190,28 @@ class APIClient: NSObject {
         } catch let errror { print("Error converting dic %@", errror.localizedDescription)}
         AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseData { response in
             debugPrint(response)
+            guard let data = response.data else {
+                completion(.failure(InstntError.init(errorConstant: .error_INVALID_DATA)))
+                return
+            }
             if let error = response.error  {
                 completion(.failure(InstntError(errorConstant: .error_EXTERNAL, message: error.localizedDescription, statusCode: response.response?.statusCode ?? 0)))
                 return
             }
-            guard let data = response.data else {
-                completion(.failure(InstntError(errorConstant: .error_EXTERNAL, message: response.error?.localizedDescription, statusCode: response.response?.statusCode ?? 0)))
-                return
-            }
+            
             do {
                 let de = JSONDecoder()
-                de.keyDecodingStrategy = .convertFromSnakeCase
-                let res = try de.decode(ResultSendOTP.self, from: data)
-                completion(.success(()))
-                print(res)
-            }
-            catch {
-                completion(.failure(InstntError(errorConstant: .error_PARSER, message: response.error?.localizedDescription, statusCode: response.response?.statusCode ?? 0)))
-                print(error)
-            }
-        }
-    }
-    
-    func verifyOTP(requestData: RequestVerifyOTP, completion: @escaping(Result<Void, InstntError>) -> Void) {
-        let endpoint = "\(baseEndpoint)/otp/phone/verify/v1.0"
-        var parameters: [String: Any] = [:]
-        do {
-            try parameters = requestData.asDictionary()
-        } catch let errror { print("Error converting dic %@", errror.localizedDescription)}
-        AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).responseData { response in
-            debugPrint(response)
-            guard let data = response.data else { return }
-            do {
-                let de = JSONDecoder()
-                de.keyDecodingStrategy = .convertFromSnakeCase
                 let res = try de.decode(ResultVerifyOTP.self, from: data)
-                print(res)
-                completion(.success(()))
+                if res.response.valid == true {
+                    completion(.success(()))
+                } else {
+                    completion(.failure(InstntError.init(errorConstant: .error_INVALID_OTP)))
+                }
             }
             catch {
-                print(error)
+                completion(.failure(InstntError.init(errorConstant: .error_PARSER)))
             }
         }
     }
     
-}
-
-private extension APIClient {
-    func getDeviceAttributes() -> [String: Any] {
-        var attributes: [String: Any] = [:]
-        
-        let device = Device.current
-        attributes["model"] = device.description
-        attributes["system"] = ("\(device.systemName!) \(device.systemVersion!)")
-
-        return attributes
-    }
 }

@@ -84,9 +84,9 @@ class EmailPhonePresenter: BasePresenter {
                     }
                     vc.presenter?.phoneNumber = phone
                     self.vc?.navigationController?.pushViewController(vc, animated: true)
-                case .failure(_):
+                case .failure( let error):
                     if let vc = self.vc {
-                        self.vc?.showSimpleAlert("Error getting the OTP", target: vc)
+                        self.vc?.showSimpleAlert(error.message ?? "Error getting the OTP", target: vc)
                     }
                 }
             })

@@ -57,7 +57,7 @@ class FirstLastNamePresenter: BasePresenter {
     func addNextButton() {
         buttonView?.decorateView(type: .next, completion: {
             Instnt.shared.formData["firstName"] = self.firstNameView?.textField.text
-            Instnt.shared.formData["surName"] = self.firstNameView?.textField.text
+            Instnt.shared.formData["surName"] = self.lastNameView?.textField.text
             
             guard let vc = Utils.getStoryboardInitialViewController("EmailPhone") as? EmailPhoneVC else {
                 return

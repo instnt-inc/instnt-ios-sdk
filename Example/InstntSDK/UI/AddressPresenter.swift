@@ -95,11 +95,11 @@ class AddressPresenter: BasePresenter {
     
     private func addButton() {
         buttonView?.decorateView(type: .next, completion: {
-            Instnt.shared.formData["physicalAddress"] = self.address?.textField.text
-            Instnt.shared.formData["city"] = self.city?.textField.text
-            Instnt.shared.formData["state"] = self.state?.textField.text
-            Instnt.shared.formData["zip"] = self.zip?.textField.text
-            Instnt.shared.formData["country"] = self.country?.textField.text            
+            ExampleShared.shared.formData["physicalAddress"] = self.address?.textField.text
+            ExampleShared.shared.formData["city"] = self.city?.textField.text
+            ExampleShared.shared.formData["state"] = self.state?.textField.text
+            ExampleShared.shared.formData["zip"] = self.zip?.textField.text
+            ExampleShared.shared.formData["country"] = self.country?.textField.text            
             
             guard let vc = Utils.getStoryboardInitialViewController("UploadDocument") as? UploadDocumentVC else {
                 return

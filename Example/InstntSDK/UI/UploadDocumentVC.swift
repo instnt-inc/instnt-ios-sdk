@@ -10,9 +10,11 @@ import UIKit
 import InstntSDK
 import CFDocumentScanSDK
 import SVProgressHUD
+import IDMetricsSelfieCapture
 
 
 class UploadDocumentVC: BaseViewController {
+    let licenseKey = "AwG5mCdqXkmCj9oNEpGV8UauciP8s4cqFT848FfjUjwAZQJfa8ZvrEpmYsPME0RTo/Q0kRowDCGz7HPhfSdyeE7rOLtB3JAhuABdQ2R7dGhVy2EUdt5ENQBBIoveIZdf1pwVY2EUgDoGm8REDU+rr2C2"
     
     @IBOutlet private var driverLicenceBtn: UIButton! {
         didSet{
@@ -44,21 +46,15 @@ class UploadDocumentVC: BaseViewController {
         super.viewDidLoad()
         addNextButton()
         Instnt.shared.delegate = self
-
     }
     
     private func addNextButton() {
         self.stackView.addSpacerView()
         buttonView?.decorateView(type: .next, completion: {
-            Instnt.shared.scanDocument(from: self, documentType: DocumentType.license)
+            let documentSettings = DocumentSettings(documentType: .license, documentSide: .front, captureMode: .manual)
+            Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: documentSettings)
         })
         self.stackView.addOptionalArrangedSubview(buttonView)
-    }
-    
-    private func onSubmit() {
-        Instnt.shared.submitFormData(Instnt.shared.formData) { response in
-            print("Submit form respose %@", response ?? "")
-        }
     }
     
     func uncheck(){
@@ -80,6 +76,65 @@ class UploadDocumentVC: BaseViewController {
             print(sender.titleLabel?.text ?? "")
             print(sender.isSelected)
         }
+    }
+    func instntDocumentVerified() {
+        self.showSimpleAlert("Document was uploaded successfully, please submit now", target: self)
+        self.buttonView?.decorateView(type: .submitForm, completion: {
+            SVProgressHUD.show()
+            Instnt.shared.submitData(ExampleShared.shared.formData, completion: { result in
+                SVProgressHUD.dismiss()
+                switch result {
+                case .success(let response):
+                    if response.success == true,
+                       let decision = response.decision,
+                       let jwt = response.jwt {
+                        self.instntDidSubmitSuccess(decision: decision, jwt: jwt)
+                    } else {
+                        if let msg = response.message {
+                            self.instntDidSubmitFailure(error: InstntError(errorConstant: .error_FORM_SUBMIT, message: msg))
+                        } else {
+                            self.instntDidSubmitFailure(error: InstntError(errorConstant: .error_FORM_SUBMIT))
+                        }
+                        
+                    }
+                case .failure(let error):
+                    self.instntDidSubmitFailure(error: error)
+                }
+               
+            })
+        })
+    }
+    
+    func instntDocumentScanError() {
+        self.showSimpleAlert("Document scan failed, please try again later", target: self, completed: {
+            self.navigationController?.popViewController(animated: true)
+        })
+    }
+    
+    func instntDidSubmitSuccess(decision: String, jwt: String) {
+        print("instntDidSubmitSuccess")
+        self.showSimpleAlert("Form is submitted and decision is \(decision)", target: self, completed: {
+            guard let nvc = Utils.getStoryboardInitialViewController("CustomForm") as? UINavigationController else {
+                return
+            }
+            guard let vc = nvc.viewControllers.first else {
+                return
+            }
+            self.navigationController?.pushViewController(vc, animated: true)
+        })
+    }
+    
+    func instntDidSubmitFailure(error: InstntError) {
+        print("instntDidSubmitFailure")
+        self.showSimpleAlert("Form submission is failed with error: \(error.message ?? "")", target: self, completed: {
+//            guard let nvc = Utils.getStoryboardInitialViewController("CustomForm") as? UINavigationController else {
+//                return
+//            }
+//            guard let vc = nvc.viewControllers.first else {
+//                return
+//            }
+//            self.navigationController?.pushViewController(vc, animated: true)
+        })
     }
     
 
@@ -120,54 +175,67 @@ extension UIButton {
 }
 
 extension UploadDocumentVC: InstntDelegate {
-    func instntDidCancel() {
-        self.showSimpleAlert("Sign Up is cancelled", target: self)
-    }
     
-    func instntDidSubmitSuccess(decision: String, jwt: String) {
-        print("instntDidSubmitSuccess")
-        self.showSimpleAlert("Form is submitted and decision is \(decision)", target: self, completed: {
-            guard let nvc = Utils.getStoryboardInitialViewController("CustomForm") as? UINavigationController else {
-                return
+    func onSelfieScanFinish(captureResult: CFASelfieScanData) {
+        SVProgressHUD.show()
+        Instnt.shared.uploadAttachment(data: captureResult.selfieData, completion: { result in
+            SVProgressHUD.dismiss()
+            switch result {
+            case .success(_):
+                Instnt.shared.verifyDocuments(completion: { result in
+                    switch result {
+                    case .success():
+                        self.instntDocumentVerified()
+                    case .failure(let error):
+                        self.showSimpleAlert("Documen verification failed with error: \(error.localizedDescription)", target: self)
+                    }
+                })
+            case .failure(let error):
+                print("uploadAttachment error \(error.localizedDescription)")
+                self.instntDocumentScanError()
             }
-            guard let vc = nvc.viewControllers.first else {
-                return
-            }
-            self.navigationController?.pushViewController(vc, animated: true)
         })
     }
     
-    func instntDidSubmitFailure(error: String) {
-        print("instntDidSubmitFailure")
-        self.showSimpleAlert("Form submission is failed with error: \(error)", target: self, completed: {
-            guard let nvc = Utils.getStoryboardInitialViewController("CustomForm") as? UINavigationController else {
-                return
-            }
-            guard let vc = nvc.viewControllers.first else {
-                return
-            }
-            self.navigationController?.pushViewController(vc, animated: true)
-        })
-    }
-    
-    func instntDocumentScanError() {
-        self.showSimpleAlert("Document scan failed, please try again later", target: self, completed: {
-            self.navigationController?.popViewController(animated: true)
-        })
-    }
-    
-    func instntSelfieScanError() {
+    func onSelfieScanCancelled() {
         self.showSimpleAlert("Selfie scan failed, please try again later", target: self, completed: {
             self.navigationController?.popViewController(animated: true)
         })
     }
     
-    func instntDocumentVerified() {
-        self.showSimpleAlert("Document was uploaded successfully, please submit now", target: self)
-        self.buttonView?.decorateView(type: .submitForm, completion: {
-            Instnt.shared.submitFormData(Instnt.shared.formData, completion: {_ in
-                print("Data was uploaded successfully")
-            })
+    func onSelfieScanError(error: InstntError) {
+        self.showSimpleAlert(error.message ?? "Selfie scan cancelled, please try again later", target: self, completed: {
+            self.navigationController?.popViewController(animated: true)
+        })
+    }
+    
+    
+    func onDocumentScanFinish(captureResult: CaptureResult) {
+        SVProgressHUD.show()
+        Instnt.shared.uploadAttachment(data: captureResult.resultBase64, completion: { result in
+            SVProgressHUD.dismiss()
+            switch result {
+            case .success(_):
+                if captureResult.documentSide == .front {
+                    DispatchQueue.main.async {
+                        let documentSettings = DocumentSettings(documentType: .license, documentSide: .back, captureMode: .manual)
+                        Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: documentSettings)
+                    }
+                } else if captureResult.documentSide == .back {
+                    DispatchQueue.main.async {
+                        Instnt.shared.scanSelfie(from: self)
+                    }
+
+                }
+            case .failure(let error):
+                print("uploadAttachment error \(String(describing: error.message))")
+            }
+        })
+    }
+    
+    func onDocumentScanCancelled(error: InstntError) {
+        self.showSimpleAlert(error.localizedDescription, target: self, completed: {
+            self.navigationController?.popViewController(animated: true)
         })
     }
 }

@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/instnt-inc/instnt-ios-sdk.git', :tag => s.version.to_s }
   
   s.platform     = :ios
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '9.0'
   s.swift_version = '5.0'
 
   s.source_files = 'InstntSDK/Classes/**/*'
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   s.public_header_files = 'Pod/Classes/**/*.h'
   
   s.frameworks = 'UIKit'
-  s.dependency 'Alamofire', '~> 5.0'
+  s.dependency 'Alamofire',
   s.dependency 'ActionSheetPicker-3.0', '~> 2.7'
   s.dependency 'IQKeyboardManagerSwift', '~> 6.5'
   s.dependency 'DeviceKit', '~> 4.0'

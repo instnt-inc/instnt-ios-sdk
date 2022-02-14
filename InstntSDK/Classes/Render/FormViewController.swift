@@ -208,20 +208,28 @@ class FormViewController: UIViewController {
         formData["client_referer_host"] = URL(string: formCodes.serviceURL)?.host ?? ""
         
         SVProgressHUD.show()
-        APIClient.shared.submitForm(to: formCodes.submitURL, formData: formData) { [weak self] (response, _, message) in
+        APIClient.shared.submitForm(to: formCodes.submitURL, formData: formData) { result in
             SVProgressHUD.dismiss()
-            
-            if let response = response {
-                self?.navigationController?.dismiss(animated: true, completion: { [weak self] in
-                    guard let strongSelf = self else {
-                        return
-                    }
-                    
-                    strongSelf.delegate?.formViewControllerDidSubmitForm(strongSelf, response: response)
-                })
-            } else {
-                self?.showAlert(title: "Failed!", message: message)
-            }
+//            switch result {
+//            case .success(let response):
+//                break
+//
+//            case .failure(let error):
+//                break
+//            }
+           
+//
+//            if let response = response {
+//                self?.navigationController?.dismiss(animated: true, completion: { [weak self] in
+//                    guard let strongSelf = self else {
+//                        return
+//                    }
+//
+//                    strongSelf.delegate?.formViewControllerDidSubmitForm(strongSelf, response: response)
+//                })
+//            } else {
+//
+//            }
         }
     }
 }

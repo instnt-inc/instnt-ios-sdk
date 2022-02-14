@@ -20,7 +20,6 @@ public struct DocumentSettings {
 
 public enum DocumentType: String {
     case license = "License"
-    case passport = "Passport"
 }
 
 public enum DocumentSide  {
@@ -35,14 +34,16 @@ public enum CaptureMode {
 
 public class CaptureResult : NSObject{    
     public var resultBase64: Data
-    var frontfocus: Bool?
-    var frontGlare: Bool?
-    var backfocus: Bool?
-    var backGlare: Bool?
-    var isFaceFaceDetected: Bool?
-    var isBarcodeDetected: Bool?
+    let frontfocus: Bool?
+    let frontGlare: Bool?
+    let backfocus: Bool?
+    let backGlare: Bool?
+    let isFaceFaceDetected: Bool?
+    let isBarcodeDetected: Bool?
+    public let documentSide: DocumentSide?
     
-    init(resultBase64: Data, frontfocus:Bool, frontGlare:Bool, backfocus:Bool, backGlare:Bool, isFaceFaceDetected:Bool, isBarcodeDetected:Bool) {
+    
+    init(resultBase64: Data, frontfocus:Bool, frontGlare:Bool, backfocus:Bool, backGlare:Bool, isFaceFaceDetected:Bool, isBarcodeDetected:Bool, documentSide: DocumentSide) {
         self.resultBase64 = resultBase64
         self.frontfocus = frontfocus
         self.frontGlare = frontGlare
@@ -50,6 +51,7 @@ public class CaptureResult : NSObject{
         self.backGlare = backGlare
         self.isFaceFaceDetected = isFaceFaceDetected
         self.isBarcodeDetected = isBarcodeDetected
+        self.documentSide = documentSide
     }
 }
 

@@ -83,8 +83,9 @@ struct ResultSendOTP: Decodable {
 }
 
 struct RequestVerifyOTP: Encodable {
-    let requestData: String
-    let isVerify: Bool
+    let phone: String
+    let is_verify: Bool
+    let otp: String
    
 }
 

@@ -52,6 +52,7 @@
 		FC04D387278F524400420E6E /* SpacerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC04D367278F524300420E6E /* SpacerView.swift */; };
 		FC04D388278F524400420E6E /* SpacerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC04D368278F524400420E6E /* SpacerView.xib */; };
 		FC04D389278F524400420E6E /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC04D369278F524400420E6E /* ButtonView.swift */; };
+		FC9F83A427BA00AB00FB961B /* ExampleShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9F83A327BA00AB00FB961B /* ExampleShared.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -107,6 +108,7 @@
 		FC04D367278F524300420E6E /* SpacerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpacerView.swift; sourceTree = "<group>"; };
 		FC04D368278F524400420E6E /* SpacerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SpacerView.xib; sourceTree = "<group>"; };
 		FC04D369278F524400420E6E /* ButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
+		FC9F83A327BA00AB00FB961B /* ExampleShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleShared.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +154,7 @@
 		607FACD21AFB9204008FA782 /* Example for InstntSDK */ = {
 			isa = PBXGroup;
 			children = (
+				FC9F83A327BA00AB00FB961B /* ExampleShared.swift */,
 				FC04D349278F51E200420E6E /* UI */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				84C6CA0A2699928B00722B80 /* MainViewController.swift */,
@@ -407,6 +410,7 @@
 				FC04D37A278F524400420E6E /* Color+UIColor.swift in Sources */,
 				FC04D382278F524400420E6E /* UIView+Utils.swift in Sources */,
 				FC04D36B278F524400420E6E /* UIViewController+Utils.swift in Sources */,
+				FC9F83A427BA00AB00FB961B /* ExampleShared.swift in Sources */,
 				FC04D377278F524400420E6E /* FirstLastNameVC.swift in Sources */,
 				FC03C5802791EBA10061A8B1 /* CustomFormPresenter.swift in Sources */,
 				FC03C58B279202110061A8B1 /* LabelView.swift in Sources */,
@@ -552,6 +556,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 5448SDW7QG;
 				INFOPLIST_FILE = InstntSDK/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -572,6 +577,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 5448SDW7QG;
 				INFOPLIST_FILE = InstntSDK/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;

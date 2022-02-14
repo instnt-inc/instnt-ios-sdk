@@ -8,15 +8,16 @@
 
 import UIKit
 import SVProgressHUD
+import IDMetricsSelfieCapture
 
 
- public protocol InstntDelegate: NSObjectProtocol {
-    func instntDidCancel()
-    func instntDidSubmitSuccess(decision: String, jwt: String)
-    func instntDidSubmitFailure(error: String)
-    func instntDocumentVerified()
-    func instntDocumentScanError()
-    func instntSelfieScanError()
+public protocol InstntDelegate: NSObjectProtocol {
+
+    func onDocumentScanFinish(captureResult: CaptureResult)
+    func onDocumentScanCancelled(error: InstntError)
+    func onSelfieScanCancelled()
+    func onSelfieScanFinish(captureResult: CFASelfieScanData)
+    func onSelfieScanError(error: InstntError)
 }
 
 public class Instnt: NSObject {
@@ -25,8 +26,6 @@ public class Instnt: NSObject {
         case reject = "REJECT"
         case review = "REVIEW"
     }
-    
-    public var formData: [String: Any] = [:]
     
     public static let shared = Instnt()
     
@@ -38,8 +37,6 @@ public class Instnt: NSObject {
     private var serviceURL: String = ""
     private var submitURL: String = ""
     private var documentType: DocumentType = .license
-    private var documentSide: DocumentSide = .front
-    private var parentVC: UIViewController?
     
     private override init() {
         super.init()
@@ -58,8 +55,7 @@ public class Instnt: NSObject {
         Instnt.shared.getTransactionID(completion: completion)
     }
     
-    public func submitFormData(_ data: [String: Any], completion: @escaping (([String: Any]?) -> Void)) {
-        SVProgressHUD.show()
+    public func submitData(_ data: [String: Any], completion: @escaping(Result<FormSubmitResponse, InstntError>) -> Void) {
         var formData: [String: Any] = data
         formData["signature"] = self.transactionID
         if Instnt.shared.isOTPSupported ?? false {
@@ -86,40 +82,18 @@ public class Instnt: NSObject {
         deviceInfo["serial"] = "\(Utils.getSerialNumber())"
         formData["mobileDeviceInfo"] = deviceInfo
         
-        
-        APIClient.shared.submitForm(to: self.submitURL, formData: formData) { (response, responseJSON, error) in
-            SVProgressHUD.dismiss()
-            completion(responseJSON)
-            debugPrint(response ?? "")
-            print("submitFormData \(String(describing: responseJSON))")
-            if response?.success == true,
-               error == nil,
-               let decision = response?.decision,
-               let jwt = response?.jwt {
-                self.delegate?.instntDidSubmitSuccess(decision: decision, jwt: jwt)
-            } else {
-                if let error = error {
-                    self.delegate?.instntDidSubmitFailure(error: error)
-                } else if response?.success == false {
-                    self.delegate?.instntDidSubmitFailure(error: "Unknown error: Please try again")
-                }
-            }
-        }
+        APIClient.shared.submitForm(to: self.submitURL, formData: formData, completion: completion)
     }
     
-    public func scanDocument(from vc: UIViewController, documentType: DocumentType) {
-        parentVC = vc
-        self.documentType = documentType
-        let documentSettings = DocumentSettings(documentType: .license, documentSide: self.documentSide, captureMode: .manual)
-        DocumentScan.shared.scanDocument(from: vc, documentSettings: documentSettings, delegate: self)
+    public func scanDocument(licenseKey: String, from vc: UIViewController, settings: DocumentSettings) {
+        DocumentScan.shared.scanDocument(licenseKey: licenseKey, from: vc, documentSettings: settings, delegate: self)
     }
     
     public func scanSelfie(from vc: UIViewController) {
-        parentVC = vc
         DocumentScan.shared.scanSelfie(from: vc, delegate: self)
     }
     
-    func getTransactionID(completion: @escaping(Result<String, InstntError>) -> Void) {
+    private func getTransactionID(completion: @escaping(Result<String, InstntError>) -> Void) {
         let transactionRequest = CreateTransaction.init(formKey: self.formId, hideFormFields: true, idmetricsVersion: "4.5.0.5", format: "json", redirect: false)
         APIClient.shared.createTransaction(data: transactionRequest, completion: { result in
             switch result {
@@ -138,18 +112,19 @@ public class Instnt: NSObject {
     }
     
     private func getUploadUrl(completion: @escaping(Result<String, InstntError>) -> Void) {
-        let requestGetuploadURL = RequestGetUploadUrl.init(transactionType: "IMAGE", documentType: "DRIVERS_LICENSE", docSuffix: "F", transactionStatus: "NEW");
-        if let transactionID = transactionID {
-            APIClient.shared.getUploadUrl(transactionId: transactionID, data: requestGetuploadURL, completion: completion)
+        if self.documentType == .license {
+            let requestGetuploadURL = RequestGetUploadUrl.init(transactionType: "IMAGE", documentType: "DRIVERS_LICENSE", docSuffix: "F", transactionStatus: "NEW");
+            if let transactionID = transactionID {
+                APIClient.shared.getUploadUrl(transactionId: transactionID, data: requestGetuploadURL, completion: completion)
+            }
         }
-        
     }
     
     private func uploadDocument(url: String, data: Data, completion: @escaping(Result<Void, InstntError>) -> Void) {
         APIClient.shared.upload(url: url, data: data, completion: completion)
     }
     
-    private func uploadAttachment(data: Data, completion: @escaping(Result<Void, InstntError>) -> Void) {
+    public func uploadAttachment(data: Data, completion: @escaping(Result<Void, InstntError>) -> Void) {
         self.getUploadUrl(completion: { result in
             switch result {
             case .success(let url):
@@ -163,23 +138,25 @@ public class Instnt: NSObject {
     public func sendOTP(phoneNumber: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
         let requestSendOTP = RequestSendOTP(phone: phoneNumber)
         guard let transactionID = transactionID else {
+            completion(.failure(InstntError(errorConstant: .error_INVALID_TRANSACTION_ID)))
             return
         }
         APIClient.shared.sendOTP(requestData: requestSendOTP, transactionId: transactionID, completion: completion)
     }
-    
     public func verifyOTP(phoneNumber: String, otp: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
+        let requestVerifyOTP = RequestVerifyOTP(phone: phoneNumber, is_verify: true, otp: otp)
         guard let transactionID = transactionID else {
+            completion(.failure(InstntError(errorConstant: .error_INVALID_TRANSACTION_ID)))
             return
         }
-        let requestVerifyOTP = RequestVerifyOTP(requestData: "{\"phoneNumber\": \"\(phoneNumber)\", \"otpCode\": \"\(otp)\"}", isVerify: true)
         APIClient.shared.verifyOTP(requestData: requestVerifyOTP, transactionId: transactionID, completion: completion)
     }
+    
     public func verifyDocuments(completion: @escaping(Result<Void, InstntError>) -> Void) {
         guard let transactionID = transactionID else {
+            completion(.failure(InstntError(errorConstant: .error_INVALID_TRANSACTION_ID)))
             return
         }
-
         let verifyDocument = VerifyDocument(formKey: Instnt.shared.formId, documentType: self.documentType.rawValue, instnttxnid:  transactionID)
         APIClient.shared.verifyDocuments(requestData: verifyDocument, transactionId: transactionID, completion: { result in
             switch result {
@@ -197,33 +174,11 @@ public class Instnt: NSObject {
 
 extension Instnt: DocumentScanDelegate {
     public func onDocumentScanFinish(captureResult: CaptureResult) {
-        SVProgressHUD.show()
-        Instnt.shared.uploadAttachment(data: captureResult.resultBase64, completion: { result in
-            SVProgressHUD.dismiss()
-            switch result {
-            case .success(_):
-                if let parentVC = self.parentVC {
-                    if self.documentSide == .front {
-                        self.documentSide = .back
-                        DispatchQueue.main.async {
-                            self.scanDocument(from: parentVC, documentType: self.documentType)
-                        }
-                    } else if self.documentSide == .back {
-                        DispatchQueue.main.async {
-                            self.scanSelfie(from: parentVC)
-                        }
-                       
-                    }
-                }
-            case .failure(let error):
-                print("uploadAttachment error \(String(describing: error.message))")
-                self.delegate?.instntDocumentScanError()
-            }
-        })
+        self.delegate?.onDocumentScanFinish(captureResult: captureResult)
     }
     
     public func onDocumentScanCancelled(error: InstntError) {
-        self.delegate?.instntDocumentScanError()
+        self.delegate?.onDocumentScanCancelled(error: error)
         print("onDocumentScanCancelled error \(String(describing: error.message))")
         print(error)
     }
@@ -231,24 +186,14 @@ extension Instnt: DocumentScanDelegate {
 
 extension Instnt: SelfieScanDelegate {
     
-    public func onSelfieScanCancelled(error: InstntError) {
-        self.delegate?.instntSelfieScanError()
-        print("onSelfieScanCancelled error \(String(describing: error.message))")
+    public func onSelfieScanCancelled() {
+        self.delegate?.onSelfieScanCancelled()
     }
     
-    public func onSelfieScanFinish(captureResult: CaptureSelfieResult) {
-        SVProgressHUD.show()
-        Instnt.shared.uploadAttachment(data: captureResult.resultBase64, completion: { result in
-            SVProgressHUD.dismiss()
-            switch result {
-            case .success(_):
-                self.verifyDocuments(completion: {_ in
-                    self.delegate?.instntDocumentVerified()
-                })
-            case .failure(let error):
-                print("uploadAttachment error \(String(describing: error.message))")
-                self.delegate?.instntDocumentScanError()
-            }
-        })
+    public func onSelfieScanFinish(captureResult: CFASelfieScanData) {
+        self.delegate?.onSelfieScanFinish(captureResult: captureResult)
+    }
+    public func onSelfieScanError(error: InstntError) {
+        self.delegate?.onSelfieScanError(error: error)
     }
 }

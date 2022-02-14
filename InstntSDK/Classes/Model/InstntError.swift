@@ -7,8 +7,10 @@
 
 import Foundation
 public enum ErrorConstants: Int {
-    case error_CANCELLED_CAPTURE
-    case error_CAPTURE
+    case error_DOCUMENT_CAPTURE
+    case error_SELFIE_CAPTURE
+    case error_FORM_SUBMIT
+    
     case error_UPLOAD
     case error_EXTERNAL
     case error_NO_CONNECTIVITY
@@ -17,6 +19,7 @@ public enum ErrorConstants: Int {
     case error_INVALID_OTP
     case error_INVALID_PHONE
     case error_INVALID_DATA
+    case error_INVALID_TRANSACTION_ID
 }
 
 open class InstntError: Error {
@@ -24,19 +27,21 @@ open class InstntError: Error {
     public var message: String?
     public var statusCode: Int = 999
 
-    public init(errorConstant: ErrorConstants, code: String? = nil, message: String? = nil, statusCode: Int = 999) {
+    public init(errorConstant: ErrorConstants, message: String? = nil, statusCode: Int = 999) {
         self.errorConstant = errorConstant
         self.message = message ?? self.getErrorMessage(errorConstant)
         self.statusCode = statusCode
     }
     func getErrorMessage(_ constant: ErrorConstants) -> String {
-        var message: String = ""
+        var message: String = "We are experiencing technical issues, please try again later"
 
         switch constant {
-        case .error_CANCELLED_CAPTURE:
-            message = NSLocalizedString("Document capture was cancelled", comment: "")
-        case .error_CAPTURE:
-            message = NSLocalizedString("There was error capturing the document, please try again", comment: "")
+        case .error_DOCUMENT_CAPTURE:
+            message = NSLocalizedString("Error capturing document, Please try again", comment: "")
+        case .error_SELFIE_CAPTURE:
+            message = NSLocalizedString("Error capturing selfie, please try again", comment: "")
+        case .error_FORM_SUBMIT:
+            message = NSLocalizedString("Error submitting form, please try again", comment: "")
         case .error_NETWORK_TIMEOUT:
             message = NSLocalizedString("Network time out", comment: "")
         case .error_EXTERNAL:
@@ -53,6 +58,9 @@ open class InstntError: Error {
             message = NSLocalizedString("Error Uploading document, please try again later.", comment: "")
         case .error_INVALID_DATA:
             message = NSLocalizedString("Invalid data, please try again later.", comment: "")
+        case .error_INVALID_TRANSACTION_ID:
+            message = NSLocalizedString("Invalid transactionId, please try again later.", comment: "")
+            
         }
 
         return NSLocalizedString(message, comment: "Error Message")

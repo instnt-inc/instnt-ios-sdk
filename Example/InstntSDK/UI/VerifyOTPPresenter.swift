@@ -53,14 +53,14 @@ class VerifyOTPPresenter: BasePresenter {
                 SVProgressHUD.dismiss()
                 switch result {
                 case .success:
-                    Instnt.shared.formData["otpCode"] = self.otp?.textField.text
+                    ExampleShared.shared.formData["otpCode"] = self.otp?.textField.text
                     guard let vc = Utils.getStoryboardInitialViewController("Address") as? AddressVC else {
                         return
                     }
                     self.vc?.navigationController?.pushViewController(vc, animated: true)
-                case .failure(_):
+                case .failure(let error):
                     if let vc = self.vc {
-                        self.vc?.showSimpleAlert("Error getting the OTP", target: vc)
+                        self.vc?.showSimpleAlert(error.message ?? "Invalid OTP", target: vc)
                     }
                 }
             })

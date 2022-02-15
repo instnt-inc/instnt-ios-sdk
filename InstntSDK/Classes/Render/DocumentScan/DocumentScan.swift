@@ -96,11 +96,11 @@ class DocumentScan: NSObject {
 //        }
     }
     
-    func scanSelfie(from vc: UIViewController, delegate: SelfieScanDelegate) {
+    func scanSelfie(from vc: UIViewController, delegate: SelfieScanDelegate, farSelfie: Bool) {
         let settings = CFASelfieSettings()
         settings?.showConfirmationScreen = true
         settings?.captureMode = .ManualCapture
-        settings?.enableFarSelfie = true
+        settings?.enableFarSelfie = farSelfie
         self.selfieScandelegate = delegate
         if let selfieScan = CFASelfieController.sharedInstance() as? CFASelfieController {
             selfieScan.scanSelfie(vc, selfieSettings: settings, selfieScanDelegate: self)

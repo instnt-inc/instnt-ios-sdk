@@ -229,6 +229,9 @@ extension UploadDocumentVC: InstntDelegate {
                 }
             case .failure(let error):
                 print("uploadAttachment error \(String(describing: error.message))")
+                self.showSimpleAlert(error.localizedDescription, target: self, completed: {
+                    self.navigationController?.popViewController(animated: true)
+                })
             }
         })
     }

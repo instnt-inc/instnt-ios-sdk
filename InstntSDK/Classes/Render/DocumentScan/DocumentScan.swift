@@ -124,8 +124,7 @@ extension DocumentScan: DSHandlerDelegate {
             return
         }
         let documentSide: DocumentSide = result.side == .Front ? .front: .back
-        let img = result.image
-        let strBase64 = img!.base64EncodedData()
+        guard let img = result.image else { return  }
         let barCodeDetected = result.barcodeDetected
         let faceDetected = result.captureAnalysis.faceDetected
         
@@ -135,7 +134,7 @@ extension DocumentScan: DSHandlerDelegate {
         } else {
             focus = false
         }
-        let capture = CaptureResult(resultBase64: strBase64, frontfocus: focus, frontGlare: false, backfocus: focus, backGlare: false, isFaceFaceDetected: faceDetected, isBarcodeDetected: barCodeDetected, documentSide: documentSide)
+        let capture = CaptureResult(resultBase64: img, frontfocus: focus, frontGlare: false, backfocus: focus, backGlare: false, isFaceFaceDetected: faceDetected, isBarcodeDetected: barCodeDetected, documentSide: documentSide)
         documentScanDelegate?.onDocumentScanFinish(captureResult: capture)
     }
     

@@ -119,11 +119,11 @@ public class Instnt: NSObject {
         })
     }
     
-    private func getUploadUrl(completion: @escaping(Result<String, InstntError>) -> Void) {
+    private func getUploadUrl(isFarSelfieData: Bool? = false, completion: @escaping(Result<String, InstntError>) -> Void) {
         if self.documentType == .license {
             var docSuffix = "F"
             if isSelfie == true {
-                if isFarSelfie == true {
+                if isFarSelfieData == true {
                     docSuffix = "FS"
                 } else {
                     docSuffix = "S"
@@ -142,8 +142,8 @@ public class Instnt: NSObject {
         APIClient.shared.upload(url: url, data: data, completion: completion)
     }
     
-    public func uploadAttachment(data: Data, completion: @escaping(Result<Void, InstntError>) -> Void) {
-        self.getUploadUrl(completion: { result in
+    public func uploadAttachment(data: Data, isFarSelfieData: Bool? = false, completion: @escaping(Result<Void, InstntError>) -> Void) {
+        self.getUploadUrl(isFarSelfieData: isFarSelfieData, completion: { result in
             switch result {
             case .success(let url):
                 self.uploadDocument(url: url, data: data, completion: completion)

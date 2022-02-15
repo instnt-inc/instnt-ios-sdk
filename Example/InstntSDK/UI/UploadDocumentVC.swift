@@ -71,6 +71,7 @@ class UploadDocumentVC: BaseViewController {
         switchView?.decorateView(title: "Far Selfie", completion: { isOn in
             self.farSelfie = isOn
         })
+        switchView?.uiswitch.isOn = false
         self.stackView.addOptionalArrangedSubview(switchView)
     }
     
@@ -199,7 +200,7 @@ extension UploadDocumentVC: InstntDelegate {
             switch result {
             case .success(_):
                 if captureResult.farSelfieData != nil {
-                    Instnt.shared.uploadAttachment(data: captureResult.selfieData, completion:  { result in
+                    Instnt.shared.uploadAttachment(data: captureResult.selfieData, isFarSelfieData: true, completion:  { result in
                         switch result {
                         case .success():
                             Instnt.shared.verifyDocuments(completion: { result in

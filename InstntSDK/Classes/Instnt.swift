@@ -90,7 +90,7 @@ public class Instnt: NSObject {
     }
     
     public func scanSelfie(from vc: UIViewController) {
-        DocumentScan.shared.scanSelfie(from: vc, delegate: self)
+        DocumentScan.shared.scanSelfie(from: vc, delegate: self, farSelfie: false)
     }
     
     private func getTransactionID(completion: @escaping(Result<String, InstntError>) -> Void) {

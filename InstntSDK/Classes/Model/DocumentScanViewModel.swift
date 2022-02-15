@@ -27,6 +27,11 @@ public enum DocumentSide  {
     case front
 }
 
+public enum SelfieType  {
+    case back
+    case front
+}
+
 public enum CaptureMode {
     case automatic
     case manual

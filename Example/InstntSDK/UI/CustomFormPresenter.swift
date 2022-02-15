@@ -79,13 +79,6 @@ class CustomFormPresenter: BasePresenter {
         self.vc?.stackView.addOptionalArrangedSubview(endPoint)
     }
     
-//    private func addSandboxSwitch() {
-//        switchView?.decorateView(title: "SandBox", completion: { isOn in
-//
-//        })
-//        self.vc?.stackView.addOptionalArrangedSubview(switchView)
-//    }
-    
     private func addSetUpButton() {
         setUpBtn?.decorateView(type: .setUp, completion: {
             if let formKey = self.formKey?.textField.text {

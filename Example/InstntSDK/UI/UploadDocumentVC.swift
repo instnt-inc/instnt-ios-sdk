@@ -14,6 +14,7 @@ import IDMetricsSelfieCapture
 
 
 class UploadDocumentVC: BaseViewController {
+    var farSelfie: Bool? = false
     let licenseKey = "AwG5mCdqXkmCj9oNEpGV8UauciP8s4cqFT848FfjUjwAZQJfa8ZvrEpmYsPME0RTo/Q0kRowDCGz7HPhfSdyeE7rOLtB3JAhuABdQ2R7dGhVy2EUdt5ENQBBIoveIZdf1pwVY2EUgDoGm8REDU+rr2C2"
     
     @IBOutlet private var driverLicenceBtn: UIButton! {
@@ -42,8 +43,17 @@ class UploadDocumentVC: BaseViewController {
         return view
     }()
     
+    lazy var switchView: SwitchView? = {
+        guard let view = Utils.getViewFromNib(name: "SwitchView") as? SwitchView  else {
+            return nil
+        }
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.stackView.addSpacerView()
+        addFarSelfieSwitch()
         addNextButton()
         Instnt.shared.delegate = self
     }
@@ -55,6 +65,13 @@ class UploadDocumentVC: BaseViewController {
             Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: documentSettings)
         })
         self.stackView.addOptionalArrangedSubview(buttonView)
+    }
+    
+    private func addFarSelfieSwitch() {
+        switchView?.decorateView(title: "Far Selfie", completion: { isOn in
+            self.farSelfie = isOn
+        })
+        self.stackView.addOptionalArrangedSubview(switchView)
     }
     
     func uncheck(){
@@ -179,18 +196,41 @@ extension UploadDocumentVC: InstntDelegate {
     func onSelfieScanFinish(captureResult: CFASelfieScanData) {
         SVProgressHUD.show()
         Instnt.shared.uploadAttachment(data: captureResult.selfieData, completion: { result in
-            SVProgressHUD.dismiss()
             switch result {
             case .success(_):
-                Instnt.shared.verifyDocuments(completion: { result in
-                    switch result {
-                    case .success():
-                        self.instntDocumentVerified()
-                    case .failure(let error):
-                        self.showSimpleAlert("Documen verification failed with error: \(error.localizedDescription)", target: self)
-                    }
-                })
+                if captureResult.farSelfieData != nil {
+                    Instnt.shared.uploadAttachment(data: captureResult.selfieData, completion:  { result in
+                        switch result {
+                        case .success():
+                            Instnt.shared.verifyDocuments(completion: { result in
+                                SVProgressHUD.dismiss()
+                                switch result {
+                                case .success():
+                                    self.instntDocumentVerified()
+                                case .failure(let error):
+                                    self.showSimpleAlert("Documen verification failed with error: \(error.localizedDescription)", target: self)
+                                }
+                            })
+                        case .failure(let error):
+                            SVProgressHUD.dismiss()
+                            print("uploadAttachment error \(error.localizedDescription)")
+                            self.instntDocumentScanError()
+                        }
+                    })
+                } else {
+                    Instnt.shared.verifyDocuments(completion: { result in
+                        SVProgressHUD.dismiss()
+                        switch result {
+                        case .success():
+                            self.instntDocumentVerified()
+                        case .failure(let error):
+                            self.showSimpleAlert("Documen verification failed with error: \(error.localizedDescription)", target: self)
+                        }
+                    })
+                }
+                
             case .failure(let error):
+                SVProgressHUD.dismiss()
                 print("uploadAttachment error \(error.localizedDescription)")
                 self.instntDocumentScanError()
             }
@@ -223,7 +263,7 @@ extension UploadDocumentVC: InstntDelegate {
                     }
                 } else if captureResult.documentSide == .back {
                     DispatchQueue.main.async {
-                        Instnt.shared.scanSelfie(from: self)
+                        Instnt.shared.scanSelfie(from: self, farSelfie: self.farSelfie ?? false)
                     }
 
                 }

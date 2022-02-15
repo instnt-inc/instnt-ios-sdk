@@ -37,6 +37,9 @@ public class Instnt: NSObject {
     private var serviceURL: String = ""
     private var submitURL: String = ""
     private var documentType: DocumentType = .license
+    private var documentSide: DocumentSide = .front
+    private var isSelfie: Bool = false
+    private var isFarSelfie: Bool = false
     
     private override init() {
         super.init()
@@ -86,11 +89,16 @@ public class Instnt: NSObject {
     }
     
     public func scanDocument(licenseKey: String, from vc: UIViewController, settings: DocumentSettings) {
+        self.documentSide = settings.documentSide
+        self.isSelfie = false
+        self.isFarSelfie = false
         DocumentScan.shared.scanDocument(licenseKey: licenseKey, from: vc, documentSettings: settings, delegate: self)
     }
     
-    public func scanSelfie(from vc: UIViewController) {
-        DocumentScan.shared.scanSelfie(from: vc, delegate: self, farSelfie: false)
+    public func scanSelfie(from vc: UIViewController, farSelfie: Bool) {
+        self.isSelfie = true
+        self.isFarSelfie = farSelfie
+        DocumentScan.shared.scanSelfie(from: vc, delegate: self, farSelfie: farSelfie)
     }
     
     private func getTransactionID(completion: @escaping(Result<String, InstntError>) -> Void) {
@@ -113,7 +121,17 @@ public class Instnt: NSObject {
     
     private func getUploadUrl(completion: @escaping(Result<String, InstntError>) -> Void) {
         if self.documentType == .license {
-            let requestGetuploadURL = RequestGetUploadUrl.init(transactionType: "IMAGE", documentType: "DRIVERS_LICENSE", docSuffix: "F", transactionStatus: "NEW");
+            var docSuffix = "F"
+            if isSelfie == true {
+                if isFarSelfie == true {
+                    docSuffix = "FS"
+                } else {
+                    docSuffix = "S"
+                }
+            } else if self.documentSide == .back {
+                docSuffix = "B"
+            }
+            let requestGetuploadURL = RequestGetUploadUrl.init(transactionType: "IMAGE", documentType: "DRIVERS_LICENSE", docSuffix: docSuffix, transactionStatus: "NEW");
             if let transactionID = transactionID {
                 APIClient.shared.getUploadUrl(transactionId: transactionID, data: requestGetuploadURL, completion: completion)
             }

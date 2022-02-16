@@ -1,4 +1,4 @@
-# Instnt iOS SDK
+# Instnt iOS SDK 2.0.0
 
 This documentation covers the basics of the Instnt iOS SDK. Using iOS SDK provides functions and libraries for a seamless integration with your front-end application.For a detailed overview of Instnt's functionality, visit the [Instnt documentation library](https://support.instnt.org/hc/en-us/articles/360055345112-Integration-Overview)
 
@@ -33,7 +33,7 @@ Refer [Quick start guide](https://support.instnt.org/hc/en-us/articles/440878113
 
 * The integration of SDK depends on your workflow; read the [Instnt Accept integration process,](https://support.instnt.org/hc/en-us/articles/4418538578701-Instnt-Accept-Integration-Process) to understand the functionalities provided by Instnt and how to integrate SDK with your application.
 
-**Note:** The sample code provided in this documentation is from the sample app provided with the SDK. You control the client implementation entirely; there is no hard and fast rule to follow the sample code-- the sample is for understanding purposes only.
+**Note:** Your implementation with Instnt's SDK may diverge from the integration shown in sample app, please contact Instnt support team for additional questions related to Integration.
 
 
 # Getting started
@@ -95,6 +95,8 @@ Document verification feature comes into the picture if you have enabled it duri
 
 When this feature is enabled, the physical capture and verification of selfies and Government-issued identification documents such as Passports and Driver's Licenses are available.
 
+**Note:** Document Verification feature usage in your implementation via SDK requires a **License** **key**. Please contact the support at the email support@instnt.org for further assistance.
+
 Read the [Document Verification](https://support.instnt.org/hc/en-us/articles/4408781136909#heading-6) section of the Quickstart guide to understand better how to enable the feature.
 
 ## Document verification pre-requisites
@@ -110,6 +112,8 @@ Read the [Document Verification](https://support.instnt.org/hc/en-us/articles/44
 ## Document verifications steps
 
 1. First step in the process of document verification is to scan a document. Following is the sample code for scanning a document.
+
+The document verification has an auto-upload feature which is turned on by default. It uploads the image to Instnt cloud storage once the image gets captured successfully.
 
 ```swift
 Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: documentSettings)

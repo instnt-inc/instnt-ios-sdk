@@ -64,7 +64,7 @@ import InstntSDK
 import CFDocumentScanSDK
 ```
 
-* To start interacting with Instnt, the first step is to begin a transactiona and obtain a transaction id , which acts as a corelation key for the user signup session.
+* To start interacting with Instnt, the first step is to begin a transaction and obtain a transaction id , which acts as a corelation key for a user signup session.
 
 * See the following sample code to call the `setup` fuction:
 
@@ -72,7 +72,7 @@ import CFDocumentScanSDK
 
 **endpoint**: production URL or sandbox URL
 
-**completion block** : implement a completeion block that checks if the initialization of a transaction is a success or not.
+**completion block** : implement and pass a completeion block that checks if the initialization of a transaction is a success or not.
 
 ```swift
 Instnt.shared.setup(with: formKey, endPOint: self.endPoint?.textField.text ?? "", completion: { result in
@@ -109,7 +109,7 @@ Read the [Document Verification](https://support.instnt.org/hc/en-us/articles/44
 
 ## Document verifications steps
 
-1. First step in the process of documentation is to scan a document. Following is the sample code for scaning a document.
+1. First step in the process of document verification is to scan a document. Following is the sample code for scanning a document.
 
 ```swift
 Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: documentSettings)
@@ -120,9 +120,6 @@ Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: do
 **UIViewController:** The document scan UIViewController
 
 **documentSettings:** The document settings object, which has information such as document type, document side, and capture mode.
-
-Once the document scan is completed, 
-
 
 2. Next, upload the attachment. The upload attachment should be called for each side of the document, for example, front and backside of a driver's licence.
 
@@ -178,9 +175,10 @@ OTP functionality can be enabled by logging in Instnt dashboard and enabling OTP
 * Your app shows the user a screen to enter the OTP code.
 * User enters the OTP code which they received.
 * Your app calls verify the OTP() SDK function to verify the OTP and pass mobile number and OTP code.
-* Instnt SDK calls Instnt API and returns the response upon successful OTP verification
+* Instnt SDK calls Instnt API and returns the response upon successful OTP verification.
 
 Instnt SDK provides two [library functions](#library-functions) to enable OTP. we have also provided the sample code for the implementation.
+
 1. sendOTP (mobileNumber)
 
 ```swift
@@ -284,7 +282,7 @@ Instnt SDK provides `InstntDelegate` which has the delegate fuctions as shown be
 
 # Instnt object
 
-<table data-layout="default" data-local-id="1461e79a-6df4-4f4b-b7df-a9a072096fd3" class="confluenceTable"><colgroup><col style="width: 173.0px;"><col style="width: 121.0px;"><col style="width: 465.0px;"></colgroup><tbody><tr><th class="confluenceTh"><p><strong>Property</strong></p></th><th class="confluenceTh"><p><strong>Type</strong></p></th><th class="confluenceTh"><p><strong>Description</strong></p></th></tr>
+<table data-layout="default" data-local-id="1461e79a-6df4-4f4b-b7df-a9a072096fd3" class="confluenceTable"><colgroup><col style="width: 200.0px;"><col style="width: 400.0px;"><col style="width: 500.0px;"></colgroup><tbody><tr><th class="confluenceTh"><p><strong>Property</strong></p></th><th class="confluenceTh"><p><strong>Type</strong></p></th><th class="confluenceTh"><p><strong>Description</strong></p></th></tr>
 
 <tr><td class="confluenceTd"><p>instnttxnid</p></td><td class="confluenceTd"><p>UUID</p></td><td class="confluenceTd"><p>Instnt Transaction ID</p></td></tr>
 
@@ -297,46 +295,48 @@ Instnt SDK provides `InstntDelegate` which has the delegate fuctions as shown be
 
 # Instnt functions
 
-<table data-layout="default" data-local-id="1461e79a-6df4-4f4b-b7df-a9a072096fd3" class="confluenceTable"><colgroup><col style="width: 173.0px;"><col style="width: 71.0px;"><col style="width: 65.0px;"></colgroup><tbody><tr><th class="confluenceTh"><p><strong>Method</strong></p></th><th class="confluenceTh"><p><strong>Input Parameters</strong></p></th><th class="confluenceTh"><p><strong>Description</strong></p></th></tr>
+<table data-layout="default" data-local-id="1461e79a-6df4-4f4b-b7df-a9a072096fd3" class="confluenceTable"><colgroup><col style="width: 200.0px;"><col style="width: 400.0px;"><col style="width: 500.0px;"></colgroup><tbody><tr><th class="confluenceTh"><p><strong>Method</strong></p></th><th class="confluenceTh"><p><strong>Input Parameters</strong></p></th><th class="confluenceTh"><p><strong>Description</strong></p></th></tr>
 
 
-<tr><td class="confluenceTd"><p>
+<tr><td class="confluenceTd"><p> <a id="user-content-setup" class="anchor" aria-hidden="true" href="#setup">
 
-## <font size="3">setup</font>
+setup
 </p></td><td class="confluenceTd"><p>(with formId: String, endPOint: String, completion: @escaping(Result<String, InstntError>) -> Void)</p></td><td class="confluenceTd"><p>Initializes a user signup session.</p></td></tr>
 
-<tr><td class="confluenceTd"><p>
+<tr><td class="confluenceTd"><p> <a id="user-content-scanDocument" class="anchor" aria-hidden="true" href="#scanDocument">
 
-## <font size="3">scanDocument</font>
-</p></td><td class="confluenceTd"><p> (licenseKey: String, from vc: UIViewController, settings: DocumentSettings)</p></td><td class="confluenceTd"><p> </p></td><td class="confluenceTd"><p>This fuction enables the document scan.</p></td></tr>
+scanDocument
+</p></td><td class="confluenceTd"><p> (licenseKey: String, from vc: UIViewController, settings: DocumentSettings)</p></td><td class="confluenceTd"><p>This fuction enables the document scan.</p></td></tr>
 
-<tr><td class="confluenceTd"><p>
+<tr><td class="confluenceTd"><p> <a id="user-content-uploadAttachment" class="anchor" aria-hidden="true" href="#uploadAttachment">
 
-## <font size="3">uploadAttachment</font>
+uploadAttachment
 </p></td><td class="confluenceTd"><p>(data: Data, completion: @escaping(Result<Void, InstntError>) -> Void)</p></td><td class="confluenceTd"><p>Upload a document file to Instnt server.</p></td></tr>
 
-<tr><td class="confluenceTd"><p>
+<tr><td class="confluenceTd"><p> <a id="user-content-verifyDocuments" class="anchor" aria-hidden="true" href="#verifyDocuments">
 
-## <font size="3">verifyDocuments</font>
+verifyDocuments
 </p></td><td class="confluenceTd"><p>(completion: @escaping(Result<Void, InstntError>) -> Void) </p></td><td class="confluenceTd"><p>Initiate document verification on Instnt server.</p></td></tr>
 
-<tr><td class="confluenceTd"><p>
+<tr><td class="confluenceTd"><p> <a id="user-content-submitData" class="anchor" aria-hidden="true" href="#submitData">
 
-## <font size="3">submitData</font>
+submitData
 </p></td><td class="confluenceTd"><p>(_ data: [String: Any], completion: @escaping(Result<FormSubmitResponse, InstntError>) -> Void)</p></td><td class="confluenceTd"><p>Submit the user entered data and the documents uploaded to the Instnt server and initiate customer approval process.</p></td></tr>
 
-## <font size="3">sendOTP</font>
-
+<tr><td class="confluenceTd"><p> <a id="user-content-sendOTP" class="anchor" aria-hidden="true" href="#sendOTP">
+<p>
+sendOTP
 </p></td><td class="confluenceTd"><p>(phoneNumber: String, completion: @escaping(Result<Void, InstntError>) -> Void)</p></td><td class="confluenceTd"><p>Sends one-time password to the mobile number provided.</p></td></tr>
-<tr><td class="confluenceTd"><p>
 
-## <font size="3">verifyOTP</font>
+<tr><td class="confluenceTd"><p><a id="user-content-verifyOTP" class="anchor" aria-hidden="true" href="#verifyOTP">
+
+verifyOTP
 
 </p></td><td class="confluenceTd"><p>(phoneNumber: String, otp: String, completion: @escaping(Result<Void, InstntError>) -> Void)</p></td><td class="confluenceTd"><p>Verifies one-time password that was sent to the provided mobile number.</p></td></tr>
 
-<tr><td class="confluenceTd"><p>
+<tr><td class="confluenceTd"><p> <a id="user-content-scanSelfie" class="anchor" aria-hidden="true" href="#scanSelfie">
 
-## <font size="3">scanSelfie</p>
+scanSelfie</p>
 </p></td><td class="confluenceTd"><p>(from vc: UIViewController)</p></td><td class="confluenceTd"><p>Function that enables selfie scan.</p></td></tr>
 
 </tbody></table>

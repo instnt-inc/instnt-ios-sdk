@@ -33,7 +33,7 @@ Refer [Quick start guide](https://support.instnt.org/hc/en-us/articles/440878113
 
 * The integration of SDK depends on your workflow; read the [Instnt Accept integration process,](https://support.instnt.org/hc/en-us/articles/4418538578701-Instnt-Accept-Integration-Process) to understand the functionalities provided by Instnt and how to integrate SDK with your application.
 
-**Note:** ** The sample code provided in this documentation is from the sample app provided with the SDK. You control the client implementation entirely; there is no hard and fast rule to follow the sample code-- the sample is for understanding purposes only. **
+**Note:** The sample code provided in this documentation is from the sample app provided with the SDK. You control the client implementation entirely; there is no hard and fast rule to follow the sample code-- the sample is for understanding purposes only.
 
 
 # Getting started
@@ -275,9 +275,9 @@ Instnt SDK provides `InstntDelegate` which has the delegate fuctions as shown be
 
 - **onSelfieScanCancelled:** This fuction is called when selfie scan is cancelled.
 
-- **onSelfieScanFinish:**This fuction is called when selfie scan is successfully completed.
+- **onSelfieScanFinish:** This fuction is called when selfie scan is successfully completed.
 
-- **onSelfieScanError:**This fuction is called when selfie scan is has a error.
+- **onSelfieScanError:** This fuction is called when selfie scan is has a error.
 
 
 # Instnt object

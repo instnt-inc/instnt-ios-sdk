@@ -59,7 +59,7 @@ class CustomFormPresenter: BasePresenter {
     
     private func addFormKey() {
         formKey?.decorateTextField(textfieldType: .formKey)
-        formKey?.textField.text = "v163875646772327"
+        formKey?.textField.text = "v1639687041590101"
         self.vc?.stackView.addOptionalArrangedSubview(formKey)
     }
     
@@ -82,7 +82,7 @@ class CustomFormPresenter: BasePresenter {
                         self.lblView?.lblText.text = "Set up is succeded with transaction Id \(transactionID)"
                     case .failure(let error):
                         self.addResponse()
-                        self.lblView?.lblText.text = "Set up is failed with \(error.localizedDescription), please try again later"
+                        self.lblView?.lblText.text = "Set up is failed with \(error.message ?? ""), please try again later"
                     }
                 })
             } 

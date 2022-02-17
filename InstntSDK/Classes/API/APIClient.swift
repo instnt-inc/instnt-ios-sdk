@@ -43,10 +43,11 @@ class APIClient: NSObject {
                 }
                 if let message = responseJSON["message"] as? String {
                     completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT, message: message)))
+                } else if let message = responseJSON["errorMessage"] as? String {
+                    completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT, message: message)))
                 } else {
                     completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT)))
-                }
-                
+                }                
             })
         } else {
             completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT)))
@@ -183,7 +184,7 @@ class APIClient: NSObject {
            
         })
     }
-
+    
     
     func verifyOTP(requestData: RequestVerifyOTP, transactionId: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
         let endpoint = "\(baseEndpoint)/transactions/\(transactionId)/otp"
@@ -193,7 +194,7 @@ class APIClient: NSObject {
         }
         let request = ConnectionRequest(urlString: endpoint, method: .POST)
         request.postData = data
-        
+            
         ConnectionManager().sendRequest(request, success: { response in
             if let resultVerifyOTP: ResultVerifyOTP = BaseEntity.parse(data: response.data) {
                 if resultVerifyOTP.response.valid == true {

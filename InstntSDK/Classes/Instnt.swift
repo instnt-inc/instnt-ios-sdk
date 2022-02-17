@@ -118,7 +118,7 @@ public class Instnt: NSObject {
                 self.fingerprint = resultTransation.fingerprintjs_browser_token
                 self.serviceURL = resultTransation.backend_service_url
                 self.submitURL = resultTransation.signed_submit_form_url
-                
+                self.isDocumentVerificationEnabled = resultTransation.document_verification
                 completion(.success(transactionID))
             case .failure(let error):
                 completion(.failure(error))

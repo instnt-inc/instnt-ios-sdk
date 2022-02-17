@@ -22,8 +22,6 @@ This documentation covers the basics of the Instnt iOS SDK. Using iOS SDK provid
 - [Submit form data](#submit-form-data)
 - [Instnt delegate](#instnt-delegate)
 - [Instnt object](#instnt-object)
-- [Instnt functions](#instnt-functions)
-- [Assertion Response Payload](#assertion-response-payload)
 - [Resource links](#resource-links)
 
 # Prerequisites
@@ -58,10 +56,9 @@ Note that a **Workflow ID** is required in order to properly execute this functi
   Instnt.shared.delegate = self
 ```
 
-* `import` the InstntSDK and CFDocumentscan.
+* `import` the InstntSDK
 ```swift
 import InstntSDK
-import CFDocumentScanSDK
 ```
 
 * To start interacting with Instnt, the first step is to begin a transaction and obtain a transaction id , which acts as a corelation key for a user signup session.
@@ -96,18 +93,9 @@ Document verification feature comes into the picture if you have enabled it duri
 When this feature is enabled, the physical capture and verification of selfies and Government-issued identification documents such as Passports and Driver's Licenses are available.
 
 **Note:** Document Verification feature usage in your implementation via SDK requires a **License** **key**. Please contact the support at the email support@instnt.org for further assistance.
-
-Read the [Document Verification](https://support.instnt.org/hc/en-us/articles/4408781136909#heading-6) section of the Quickstart guide to understand better how to enable the feature.
-
 ## Document verification pre-requisites
 
-* iOS and Android mobile devices with Chrome or Safari browsers are supported for document verification.
-
-* Desktop devices (laptops, PCs) are unsupported due to the poor quality of embedded cameras and lack of gyroscopes for orientation detection. While the feature will work on devices running Chrome or Safari browsers, the experience can vary.
-
-* Do not include HTML tags with IDs containing the prefix 'aid.' e.g. `<div id=’aidFooter’>` in your web app as this prefix is reserved to be used by the toolkit.
-
-* Document verification requires end-to-end communication over SSL to get permission to use the device camera.
+* iOS devices reasonably updated OS and a good camera are supported for document verification.
 
 ## Document verifications steps
 
@@ -125,7 +113,7 @@ Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: do
 
 **documentSettings:** The document settings object, which has information such as document type, document side, and capture mode.
 
-2. Next, upload the attachment. The upload attachment should be called for each side of the document, for example, front and backside of a driver's licence.
+2. Next, upload the attachment. The upload attachment should be called for each side of the document, for example, front and backside of a driver's licence. You only need to take this step if you have autoUpload turned off (when you invoke scanDocument or scanSelfie methods)
 
 Following sample code demonstrates the upload attachment process:
 
@@ -292,9 +280,9 @@ Instnt SDK provides `InstntDelegate` which has the delegate fuctions as shown be
 
 <tr><td class="confluenceTd"><p>formId</p></td><td class="confluenceTd"><p>string</p></td><td class="confluenceTd"><p>Instnt Form/Workflow ID</p></td></tr>
 
-<tr><td class="confluenceTd"><p>otpVerification</p></td><td class="confluenceTd"><p>boolean</p></td><td class="confluenceTd"><p>Whether Instnt Form/Workflow has OTP verification enabled</p></td></tr>
+<tr><td class="confluenceTd"><p>isOTPSupported</p></td><td class="confluenceTd"><p>boolean</p></td><td class="confluenceTd"><p>Whether Instnt Form/Workflow has OTP verification enabled</p></td></tr>
 
-<tr><td class="confluenceTd"><p>documentVerification</p></td><td class="confluenceTd"><p>boolean</p></td><td class="confluenceTd"><p>Whether Instnt Form/Workflow has document verification enabled</p></td></tr>
+<tr><td class="confluenceTd"><p>isDocumentVerificationSupported</p></td><td class="confluenceTd"><p>boolean</p></td><td class="confluenceTd"><p>Whether Instnt Form/Workflow has document verification enabled</p></td></tr>
 </tbody></table>
 
 # Instnt functions
@@ -311,6 +299,11 @@ setup
 
 scanDocument
 </p></td><td class="confluenceTd"><p> (licenseKey: String, from vc: UIViewController, settings: DocumentSettings)</p></td><td class="confluenceTd"><p>This fuction enables the document scan.</p></td></tr>
+
+<tr><td class="confluenceTd"><p> <a id="user-content-scanSelfie" class="anchor" aria-hidden="true" href="#scanSelfie">
+
+scanSelfie</p>
+</p></td><td class="confluenceTd"><p>(from vc: UIViewController, farSelfie: bool)</p></td><td class="confluenceTd"><p>Function that enables selfie scan.</p></td></tr>
 
 <tr><td class="confluenceTd"><p> <a id="user-content-uploadAttachment" class="anchor" aria-hidden="true" href="#uploadAttachment">
 
@@ -338,18 +331,7 @@ verifyOTP
 
 </p></td><td class="confluenceTd"><p>(phoneNumber: String, otp: String, completion: @escaping(Result<Void, InstntError>) -> Void)</p></td><td class="confluenceTd"><p>Verifies one-time password that was sent to the provided mobile number.</p></td></tr>
 
-<tr><td class="confluenceTd"><p> <a id="user-content-scanSelfie" class="anchor" aria-hidden="true" href="#scanSelfie">
-
-scanSelfie</p>
-</p></td><td class="confluenceTd"><p>(from vc: UIViewController)</p></td><td class="confluenceTd"><p>Function that enables selfie scan.</p></td></tr>
-
 </tbody></table>
-
-# Assertion response payload
-
-Now that you're connected to the sandbox environment, you can begin processing synthetic applicants provided to you by Instnt. The decisions applied to these synthetic applicants will be returned in the form of an assertion response payload that must be decrypted.
-
-For more information concerning the decryption and analysis of the assertion response payload refer to the [Data Encryption and Decryption](https://support.instnt.org/hc/en-us/articles/360045168511) and [Getting and Analyzing the Assertion Response](https://support.instnt.org/hc/en-us/articles/360044671691) articles in the Developer Guide.
 
 # Resource links
 - [Quick start guide](https://support.instnt.org/hc/en-us/articles/4408781136909)

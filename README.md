@@ -1,6 +1,6 @@
-# Instnt iOS SDK 2.0.0
+# Instnt iOS SDK
 
-This documentation covers the basics of the Instnt iOS SDK. Using iOS SDK provides functions and libraries for a seamless integration with your front-end application.For a detailed overview of Instnt's functionality, visit the [Instnt documentation library](https://support.instnt.org/hc/en-us/articles/360055345112-Integration-Overview)
+This documentation covers the basics of the Instnt iOS SDK 2.0.0. iOS SDK provides functions and libraries for seamless integration with your front-end application. For a detailed overview of Instnt's functionality, visit the [Instnt documentation hub](https://support.instnt.org/hc/en-us/articles/360055345112-Integration-Overview)
 
 
 # Requirements
@@ -26,19 +26,19 @@ This documentation covers the basics of the Instnt iOS SDK. Using iOS SDK provid
 
 # Prerequisites
 
-* Sign in to your account on the Instnt Accept's dashboard and create a customer signup workflow that works for your company. Get the workflow ID, this ID is important during the integration with Instnt SDK.
+* Sign in to your account on the Instnt Accept's dashboard and create a customer signup workflow that works for your company. Get the workflow ID. This ID is essential while integrating with Instnt SDK.
 Refer [Quick start guide](https://support.instnt.org/hc/en-us/articles/4408781136909) and [Developer guide, ](https://support.instnt.org/hc/en-us/articles/360055345112-Integration-Overview) for more information.
 
-* The integration of SDK depends on your workflow; read the [Instnt Accept integration process,](https://support.instnt.org/hc/en-us/articles/4418538578701-Instnt-Accept-Integration-Process) to understand the functionalities provided by Instnt and how to integrate SDK with your application.
+* The integration of SDK depends on your workflow; read the [Instnt Accept integration process](https://support.instnt.org/hc/en-us/articles/4418538578701-Instnt-Accept-Integration-Process) to understand the functionalities provided by Instnt and how to integrate SDK with your application.
 
-**Note:** Your implementation with Instnt's SDK may diverge from the integration shown in sample app, please contact Instnt support team for additional questions related to Integration.
+**Note:** Your implementation with Instnt's SDK may diverge from the integration shown in the sample app. Please get in touch with the Instnt support team for additional questions related to Integration.
 
 
 # Getting started
 
 Instnt iOS SDK is comprised of iOS components and mechanisms to facilitate communication between your application, Instnt SDK, and Instnt's APIs.
 
-Note that a **Workflow ID** is required in order to properly execute this function. For more information concerning Workflow IDs, please visit
+Note that a **Workflow ID** is required to execute this function properly. For more information concerning Workflow IDs, please visit
 [Instnt's documentation library.](https://support.instnt.org/hc/en-us/articles/360055345112-Integration-Overview)
 
 1. Create a workflow in the Instnt dashboard and get the Workflow ID.
@@ -61,7 +61,7 @@ Note that a **Workflow ID** is required in order to properly execute this functi
 import InstntSDK
 ```
 
-* To start interacting with Instnt, the first step is to begin a transaction and obtain a transaction id , which acts as a corelation key for a user signup session.
+* The first step is to begin a transaction and obtain a transaction id, which acts as a correlation key for a user signup session to interact with Instnt.
 
 * See the following sample code to call the `setup` fuction:
 
@@ -99,7 +99,7 @@ When this feature is enabled, the physical capture and verification of selfies a
 
 ## Document verifications steps
 
-1. First step in the process of document verification is to scan a document. Following is the sample code for scanning a document.
+1. The first step in document verification is to scan a document. Following is the sample code for scanning a document.
 
 The document verification has an auto-upload feature which is turned on by default. It uploads the image to Instnt cloud storage once the image gets captured successfully.
 
@@ -113,9 +113,9 @@ Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: do
 
 **documentSettings:** The document settings object, which has information such as document type, document side, and capture mode.
 
-2. Next, upload the attachment. The upload attachment should be called for each side of the document, for example, front and backside of a driver's licence. You only need to take this step if you have autoUpload turned off (when you invoke scanDocument or scanSelfie methods)
+2. Next, upload the attachment. The upload attachment should be called for each side of the document, for example, the front and backside of a driver's license. You only need to take this step if you have autoUpload turned off (when you invoke scanDocument or scanSelfie methods)
 
-Following sample code demonstrates the upload attachment process:
+The following sample code demonstrates the upload attachment process:
 
 ```swift
 Instnt.shared.uploadAttachment(data: captureResult.selfieData, completion: { result in
@@ -137,7 +137,7 @@ Instnt.shared.uploadAttachment(data: captureResult.selfieData, completion: { res
         })
 ```
 
-3. Next, verify the documents that were uploaded. Once all the documents are uploaded, call verifyDocuments fuction to verify the documents.
+3. Next, verify the documents that were uploaded. Once all the documents are uploaded, call verifyDocuments function to verify the documents.
 
 ```swift
   Instnt.shared.verifyDocuments(completion: { result in
@@ -151,7 +151,7 @@ Instnt.shared.uploadAttachment(data: captureResult.selfieData, completion: { res
            
 ```
 
-4. In the Instnt iOS SDK we provide another fucntionality of selfie scan/capture. It is similar to the document scan and upload process. Pass the `UIViewController` as the argument.
+4. In the Instnt iOS SDK, we provide another functionality for selfie scan/capture. It is similar to the document scan and upload process. Pass the `UIViewController` as the argument.
 
 ```swift
 Instnt.shared.scanSelfie(from: self)
@@ -261,15 +261,15 @@ Instnt SDK provides `InstntDelegate` which has the delegate fuctions as shown be
     func onSelfieScanError(error: InstntError)
 }
 ```
-- **onDocumentScanFinish:** This fuction is called when document scan is successfully completed.
+- **onDocumentScanFinish:** This function is called when a document scan is successfully completed.
 
-- **onDocumentScanCancelled:** This fuction is called when document scan is not successful.
+- **onDocumentScanCancelled:** This function is called when document scan is unsuccessful.
 
-- **onSelfieScanCancelled:** This fuction is called when selfie scan is cancelled.
+- **onSelfieScanCancelled:** This function is called when the selfie scan is canceled.
 
-- **onSelfieScanFinish:** This fuction is called when selfie scan is successfully completed.
+- **onSelfieScanFinish:** This function is called when the selfie scan is successfully completed.
 
-- **onSelfieScanError:** This fuction is called when selfie scan is has a error.
+- **onSelfieScanError:** This function is called when a selfie scan has an error.
 
 
 # Instnt object
@@ -278,11 +278,11 @@ Instnt SDK provides `InstntDelegate` which has the delegate fuctions as shown be
 
 <tr><td class="confluenceTd"><p>instnttxnid</p></td><td class="confluenceTd"><p>UUID</p></td><td class="confluenceTd"><p>Instnt Transaction ID</p></td></tr>
 
-<tr><td class="confluenceTd"><p>formId</p></td><td class="confluenceTd"><p>string</p></td><td class="confluenceTd"><p>Instnt Form/Workflow ID</p></td></tr>
+<tr><td class="confluenceTd"><p>formId</p></td><td class="confluenceTd"><p>string</p></td><td class="confluenceTd"><p>Instnt Form/Workflow ID. This ID is available in the Instnt dashboard, where you created a signup workflow.</p></td></tr>
 
-<tr><td class="confluenceTd"><p>isOTPSupported</p></td><td class="confluenceTd"><p>boolean</p></td><td class="confluenceTd"><p>Whether Instnt Form/Workflow has OTP verification enabled</p></td></tr>
+<tr><td class="confluenceTd"><p>isOTPSupported</p></td><td class="confluenceTd"><p>boolean</p></td><td class="confluenceTd"><p>Checks whether Instnt Form/Workflow has OTP verification enabled</p></td></tr>
 
-<tr><td class="confluenceTd"><p>isDocumentVerificationSupported</p></td><td class="confluenceTd"><p>boolean</p></td><td class="confluenceTd"><p>Whether Instnt Form/Workflow has document verification enabled</p></td></tr>
+<tr><td class="confluenceTd"><p>isDocumentVerificationSupported</p></td><td class="confluenceTd"><p>boolean</p></td><td class="confluenceTd"><p>Checks whether Instnt Form/Workflow has document verification enabled</p></td></tr>
 </tbody></table>
 
 # Instnt functions
@@ -298,12 +298,12 @@ setup
 <tr><td class="confluenceTd"><p> <a id="user-content-scanDocument" class="anchor" aria-hidden="true" href="#scanDocument">
 
 scanDocument
-</p></td><td class="confluenceTd"><p> (licenseKey: String, from vc: UIViewController, settings: DocumentSettings)</p></td><td class="confluenceTd"><p>This fuction enables the document scan.</p></td></tr>
+</p></td><td class="confluenceTd"><p> (licenseKey: String, from vc: UIViewController, settings: DocumentSettings)</p></td><td class="confluenceTd"><p>Enables a document scan.</p></td></tr>
 
 <tr><td class="confluenceTd"><p> <a id="user-content-scanSelfie" class="anchor" aria-hidden="true" href="#scanSelfie">
 
 scanSelfie</p>
-</p></td><td class="confluenceTd"><p>(from vc: UIViewController, farSelfie: bool)</p></td><td class="confluenceTd"><p>Function that enables selfie scan.</p></td></tr>
+</p></td><td class="confluenceTd"><p>(from vc: UIViewController, farSelfie: bool)</p></td><td class="confluenceTd"><p> Enables a selfie scan/capture.</p></td></tr>
 
 <tr><td class="confluenceTd"><p> <a id="user-content-uploadAttachment" class="anchor" aria-hidden="true" href="#uploadAttachment">
 
@@ -336,12 +336,12 @@ verifyOTP
 # Resource links
 - [Quick start guide](https://support.instnt.org/hc/en-us/articles/4408781136909)
 - [Developer guide](https://support.instnt.org/hc/en-us/articles/360055345112-Integration-Overview)
-- [Instnt API endpoints](https://swagger.instnt.org/)
-- [Instnt support](https://support.instnt.org/hc/en-us)
+- [Instnt API documentation](https://api.instnt.org/doc/swagger/)
+- [Instnt documentation hub](https://support.instnt.org/hc/en-us)
 
 # License
 
-The instnt-reactjs SDK is under MIT license.
+The instnt-iOS SDK is under MIT license.
 
 
 

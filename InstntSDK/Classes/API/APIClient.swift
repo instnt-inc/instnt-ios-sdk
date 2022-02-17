@@ -43,10 +43,11 @@ class APIClient: NSObject {
                 }
                 if let message = responseJSON["message"] as? String {
                     completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT, message: message)))
+                } else if let message = responseJSON["errorMessage"] as? String {
+                    completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT, message: message)))
                 } else {
                     completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT)))
-                }
-                
+                }                
             })
         } else {
             completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT)))

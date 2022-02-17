@@ -153,6 +153,7 @@ class AddressPresenter: BasePresenter {
                    
                 })
             })
+            self.vc?.stackView.addOptionalArrangedSubview(buttonView)
         } else {
             buttonView?.decorateView(type: .next, completion: {
                 ExampleShared.shared.formData["physicalAddress"] = self.address?.textField.text

@@ -18,7 +18,7 @@ public protocol DocumentScanDelegate: NSObjectProtocol {
 
 public protocol SelfieScanDelegate: NSObjectProtocol {
     func onSelfieScanCancelled()
-    func onSelfieScanFinish(captureResult: CFASelfieScanData)
+    func onSelfieScanFinish(captureResult: CaptureSelfieResult)
     func onSelfieScanError(error: InstntError)
 }
 
@@ -28,6 +28,7 @@ class DocumentScan: NSObject {
     private lazy var scanHandler = DSHandler(delegate: self)
     weak var documentScanDelegate: DocumentScanDelegate? = nil
     weak var selfieScandelegate: SelfieScanDelegate? = nil
+    private var isAutoUpload: Bool = true
     
     private override init() {
         super.init()
@@ -67,10 +68,8 @@ class DocumentScan: NSObject {
         }
     }
     
-    func scanDocument(licenseKey: String, from vc: UIViewController, documentSettings: DocumentSettings, delegate:DocumentScanDelegate) {
-        
-        //DSCapture.setLicense(key: "AwG5mCdqXkmCj9oNEpGV8UauciP8s4cqFT848FfjUjwAZQJfa8ZvrEpmYsPME0RTo/Q0kRowDCGz7HPhfSdyeE7rOLtB3JAhuABdQ2R7dGhVy2EUdt5ENQBBIoveIZdf1pwVY2EUgDoGm8REDU+rr2C2")
-        
+    func scanDocument(licenseKey: String, from vc: UIViewController, documentSettings: DocumentSettings, delegate:DocumentScanDelegate, isAutoUpload: Bool? = true) {
+        self.isAutoUpload  = isAutoUpload ?? true
         DSCapture.setLicense(key: licenseKey)
         self.documentScanDelegate = delegate
         if documentSettings.documentType == .license {
@@ -85,18 +84,10 @@ class DocumentScan: NSObject {
             vc.present(scanHandler.scanController, animated: true)
             scanHandler.start()
         }
-//        if documentSettings.documentType == .passport {
-//            let options = DSPassportOptions()
-//            options.captureMode = .Auto
-//            
-//            scanHandler.options = options
-//            vc.present(scanHandler.scanController, animated: true)
-//            scanHandler.start()
-//
-//        }
     }
     
-    func scanSelfie(from vc: UIViewController, delegate: SelfieScanDelegate, farSelfie: Bool) {
+    func scanSelfie(from vc: UIViewController, delegate: SelfieScanDelegate, farSelfie: Bool, isAutoUpload: Bool? = true) {
+        self.isAutoUpload  = isAutoUpload ?? true
         let settings = CFASelfieSettings()
         settings?.showConfirmationScreen = true
         settings?.captureMode = .ManualCapture
@@ -128,13 +119,8 @@ extension DocumentScan: DSHandlerDelegate {
         let barCodeDetected = result.barcodeDetected
         let faceDetected = result.captureAnalysis.faceDetected
         
-        var focus : Bool!
-        if result.captureAnalysis.focus > 0.6 {
-            focus = true
-        } else {
-            focus = false
-        }
-        let capture = CaptureResult(resultBase64: img, frontfocus: focus, frontGlare: false, backfocus: focus, backGlare: false, isFaceFaceDetected: faceDetected, isBarcodeDetected: barCodeDetected, documentSide: documentSide)
+        
+        let capture = CaptureResult(resultBase64: img,  isFaceFaceDetected: faceDetected, isBarcodeDetected: barCodeDetected, documentSide: documentSide, isAutoUpload: isAutoUpload)
         documentScanDelegate?.onDocumentScanFinish(captureResult: capture)
     }
     
@@ -150,8 +136,8 @@ extension DocumentScan: CFASelfieScanDelegate {
     }
     
     func onFinishSelfieScan(_ selfieScanData: CFASelfieScanData!) {
-        //let selfieResult = CaptureSelfieResult(resultBase64: selfieScanData.selfieData)
-        selfieScandelegate?.onSelfieScanFinish(captureResult: selfieScanData)
+        let selfieResult = CaptureSelfieResult(selfieData: selfieScanData.selfieData, farSelfieData: selfieScanData.farSelfieData, isAutoUpload: isAutoUpload)
+        selfieScandelegate?.onSelfieScanFinish(captureResult: selfieResult)
     }
 
     func onCancelSelfieScan() {

@@ -7,15 +7,15 @@
 
 import Foundation
 public struct DocumentSettings {
-    public init(documentType: DocumentType, documentSide: DocumentSide, captureMode: CaptureMode) {
+    public init(documentType: DocumentType, documentSide: DocumentSide, captureMode: CaptureMode, isAutoUpload: Bool) {
         self.documentType = documentType
         self.documentSide = documentSide
         self.captureMode = captureMode
     }
     
-    let documentType: DocumentType
-    let documentSide: DocumentSide
-    let captureMode: CaptureMode
+    public let documentType: DocumentType
+    public let documentSide: DocumentSide
+    public let captureMode: CaptureMode
 }
 
 public enum DocumentType: String {
@@ -37,33 +37,32 @@ public enum CaptureMode {
     case manual
 }
 
-public class CaptureResult : NSObject{    
+public class CaptureResult {    
     public var resultBase64: Data
-    let frontfocus: Bool?
-    let frontGlare: Bool?
-    let backfocus: Bool?
-    let backGlare: Bool?
     let isFaceFaceDetected: Bool?
     let isBarcodeDetected: Bool?
     public let documentSide: DocumentSide?
+    public let isAutoUpload: Bool?
     
     
-    init(resultBase64: Data, frontfocus:Bool, frontGlare:Bool, backfocus:Bool, backGlare:Bool, isFaceFaceDetected:Bool, isBarcodeDetected:Bool, documentSide: DocumentSide) {
+    init(resultBase64: Data, isFaceFaceDetected:Bool, isBarcodeDetected:Bool, documentSide: DocumentSide, isAutoUpload: Bool) {
         self.resultBase64 = resultBase64
-        self.frontfocus = frontfocus
-        self.frontGlare = frontGlare
-        self.backfocus = backfocus
-        self.backGlare = backGlare
         self.isFaceFaceDetected = isFaceFaceDetected
         self.isBarcodeDetected = isBarcodeDetected
         self.documentSide = documentSide
+        self.isAutoUpload = isAutoUpload
     }
 }
 
 public class CaptureSelfieResult : NSObject{
-    public var resultBase64: Data
-    init(resultBase64: Data) {
-        self.resultBase64 = resultBase64
+    public var selfieData: Data
+    public var farSelfieData: Data?
+    public let isAutoUpload: Bool?
+    
+    init(selfieData: Data, farSelfieData: Data? = nil, isAutoUpload: Bool) {
+        self.selfieData = selfieData
+        self.farSelfieData = farSelfieData
+        self.isAutoUpload = isAutoUpload
     }
 }
 

@@ -44,16 +44,6 @@ class CustomFormPresenter: BasePresenter {
         return view
     }()
     
-//    private let sandboxBaseEndpoint         = "https://dev2-api.instnt.org/public"
-//    private let productionBaseEndpoint      = "https://api.instnt.org/public"
-//    private var baseEndpoint: String {
-//        return isSandbox ? sandboxBaseEndpoint : productionBaseEndpoint
-//    }
-//
-//    var isSandbox: Bool = false
-//    var formKey = ""
-    
-    
     override func presentScene() {
         super.presentScene()
         self.buildView()
@@ -91,6 +81,7 @@ class CustomFormPresenter: BasePresenter {
                         self.getFormAfterSuccess()
                         self.lblView?.lblText.text = "Set up is succeded with transaction Id \(transactionID)"
                     case .failure(let error):
+                        self.addResponse()
                         self.lblView?.lblText.text = "Set up is failed with \(error.localizedDescription), please try again later"
                     }
                 })

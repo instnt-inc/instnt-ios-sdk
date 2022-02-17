@@ -9,8 +9,8 @@ import Foundation
 public enum ErrorConstants: Int {
     case error_DOCUMENT_CAPTURE
     case error_SELFIE_CAPTURE
-    case error_FORM_SUBMIT
-    
+    case error_SETUP
+    case error_FORM_SUBMIT    
     case error_UPLOAD
     case error_EXTERNAL
     case error_NO_CONNECTIVITY
@@ -26,6 +26,7 @@ open class InstntError: Error {
     public var errorConstant: ErrorConstants
     public var message: String?
     public var statusCode: Int = 999
+    public var api: String?
 
     public init(errorConstant: ErrorConstants, message: String? = nil, statusCode: Int = 999) {
         self.errorConstant = errorConstant
@@ -60,10 +61,28 @@ open class InstntError: Error {
             message = NSLocalizedString("Invalid data, please try again later.", comment: "")
         case .error_INVALID_TRANSACTION_ID:
             message = NSLocalizedString("Invalid transactionId, please try again later.", comment: "")
+        case .error_SETUP:
+            message = NSLocalizedString("Invalid data.", comment: "")
             
         }
 
         return NSLocalizedString(message, comment: "Error Message")
     }
+    
+    static func parse(_ response: ConnectionResponse?, errorConstant: ErrorConstants) -> InstntError {
+          var errorEntity: InstntError
+
+          if let response = response,
+              let jsonData = try? JSONSerialization.jsonObject(with: response.data as Data, options: []),
+           let _ = jsonData as? NSDictionary {
+
+              errorEntity = InstntError(errorConstant: .error_EXTERNAL)
+              errorEntity.api = response.request.requestURL
+          } else {
+              errorEntity = InstntError(errorConstant: errorConstant)
+          }
+
+          return errorEntity
+      }
 }
 

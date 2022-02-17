@@ -55,11 +55,11 @@ class EmailPhonePresenter: BasePresenter {
     }
     
     func addButton() {
-        if Instnt.shared.isOTPSupported == false  {
+        if Instnt.shared.isOTPverificationEnabled == false  {
             buttonView?.decorateView(type: .next, completion: {
                 ExampleShared.shared.formData["mobileNumber"] = self.phone?.textField.text
                 ExampleShared.shared.formData["email"] = self.email?.textField.text
-                if Instnt.shared.isOTPSupported == false {
+                if Instnt.shared.isOTPverificationEnabled == false {
                     guard let vc = Utils.getStoryboardInitialViewController("Address") as? AddressVC else {
                         return
                     }

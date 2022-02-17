@@ -28,11 +28,13 @@ struct ResultCreateTransaction: Decodable {
     let fingerprintjs_browser_token: String
     let backend_service_url: String
     let signed_submit_form_url: String
+    let document_verification: Bool
     
     public init(from decoder:Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         instnttxnid = try values.decode(String.self, forKey: .instnttxnid)
         otp_verification = try values.decode(Bool.self, forKey: .otp_verification)
+        document_verification = try values.decode(Bool.self, forKey: .document_verification)
         fingerprintjs_browser_token = try values.decode(String.self, forKey: .fingerprintjs_browser_token)
         backend_service_url = try values.decode(String.self, forKey: .backend_service_url)
         signed_submit_form_url = try values.decode(String.self, forKey: .signed_submit_form_url)
@@ -44,6 +46,7 @@ struct ResultCreateTransaction: Decodable {
         case fingerprintjs_browser_token
         case backend_service_url
         case signed_submit_form_url
+        case document_verification
     }
 }
 

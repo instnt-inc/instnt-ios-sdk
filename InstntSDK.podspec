@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'InstntSDK'
-  s.version          = '1.0.0'
+  s.version          = '2.0.0'
   s.summary          = 'Swift CocoaPod implementation of the Instnt SDK'
   s.description      = 'Swift CocoaPod implementation of the Instnt SDK'
 
@@ -28,7 +28,6 @@ Pod::Spec.new do |s|
   s.public_header_files = 'Pod/Classes/**/*.h'
   
   s.frameworks = 'UIKit'
-  s.dependency 'Alamofire'
   s.dependency 'ActionSheetPicker-3.0', '~> 2.7'
   s.dependency 'IQKeyboardManagerSwift', '~> 6.5'
   s.dependency 'DeviceKit', '~> 4.0'

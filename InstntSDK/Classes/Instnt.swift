@@ -15,9 +15,12 @@ public protocol InstntDelegate: NSObjectProtocol {
 
     func onDocumentScanFinish(captureResult: CaptureResult)
     func onDocumentScanCancelled(error: InstntError)
+    
     func onSelfieScanCancelled()
-    func onSelfieScanFinish(captureResult: CFASelfieScanData)
+    func onSelfieScanFinish(captureResult: CaptureSelfieResult)
     func onSelfieScanError(error: InstntError)
+    
+    func onDocumentUploaded(documentSetting: DocumentSettings?, data: Data?, isSelfie: Bool, error: InstntError?)
 }
 
 public class Instnt: NSObject {
@@ -32,7 +35,8 @@ public class Instnt: NSObject {
     private (set) var formId: String = ""
     public weak var delegate: InstntDelegate? = nil
     public var transactionID: String?
-    public var isOTPSupported: Bool?
+    public var isOTPverificationEnabled: Bool?
+    public var isDocumentVerificationEnabled: Bool?
     private var fingerprint: String = ""
     private var serviceURL: String = ""
     private var submitURL: String = ""
@@ -40,6 +44,7 @@ public class Instnt: NSObject {
     private var documentSide: DocumentSide = .front
     private var isSelfie: Bool = false
     private var isFarSelfie: Bool = false
+    private var documentSettings: DocumentSettings?
     
     private override init() {
         super.init()
@@ -61,7 +66,7 @@ public class Instnt: NSObject {
     public func submitData(_ data: [String: Any], completion: @escaping(Result<FormSubmitResponse, InstntError>) -> Void) {
         var formData: [String: Any] = data
         formData["signature"] = self.transactionID
-        if Instnt.shared.isOTPSupported ?? false {
+        if Instnt.shared.isOTPverificationEnabled ?? false {
             formData["OTPSignature"] = self.transactionID
         }
         formData["form_key"] = formId
@@ -88,17 +93,18 @@ public class Instnt: NSObject {
         APIClient.shared.submitForm(to: self.submitURL, formData: formData, completion: completion)
     }
     
-    public func scanDocument(licenseKey: String, from vc: UIViewController, settings: DocumentSettings) {
+    public func scanDocument(licenseKey: String, from vc: UIViewController, settings: DocumentSettings, isAutoUpload: Bool? = true) {
         self.documentSide = settings.documentSide
         self.isSelfie = false
         self.isFarSelfie = false
-        DocumentScan.shared.scanDocument(licenseKey: licenseKey, from: vc, documentSettings: settings, delegate: self)
+        documentSettings = settings
+        DocumentScan.shared.scanDocument(licenseKey: licenseKey, from: vc, documentSettings: settings, delegate: self, isAutoUpload: isAutoUpload)
     }
     
-    public func scanSelfie(from vc: UIViewController, farSelfie: Bool) {
+    public func scanSelfie(from vc: UIViewController, farSelfie: Bool, isAutoUpload: Bool? = true) {
         self.isSelfie = true
         self.isFarSelfie = farSelfie
-        DocumentScan.shared.scanSelfie(from: vc, delegate: self, farSelfie: farSelfie)
+        DocumentScan.shared.scanSelfie(from: vc, delegate: self, farSelfie: isFarSelfie, isAutoUpload: isAutoUpload)
     }
     
     private func getTransactionID(completion: @escaping(Result<String, InstntError>) -> Void) {
@@ -107,11 +113,12 @@ public class Instnt: NSObject {
             switch result {
             case .success(let resultTransation):
                 let transactionID = resultTransation.instnttxnid
-                self.isOTPSupported = resultTransation.otp_verification
+                self.isOTPverificationEnabled = resultTransation.otp_verification
                 self.transactionID = transactionID
                 self.fingerprint = resultTransation.fingerprintjs_browser_token
                 self.serviceURL = resultTransation.backend_service_url
                 self.submitURL = resultTransation.signed_submit_form_url
+                
                 completion(.success(transactionID))
             case .failure(let error):
                 completion(.failure(error))
@@ -193,6 +200,20 @@ public class Instnt: NSObject {
 extension Instnt: DocumentScanDelegate {
     public func onDocumentScanFinish(captureResult: CaptureResult) {
         self.delegate?.onDocumentScanFinish(captureResult: captureResult)
+        if captureResult.isAutoUpload ?? false {
+            SVProgressHUD.show()
+            Instnt.shared.uploadAttachment(data: captureResult.resultBase64, completion: { result in
+                SVProgressHUD.dismiss()
+                switch result {
+                case .success(_):
+                    self.delegate?.onDocumentUploaded(documentSetting:  self.documentSettings, data: captureResult.resultBase64, isSelfie: false, error: nil)
+                case .failure(let error):
+                    self.delegate?.onDocumentUploaded(documentSetting: self.documentSettings, data: nil, isSelfie: false, error: error)
+                }
+            })
+            
+        }
+        
     }
     
     public func onDocumentScanCancelled(error: InstntError) {
@@ -208,10 +229,42 @@ extension Instnt: SelfieScanDelegate {
         self.delegate?.onSelfieScanCancelled()
     }
     
-    public func onSelfieScanFinish(captureResult: CFASelfieScanData) {
+    public func onSelfieScanFinish(captureResult: CaptureSelfieResult) {
         self.delegate?.onSelfieScanFinish(captureResult: captureResult)
+        if captureResult.isAutoUpload ?? false {
+            SVProgressHUD.show()
+            Instnt.shared.uploadAttachment(data: captureResult.selfieData, completion: { result in
+                switch result {
+                case .success(_):
+                    if captureResult.farSelfieData != nil {
+                        Instnt.shared.uploadAttachment(data: captureResult.selfieData, isFarSelfieData: true, completion:  { result in
+                            switch result {
+                            case .success():
+                                self.delegate?.onDocumentUploaded(documentSetting: nil, data: captureResult.selfieData, isSelfie: true, error: nil)
+                               
+                            case .failure(let error):
+                                SVProgressHUD.dismiss()
+                                print("uploadAttachment error \(error.localizedDescription)")
+                                self.delegate?.onDocumentUploaded(documentSetting: nil, data: nil, isSelfie: false, error: error)
+                            }
+                        })
+                    } else {
+                        self.delegate?.onDocumentUploaded(documentSetting: self.documentSettings, data: captureResult.selfieData, isSelfie: true, error: nil)
+                    }
+                    
+                case .failure(let error):
+                    SVProgressHUD.dismiss()
+                    print("uploadAttachment error \(error.localizedDescription)")
+                    self.delegate?.onDocumentUploaded(documentSetting: self.documentSettings, data: nil, isSelfie: false, error: error)
+                   
+                }
+            })
+            
+        }
+        
     }
     public func onSelfieScanError(error: InstntError) {
+        
         self.delegate?.onSelfieScanError(error: error)
     }
 }

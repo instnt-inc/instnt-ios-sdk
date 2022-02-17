@@ -8,13 +8,12 @@
 
 import UIKit
 import InstntSDK
-import CFDocumentScanSDK
 import SVProgressHUD
-import IDMetricsSelfieCapture
 
 
 class UploadDocumentVC: BaseViewController {
-    var farSelfie: Bool? = false
+    var isFarSelfie: Bool? = false
+    var isAutoUpload: Bool? = true
     let licenseKey = "AwG5mCdqXkmCj9oNEpGV8UauciP8s4cqFT848FfjUjwAZQJfa8ZvrEpmYsPME0RTo/Q0kRowDCGz7HPhfSdyeE7rOLtB3JAhuABdQ2R7dGhVy2EUdt5ENQBBIoveIZdf1pwVY2EUgDoGm8REDU+rr2C2"
     
     @IBOutlet private var driverLicenceBtn: UIButton! {
@@ -50,10 +49,18 @@ class UploadDocumentVC: BaseViewController {
         return view
     }()
     
+    lazy var autoUploadSwitchView: SwitchView? = {
+        guard let view = Utils.getViewFromNib(name: "SwitchView") as? SwitchView  else {
+            return nil
+        }
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.stackView.addSpacerView()
         addFarSelfieSwitch()
+        addAutoUploadSwitch()
         addNextButton()
         Instnt.shared.delegate = self
     }
@@ -61,17 +68,25 @@ class UploadDocumentVC: BaseViewController {
     private func addNextButton() {
         self.stackView.addSpacerView()
         buttonView?.decorateView(type: .next, completion: {
-            let documentSettings = DocumentSettings(documentType: .license, documentSide: .front, captureMode: .manual)
-            Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: documentSettings)
+            let documentSettings = DocumentSettings(documentType: .license, documentSide: .front, captureMode: .manual, isAutoUpload: self.isAutoUpload ?? true)
+            Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
         })
         self.stackView.addOptionalArrangedSubview(buttonView)
     }
     
     private func addFarSelfieSwitch() {
         switchView?.decorateView(title: "Far Selfie", completion: { isOn in
-            self.farSelfie = isOn
+            self.isFarSelfie = isOn
         })
         switchView?.uiswitch.isOn = false
+        self.stackView.addOptionalArrangedSubview(switchView)
+    }
+    
+    private func addAutoUploadSwitch() {
+        switchView?.decorateView(title: "Auto Upload", completion: { isOn in
+            self.isAutoUpload = isOn
+        })
+        switchView?.uiswitch.isOn = true
         self.stackView.addOptionalArrangedSubview(switchView)
     }
     
@@ -194,7 +209,44 @@ extension UIButton {
 
 extension UploadDocumentVC: InstntDelegate {
     
-    func onSelfieScanFinish(captureResult: CFASelfieScanData) {
+    private func verifyDocument() {
+        Instnt.shared.verifyDocuments(completion: { result in
+            SVProgressHUD.dismiss()
+            switch result {
+            case .success():
+                self.instntDocumentVerified()
+            case .failure(let error):
+                self.showSimpleAlert("Document verification failed with error: \(error.localizedDescription)", target: self)
+            }
+        })
+    }
+    
+    func onDocumentUploaded(documentSetting: DocumentSettings?, data: Data?, isSelfie: Bool, error: InstntError?) {
+        if error != nil {
+            print("uploadAttachment error \(String(describing: error?.message))")
+            self.showSimpleAlert(error?.message ?? "Upload Attachment error", target: self, completed: {
+                self.navigationController?.popViewController(animated: true)
+            })
+        }
+        if isSelfie == true  {
+            self.verifyDocument()
+        } else if documentSetting?.documentSide == .front {
+            DispatchQueue.main.async {
+                let documentSettings = DocumentSettings(documentType: .license, documentSide: .back, captureMode: .manual, isAutoUpload: self.isAutoUpload ?? true)
+                Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
+            }
+        } else if documentSetting?.documentSide == .back {
+            DispatchQueue.main.async {
+                Instnt.shared.scanSelfie(from: self, farSelfie: self.isFarSelfie ?? false, isAutoUpload: self.isAutoUpload ?? true)
+            }
+        }
+    }
+   
+    
+    func onSelfieScanFinish(captureResult: CaptureSelfieResult) {
+        if captureResult.isAutoUpload == true {
+            return
+        }
         SVProgressHUD.show()
         Instnt.shared.uploadAttachment(data: captureResult.selfieData, completion: { result in
             switch result {
@@ -203,15 +255,7 @@ extension UploadDocumentVC: InstntDelegate {
                     Instnt.shared.uploadAttachment(data: captureResult.selfieData, isFarSelfieData: true, completion:  { result in
                         switch result {
                         case .success():
-                            Instnt.shared.verifyDocuments(completion: { result in
-                                SVProgressHUD.dismiss()
-                                switch result {
-                                case .success():
-                                    self.instntDocumentVerified()
-                                case .failure(let error):
-                                    self.showSimpleAlert("Documen verification failed with error: \(error.localizedDescription)", target: self)
-                                }
-                            })
+                            self.verifyDocument()
                         case .failure(let error):
                             SVProgressHUD.dismiss()
                             print("uploadAttachment error \(error.localizedDescription)")
@@ -219,15 +263,7 @@ extension UploadDocumentVC: InstntDelegate {
                         }
                     })
                 } else {
-                    Instnt.shared.verifyDocuments(completion: { result in
-                        SVProgressHUD.dismiss()
-                        switch result {
-                        case .success():
-                            self.instntDocumentVerified()
-                        case .failure(let error):
-                            self.showSimpleAlert("Documen verification failed with error: \(error.localizedDescription)", target: self)
-                        }
-                    })
+                    self.verifyDocument()
                 }
                 
             case .failure(let error):
@@ -252,6 +288,9 @@ extension UploadDocumentVC: InstntDelegate {
     
     
     func onDocumentScanFinish(captureResult: CaptureResult) {
+        if captureResult.isAutoUpload == true {
+            return
+        }
         SVProgressHUD.show()
         Instnt.shared.uploadAttachment(data: captureResult.resultBase64, completion: { result in
             SVProgressHUD.dismiss()
@@ -259,12 +298,12 @@ extension UploadDocumentVC: InstntDelegate {
             case .success(_):
                 if captureResult.documentSide == .front {
                     DispatchQueue.main.async {
-                        let documentSettings = DocumentSettings(documentType: .license, documentSide: .back, captureMode: .manual)
-                        Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: documentSettings)
+                        let documentSettings = DocumentSettings(documentType: .license, documentSide: .back, captureMode: .manual, isAutoUpload: self.isAutoUpload ?? true)
+                        Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
                     }
                 } else if captureResult.documentSide == .back {
                     DispatchQueue.main.async {
-                        Instnt.shared.scanSelfie(from: self, farSelfie: self.farSelfie ?? false)
+                        Instnt.shared.scanSelfie(from: self, farSelfie: self.isFarSelfie ?? false, isAutoUpload: self.isAutoUpload ?? true)
                     }
 
                 }

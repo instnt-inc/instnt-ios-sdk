@@ -79,7 +79,9 @@ class ConnectionManager: NSObject {
         }
 
         for request in apiRequests {
-            request.failureBlock(connectionErrorResponse)
+            DispatchQueue.main.async {
+                request.failureBlock(connectionErrorResponse)
+            }
         }
 
         ConnectionManager.ConnectionRequests[url] = nil

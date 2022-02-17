@@ -211,12 +211,14 @@ extension UploadDocumentVC: InstntDelegate {
     
     private func verifyDocument() {
         Instnt.shared.verifyDocuments(completion: { result in
-            SVProgressHUD.dismiss()
-            switch result {
-            case .success():
-                self.instntDocumentVerified()
-            case .failure(let error):
-                self.showSimpleAlert("Document verification failed with error: \(error.localizedDescription)", target: self)
+            DispatchQueue.main.async {
+                SVProgressHUD.dismiss()
+                switch result {
+                case .success():
+                    self.instntDocumentVerified()
+                case .failure(let error):
+                    self.showSimpleAlert("Document verification failed with error: \(error.message ?? "Technical Difficulties")", target: self)
+                }
             }
         })
     }
@@ -309,9 +311,12 @@ extension UploadDocumentVC: InstntDelegate {
                 }
             case .failure(let error):
                 print("uploadAttachment error \(String(describing: error.message))")
-                self.showSimpleAlert(error.localizedDescription, target: self, completed: {
-                    self.navigationController?.popViewController(animated: true)
-                })
+                DispatchQueue.main.async {
+                    self.showSimpleAlert(error.localizedDescription, target: self, completed: {
+                        self.navigationController?.popViewController(animated: true)
+                    })
+                }
+                
             }
         })
     }

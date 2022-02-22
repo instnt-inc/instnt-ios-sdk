@@ -69,7 +69,11 @@ class UploadDocumentVC: BaseViewController {
         self.stackView.addSpacerView()
         buttonView?.decorateView(type: .next, completion: {
             let documentSettings = DocumentSettings(documentType: .license, documentSide: .front, captureMode: .manual, isAutoUpload: self.isAutoUpload ?? true)
-            Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
+            guard let transactionID = ExampleShared.shared.transactionID else {
+                self.instntDidSubmitFailure(error: InstntError(errorConstant: .error_INVALID_TRANSACTION_ID))
+                return
+            }
+            Instnt.shared.scanDocument(transactionID: transactionID, licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
         })
         self.stackView.addOptionalArrangedSubview(buttonView)
     }
@@ -114,7 +118,11 @@ class UploadDocumentVC: BaseViewController {
         self.showSimpleAlert("Document was uploaded successfully, please submit now", target: self)
         self.buttonView?.decorateView(type: .submitForm, completion: {
             SVProgressHUD.show()
-            Instnt.shared.submitData(ExampleShared.shared.formData, completion: { result in
+            guard let transactionID = ExampleShared.shared.transactionID else {
+                self.instntDidSubmitFailure(error: InstntError(errorConstant: .error_INVALID_TRANSACTION_ID))
+                return
+            }
+            Instnt.shared.submitData(transactionID: transactionID, data: ExampleShared.shared.formData, completion: { result in
                 SVProgressHUD.dismiss()
                 switch result {
                 case .success(let response):
@@ -210,7 +218,13 @@ extension UIButton {
 extension UploadDocumentVC: InstntDelegate {
     
     private func verifyDocument() {
-        Instnt.shared.verifyDocuments(completion: { result in
+        guard let transactionID = ExampleShared.shared.transactionID else {
+            self.showSimpleAlert("Invalid transacation ID, please try again later.", target: self, completed: {
+                self.navigationController?.popViewController(animated: true)
+            })
+            return
+        }
+        Instnt.shared.verifyDocuments(transactionID: transactionID, completion: { result in
             DispatchQueue.main.async {
                 SVProgressHUD.dismiss()
                 switch result {
@@ -223,38 +237,52 @@ extension UploadDocumentVC: InstntDelegate {
         })
     }
     
-    func onDocumentUploaded(documentSetting: DocumentSettings?, data: Data?, isSelfie: Bool, error: InstntError?) {
+    func onDocumentUploaded(imageResult: InstntImageData, error: InstntError?) {
         if error != nil {
             print("uploadAttachment error \(String(describing: error?.message))")
             self.showSimpleAlert(error?.message ?? "Upload Attachment error", target: self, completed: {
                 self.navigationController?.popViewController(animated: true)
             })
         }
-        if isSelfie == true  {
+        guard let transactionID = ExampleShared.shared.transactionID else {
+            self.showSimpleAlert("Invalid transacation ID, please try again later.", target: self, completed: {
+                self.navigationController?.popViewController(animated: true)
+            })
+            return
+        }
+        
+        if imageResult.isSelfie == true  {
             self.verifyDocument()
-        } else if documentSetting?.documentSide == .front {
+        } else if imageResult.documentSide == .front {
             DispatchQueue.main.async {
                 let documentSettings = DocumentSettings(documentType: .license, documentSide: .back, captureMode: .manual, isAutoUpload: self.isAutoUpload ?? true)
-                Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
+                Instnt.shared.scanDocument(transactionID: transactionID,  licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
             }
-        } else if documentSetting?.documentSide == .back {
+        } else if imageResult.documentSide == .back {
             DispatchQueue.main.async {
-                Instnt.shared.scanSelfie(from: self, farSelfie: self.isFarSelfie ?? false, isAutoUpload: self.isAutoUpload ?? true)
+                Instnt.shared.scanSelfie(from: self, transactionID: transactionID, farSelfie: self.isFarSelfie ?? false, isAutoUpload: self.isAutoUpload ?? true)
             }
         }
     }
    
     
     func onSelfieScanFinish(captureResult: CaptureSelfieResult) {
+        guard let transactionID = ExampleShared.shared.transactionID else {
+            self.showSimpleAlert("Invalid transacation ID, please try again later.", target: self, completed: {
+                self.navigationController?.popViewController(animated: true)
+            })
+            return
+        }
         if captureResult.isAutoUpload == true {
             return
         }
         SVProgressHUD.show()
-        Instnt.shared.uploadAttachment(data: captureResult.selfieData, completion: { result in
+        
+        Instnt.shared.uploadAttachment(transactionID: transactionID, data: captureResult.selfieData, completion: { result in
             switch result {
             case .success(_):
                 if captureResult.farSelfieData != nil {
-                    Instnt.shared.uploadAttachment(data: captureResult.selfieData, isFarSelfieData: true, completion:  { result in
+                    Instnt.shared.uploadAttachment(transactionID: transactionID, data: captureResult.selfieData, isFarSelfieData: true, completion:  { result in
                         switch result {
                         case .success():
                             self.verifyDocument()
@@ -294,18 +322,24 @@ extension UploadDocumentVC: InstntDelegate {
             return
         }
         SVProgressHUD.show()
-        Instnt.shared.uploadAttachment(data: captureResult.resultBase64, completion: { result in
+        guard let transactionID = ExampleShared.shared.transactionID else {
+            self.showSimpleAlert("Invalid transacation ID, please try again later.", target: self, completed: {
+                self.navigationController?.popViewController(animated: true)
+            })
+            return
+        }
+        Instnt.shared.uploadAttachment(transactionID: transactionID, data: captureResult.resultBase64, completion: { result in
             SVProgressHUD.dismiss()
             switch result {
             case .success(_):
                 if captureResult.documentSide == .front {
                     DispatchQueue.main.async {
                         let documentSettings = DocumentSettings(documentType: .license, documentSide: .back, captureMode: .manual, isAutoUpload: self.isAutoUpload ?? true)
-                        Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
+                        Instnt.shared.scanDocument(transactionID: transactionID, licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
                     }
                 } else if captureResult.documentSide == .back {
                     DispatchQueue.main.async {
-                        Instnt.shared.scanSelfie(from: self, farSelfie: self.isFarSelfie ?? false, isAutoUpload: self.isAutoUpload ?? true)
+                        Instnt.shared.scanSelfie(from: self, transactionID: transactionID, farSelfie: self.isFarSelfie ?? false, isAutoUpload: self.isAutoUpload ?? true)
                     }
 
                 }

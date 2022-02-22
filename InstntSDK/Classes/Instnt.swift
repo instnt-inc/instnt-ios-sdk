@@ -20,7 +20,7 @@ public protocol InstntDelegate: NSObjectProtocol {
     func onSelfieScanFinish(captureResult: CaptureSelfieResult)
     func onSelfieScanError(error: InstntError)
     
-    func onDocumentUploaded(documentSetting: DocumentSettings?, data: Data?, isSelfie: Bool, error: InstntError?)
+    func onDocumentUploaded(imageResult: InstntImageData, error: InstntError?)
 }
 
 public class Instnt: NSObject {
@@ -63,11 +63,11 @@ public class Instnt: NSObject {
         Instnt.shared.getTransactionID(completion: completion)
     }
     
-    public func submitData(_ data: [String: Any], completion: @escaping(Result<FormSubmitResponse, InstntError>) -> Void) {
+    public func submitData(transactionID: String, data: [String: Any], completion: @escaping(Result<FormSubmitResponse, InstntError>) -> Void) {
         var formData: [String: Any] = data
-        formData["signature"] = self.transactionID
+        formData["signature"] = transactionID
         if Instnt.shared.isOTPverificationEnabled ?? false {
-            formData["OTPSignature"] = self.transactionID
+            formData["OTPSignature"] = transactionID
         }
         formData["form_key"] = formId
         
@@ -93,17 +93,19 @@ public class Instnt: NSObject {
         APIClient.shared.submitForm(to: self.submitURL, formData: formData, completion: completion)
     }
     
-    public func scanDocument(licenseKey: String, from vc: UIViewController, settings: DocumentSettings, isAutoUpload: Bool? = true) {
+    public func scanDocument(transactionID: String, licenseKey: String, from vc: UIViewController, settings: DocumentSettings, isAutoUpload: Bool? = true) {
         self.documentSide = settings.documentSide
         self.isSelfie = false
         self.isFarSelfie = false
         documentSettings = settings
+        self.transactionID = transactionID
         DocumentScan.shared.scanDocument(licenseKey: licenseKey, from: vc, documentSettings: settings, delegate: self, isAutoUpload: isAutoUpload)
     }
     
-    public func scanSelfie(from vc: UIViewController, farSelfie: Bool, isAutoUpload: Bool? = true) {
+    public func scanSelfie(from vc: UIViewController, transactionID: String, farSelfie: Bool, isAutoUpload: Bool? = true) {
         self.isSelfie = true
         self.isFarSelfie = farSelfie
+        self.transactionID = transactionID
         DocumentScan.shared.scanSelfie(from: vc, delegate: self, farSelfie: isFarSelfie, isAutoUpload: isAutoUpload)
     }
     
@@ -114,7 +116,6 @@ public class Instnt: NSObject {
             case .success(let resultTransation):
                 let transactionID = resultTransation.instnttxnid
                 self.isOTPverificationEnabled = resultTransation.otp_verification
-                self.transactionID = transactionID
                 self.fingerprint = resultTransation.fingerprintjs_browser_token
                 self.serviceURL = resultTransation.backend_service_url
                 self.submitURL = resultTransation.signed_submit_form_url
@@ -126,7 +127,7 @@ public class Instnt: NSObject {
         })
     }
     
-    private func getUploadUrl(isFarSelfieData: Bool? = false, completion: @escaping(Result<String, InstntError>) -> Void) {
+    private func getUploadUrl(transactionID: String, isFarSelfieData: Bool? = false, completion: @escaping(Result<String, InstntError>) -> Void) {
         if self.documentType == .license {
             var docSuffix = "F"
             if isSelfie == true {
@@ -139,9 +140,7 @@ public class Instnt: NSObject {
                 docSuffix = "B"
             }
             let requestGetuploadURL = RequestGetUploadUrl.init(transactionType: "IMAGE", documentType: "DRIVERS_LICENSE", docSuffix: docSuffix, transactionStatus: "NEW");
-            if let transactionID = transactionID {
-                APIClient.shared.getUploadUrl(transactionId: transactionID, data: requestGetuploadURL, completion: completion)
-            }
+            APIClient.shared.getUploadUrl(transactionId: transactionID, data: requestGetuploadURL, completion: completion)
         }
     }
     
@@ -149,8 +148,8 @@ public class Instnt: NSObject {
         APIClient.shared.upload(url: url, data: data, completion: completion)
     }
     
-    public func uploadAttachment(data: Data, isFarSelfieData: Bool? = false, completion: @escaping(Result<Void, InstntError>) -> Void) {
-        self.getUploadUrl(isFarSelfieData: isFarSelfieData, completion: { result in
+    public func uploadAttachment(transactionID: String, data: Data, isFarSelfieData: Bool? = false, completion: @escaping(Result<Void, InstntError>) -> Void) {
+        self.getUploadUrl(transactionID: transactionID, isFarSelfieData: isFarSelfieData, completion: { result in
             switch result {
             case .success(let url):
                 self.uploadDocument(url: url, data: data, completion: completion)
@@ -160,28 +159,16 @@ public class Instnt: NSObject {
         })
     }
     
-    public func sendOTP(phoneNumber: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
+    public func sendOTP(transactionID: String, phoneNumber: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
         let requestSendOTP = RequestSendOTP(phone: phoneNumber)
-        guard let transactionID = transactionID else {
-            completion(.failure(InstntError(errorConstant: .error_INVALID_TRANSACTION_ID)))
-            return
-        }
         APIClient.shared.sendOTP(requestData: requestSendOTP, transactionId: transactionID, completion: completion)
     }
-    public func verifyOTP(phoneNumber: String, otp: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
+    public func verifyOTP(transactionID: String, phoneNumber: String, otp: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
         let requestVerifyOTP = RequestVerifyOTP(phone: phoneNumber, is_verify: true, otp: otp)
-        guard let transactionID = transactionID else {
-            completion(.failure(InstntError(errorConstant: .error_INVALID_TRANSACTION_ID)))
-            return
-        }
         APIClient.shared.verifyOTP(requestData: requestVerifyOTP, transactionId: transactionID, completion: completion)
     }
     
-    public func verifyDocuments(completion: @escaping(Result<Void, InstntError>) -> Void) {
-        guard let transactionID = transactionID else {
-            completion(.failure(InstntError(errorConstant: .error_INVALID_TRANSACTION_ID)))
-            return
-        }
+    public func verifyDocuments(transactionID: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
         let verifyDocument = VerifyDocument(formKey: Instnt.shared.formId, documentType: self.documentType.rawValue, instnttxnid:  transactionID)
         APIClient.shared.verifyDocuments(requestData: verifyDocument, transactionId: transactionID, completion: { result in
             switch result {
@@ -202,13 +189,27 @@ extension Instnt: DocumentScanDelegate {
         self.delegate?.onDocumentScanFinish(captureResult: captureResult)
         if captureResult.isAutoUpload ?? false {
             SVProgressHUD.show()
-            Instnt.shared.uploadAttachment(data: captureResult.resultBase64, completion: { result in
+            guard let transactionID = transactionID else {
+                self.delegate?.onDocumentScanCancelled(error: InstntError(errorConstant: .error_INVALID_TRANSACTION_ID))
+                return
+            }
+            guard let documentSettings = self.documentSettings else {
+                //this will never happen
+                self.delegate?.onDocumentScanCancelled(error: InstntError(errorConstant: .error_INVALID_DATA))
+                return
+            }
+            Instnt.shared.uploadAttachment(transactionID: transactionID, data: captureResult.resultBase64, completion: { result in
+                self.transactionID = nil
                 SVProgressHUD.dismiss()
                 switch result {
                 case .success(_):
-                    self.delegate?.onDocumentUploaded(documentSetting:  self.documentSettings, data: captureResult.resultBase64, isSelfie: false, error: nil)
+                    let imageData = InstntImageData(data: captureResult.resultBase64, isSelfie: false, documentType: documentSettings.documentType, documentSide: documentSettings.documentSide)
+                    self.delegate?.onDocumentUploaded(imageResult: imageData, error: nil)
+                    break
                 case .failure(let error):
-                    self.delegate?.onDocumentUploaded(documentSetting: self.documentSettings, data: nil, isSelfie: false, error: error)
+                    let imageData = InstntImageData(data: captureResult.resultBase64, isSelfie: false, documentType: documentSettings.documentType, documentSide: documentSettings.documentSide)
+                    self.delegate?.onDocumentUploaded(imageResult: imageData, error: error)
+                    break
                 }
             })
             
@@ -233,29 +234,43 @@ extension Instnt: SelfieScanDelegate {
         self.delegate?.onSelfieScanFinish(captureResult: captureResult)
         if captureResult.isAutoUpload ?? false {
             SVProgressHUD.show()
-            Instnt.shared.uploadAttachment(data: captureResult.selfieData, completion: { result in
+            guard let transactionID = transactionID else {
+                self.delegate?.onDocumentScanCancelled(error: InstntError(errorConstant: .error_INVALID_TRANSACTION_ID))
+                return
+            }
+            guard let documentSettings = self.documentSettings else {
+                //this will never happen
+                self.delegate?.onDocumentScanCancelled(error: InstntError(errorConstant: .error_INVALID_DATA))
+                return
+            }
+            Instnt.shared.uploadAttachment(transactionID: transactionID, data: captureResult.selfieData, completion: { result in
                 switch result {
                 case .success(_):
                     if captureResult.farSelfieData != nil {
-                        Instnt.shared.uploadAttachment(data: captureResult.selfieData, isFarSelfieData: true, completion:  { result in
+                        Instnt.shared.uploadAttachment(transactionID: transactionID, data: captureResult.selfieData, isFarSelfieData: true, completion:  { result in
+                            self.transactionID = nil
+                            SVProgressHUD.dismiss()
                             switch result {
                             case .success():
-                                self.delegate?.onDocumentUploaded(documentSetting: nil, data: captureResult.selfieData, isSelfie: true, error: nil)
+                                let imageData = InstntImageData(data: captureResult.selfieData, isSelfie: true, documentType: documentSettings.documentType, documentSide: nil)
+                                self.delegate?.onDocumentUploaded(imageResult: imageData, error: nil)
                                
                             case .failure(let error):
-                                SVProgressHUD.dismiss()
+                                let imageData = InstntImageData(data:nil, isSelfie: true, documentType: documentSettings.documentType, documentSide: nil)
                                 print("uploadAttachment error \(error.localizedDescription)")
-                                self.delegate?.onDocumentUploaded(documentSetting: nil, data: nil, isSelfie: false, error: error)
+                                self.delegate?.onDocumentUploaded(imageResult: imageData, error: error)
                             }
                         })
                     } else {
-                        self.delegate?.onDocumentUploaded(documentSetting: self.documentSettings, data: captureResult.selfieData, isSelfie: true, error: nil)
+                        let imageData = InstntImageData(data:captureResult.selfieData, isSelfie: true, documentType: documentSettings.documentType, documentSide: nil)
+                        self.delegate?.onDocumentUploaded(imageResult: imageData, error: nil)
                     }
                     
                 case .failure(let error):
                     SVProgressHUD.dismiss()
                     print("uploadAttachment error \(error.localizedDescription)")
-                    self.delegate?.onDocumentUploaded(documentSetting: self.documentSettings, data: nil, isSelfie: false, error: error)
+                    let imageData = InstntImageData(data: nil, isSelfie: true, documentType: documentSettings.documentType, documentSide: nil)
+                    self.delegate?.onDocumentUploaded(imageResult: imageData, error: error)
                    
                 }
             })

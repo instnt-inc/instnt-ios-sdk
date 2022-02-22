@@ -66,15 +66,17 @@ public class CaptureSelfieResult : NSObject{
     }
 }
 
-public class CaptureResultData: NSObject {
-    var eventCount: Int
-    var faceDetectionStatus: faceDetectionStatus
-    var image: String
+public class InstntImageData: NSObject {
+    public let data: Data?
+    public let isSelfie: Bool
+    public let documentType: DocumentType
+    public let documentSide: DocumentSide?
     
-    init(eventCount:Int, faceDetectionStatus:faceDetectionStatus, image:String) {
-        self.eventCount = eventCount
-        self.faceDetectionStatus = faceDetectionStatus
-        self.image = image
+    init(data: Data?, isSelfie: Bool, documentType: DocumentType, documentSide: DocumentSide?) {
+        self.data = data
+        self.isSelfie = isSelfie
+        self.documentSide = documentSide
+        self.documentType = documentType
     }
 }
 

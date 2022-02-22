@@ -45,11 +45,17 @@ class VerifyOTPPresenter: BasePresenter {
     
     func addButton() {
         buttonView?.decorateView(type: .verifyOTP, completion: {
+            guard let transactionID = ExampleShared.shared.transactionID else {
+                if let vc = self.vc {
+                    self.vc?.showSimpleAlert("Invalid transacation ID, please try again later", target: vc)
+                }
+                return
+            }
             let phone = self.phoneNumber ?? ""
             let otp = self.otp?.textField.text ?? ""
             
             SVProgressHUD.show()
-            Instnt.shared.verifyOTP(phoneNumber: phone, otp: otp, completion: { result in
+            Instnt.shared.verifyOTP(transactionID: transactionID, phoneNumber: phone, otp: otp, completion: { result in
                 SVProgressHUD.dismiss()
                 switch result {
                 case .success:

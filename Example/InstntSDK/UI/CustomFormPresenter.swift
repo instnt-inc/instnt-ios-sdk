@@ -75,10 +75,12 @@ class CustomFormPresenter: BasePresenter {
         setUpBtn?.decorateView(type: .setUp, completion: {
             if let formKey = self.formKey?.textField.text {
                 SVProgressHUD.show()
+                ExampleShared.shared.transactionID = nil
                 Instnt.shared.setup(with: formKey, endPOint: self.endPoint?.textField.text ?? "", completion: { result in
                     SVProgressHUD.dismiss()
                     switch result {
                     case .success(let transactionID):
+                        ExampleShared.shared.transactionID = transactionID
                         self.addResponse()
                         self.getFormAfterSuccess()
                         self.lblView?.lblText.text = "Set up is succeded with transaction Id \(transactionID)"

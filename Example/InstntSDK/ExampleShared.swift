@@ -10,4 +10,5 @@ import Foundation
 class ExampleShared: NSObject {
     public static let shared = ExampleShared()
     public var formData: [String: Any] = [:]
+    public var transactionID: String?
 }

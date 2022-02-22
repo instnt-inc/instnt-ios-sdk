@@ -73,7 +73,13 @@ class EmailPhonePresenter: BasePresenter {
         buttonView?.decorateView(type: .submitOTP, completion: {
             let phone = self.phone?.textField.text ?? ""
             SVProgressHUD.show()
-            Instnt.shared.sendOTP(phoneNumber: phone, completion: { result in
+            guard let transactionID = ExampleShared.shared.transactionID else {
+                if let vc = self.vc {
+                    self.vc?.showSimpleAlert("Invalid transacation ID, please try again later", target: vc)
+                }
+                return
+            }
+            Instnt.shared.sendOTP(transactionID: transactionID, phoneNumber: phone, completion: { result in
                 SVProgressHUD.dismiss()
                 switch result {
                 case .success:

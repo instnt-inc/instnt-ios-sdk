@@ -79,7 +79,7 @@ class EmailPhonePresenter: BasePresenter {
                 }
                 return
             }
-            Instnt.shared.sendOTP(transactionID: transactionID, phoneNumber: phone, completion: { result in
+            Instnt.shared.sendOTP(instnttxnid: transactionID, phoneNumber: phone, completion: { result in
                 SVProgressHUD.dismiss()
                 switch result {
                 case .success:

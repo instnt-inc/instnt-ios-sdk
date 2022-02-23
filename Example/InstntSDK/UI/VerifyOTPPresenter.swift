@@ -55,7 +55,7 @@ class VerifyOTPPresenter: BasePresenter {
             let otp = self.otp?.textField.text ?? ""
             
             SVProgressHUD.show()
-            Instnt.shared.verifyOTP(transactionID: transactionID, phoneNumber: phone, otp: otp, completion: { result in
+            Instnt.shared.verifyOTP(instnttxnid: transactionID, phoneNumber: phone, otp: otp, completion: { result in
                 SVProgressHUD.dismiss()
                 switch result {
                 case .success:

@@ -63,11 +63,11 @@ public class Instnt: NSObject {
         Instnt.shared.getTransactionID(completion: completion)
     }
     
-    public func submitData(transactionID: String, data: [String: Any], completion: @escaping(Result<FormSubmitResponse, InstntError>) -> Void) {
+    public func submitData(instnttxnid: String, data: [String: Any], completion: @escaping(Result<FormSubmitResponse, InstntError>) -> Void) {
         var formData: [String: Any] = data
-        formData["signature"] = transactionID
+        formData["signature"] = instnttxnid
         if Instnt.shared.isOTPverificationEnabled ?? false {
-            formData["OTPSignature"] = transactionID
+            formData["OTPSignature"] = instnttxnid
         }
         formData["form_key"] = formId
         
@@ -93,19 +93,19 @@ public class Instnt: NSObject {
         APIClient.shared.submitForm(to: self.submitURL, formData: formData, completion: completion)
     }
     
-    public func scanDocument(transactionID: String, licenseKey: String, from vc: UIViewController, settings: DocumentSettings, isAutoUpload: Bool? = true) {
+    public func scanDocument(instnttxnid: String, licenseKey: String, from vc: UIViewController, settings: DocumentSettings, isAutoUpload: Bool? = true) {
         self.documentSide = settings.documentSide
         self.isSelfie = false
         self.isFarSelfie = false
         documentSettings = settings
-        self.transactionID = transactionID
+        self.transactionID = instnttxnid
         DocumentScan.shared.scanDocument(licenseKey: licenseKey, from: vc, documentSettings: settings, delegate: self, isAutoUpload: isAutoUpload)
     }
     
-    public func scanSelfie(from vc: UIViewController, transactionID: String, farSelfie: Bool, isAutoUpload: Bool? = true) {
+    public func scanSelfie(from vc: UIViewController, instnttxnid: String, farSelfie: Bool, isAutoUpload: Bool? = true) {
         self.isSelfie = true
         self.isFarSelfie = farSelfie
-        self.transactionID = transactionID
+        self.transactionID = instnttxnid
         DocumentScan.shared.scanSelfie(from: vc, delegate: self, farSelfie: isFarSelfie, isAutoUpload: isAutoUpload)
     }
     
@@ -127,7 +127,7 @@ public class Instnt: NSObject {
         })
     }
     
-    private func getUploadUrl(transactionID: String, isFarSelfieData: Bool? = false, completion: @escaping(Result<String, InstntError>) -> Void) {
+    private func getUploadUrl(instnttxnid: String, isFarSelfieData: Bool? = false, completion: @escaping(Result<String, InstntError>) -> Void) {
         if self.documentType == .license {
             var docSuffix = "F"
             if isSelfie == true {
@@ -140,7 +140,7 @@ public class Instnt: NSObject {
                 docSuffix = "B"
             }
             let requestGetuploadURL = RequestGetUploadUrl.init(transactionType: "IMAGE", documentType: "DRIVERS_LICENSE", docSuffix: docSuffix, transactionStatus: "NEW");
-            APIClient.shared.getUploadUrl(transactionId: transactionID, data: requestGetuploadURL, completion: completion)
+            APIClient.shared.getUploadUrl(transactionId: instnttxnid, data: requestGetuploadURL, completion: completion)
         }
     }
     
@@ -148,8 +148,8 @@ public class Instnt: NSObject {
         APIClient.shared.upload(url: url, data: data, completion: completion)
     }
     
-    public func uploadAttachment(transactionID: String, data: Data, isFarSelfieData: Bool? = false, completion: @escaping(Result<Void, InstntError>) -> Void) {
-        self.getUploadUrl(transactionID: transactionID, isFarSelfieData: isFarSelfieData, completion: { result in
+    public func uploadAttachment(instnttxnid: String, data: Data, isFarSelfieData: Bool? = false, completion: @escaping(Result<Void, InstntError>) -> Void) {
+        self.getUploadUrl(instnttxnid: instnttxnid, isFarSelfieData: isFarSelfieData, completion: { result in
             switch result {
             case .success(let url):
                 self.uploadDocument(url: url, data: data, completion: completion)
@@ -159,18 +159,18 @@ public class Instnt: NSObject {
         })
     }
     
-    public func sendOTP(transactionID: String, phoneNumber: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
+    public func sendOTP(instnttxnid: String, phoneNumber: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
         let requestSendOTP = RequestSendOTP(phone: phoneNumber)
-        APIClient.shared.sendOTP(requestData: requestSendOTP, transactionId: transactionID, completion: completion)
+        APIClient.shared.sendOTP(requestData: requestSendOTP, transactionId: instnttxnid, completion: completion)
     }
-    public func verifyOTP(transactionID: String, phoneNumber: String, otp: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
+    public func verifyOTP(instnttxnid: String, phoneNumber: String, otp: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
         let requestVerifyOTP = RequestVerifyOTP(phone: phoneNumber, is_verify: true, otp: otp)
-        APIClient.shared.verifyOTP(requestData: requestVerifyOTP, transactionId: transactionID, completion: completion)
+        APIClient.shared.verifyOTP(requestData: requestVerifyOTP, transactionId: instnttxnid, completion: completion)
     }
     
-    public func verifyDocuments(transactionID: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
-        let verifyDocument = VerifyDocument(formKey: Instnt.shared.formId, documentType: self.documentType.rawValue, instnttxnid:  transactionID)
-        APIClient.shared.verifyDocuments(requestData: verifyDocument, transactionId: transactionID, completion: { result in
+    public func verifyDocuments(instnttxnid: String, completion: @escaping(Result<Void, InstntError>) -> Void) {
+        let verifyDocument = VerifyDocument(formKey: Instnt.shared.formId, documentType: self.documentType.rawValue, instnttxnid:  instnttxnid)
+        APIClient.shared.verifyDocuments(requestData: verifyDocument, transactionId: instnttxnid, completion: { result in
             switch result {
             case .success(_):
                 print("verify succes")
@@ -198,7 +198,7 @@ extension Instnt: DocumentScanDelegate {
                 self.delegate?.onDocumentScanCancelled(error: InstntError(errorConstant: .error_INVALID_DATA))
                 return
             }
-            Instnt.shared.uploadAttachment(transactionID: transactionID, data: captureResult.resultBase64, completion: { result in
+            Instnt.shared.uploadAttachment(instnttxnid: transactionID, data: captureResult.resultBase64, completion: { result in
                 self.transactionID = nil
                 SVProgressHUD.dismiss()
                 switch result {
@@ -243,11 +243,11 @@ extension Instnt: SelfieScanDelegate {
                 self.delegate?.onDocumentScanCancelled(error: InstntError(errorConstant: .error_INVALID_DATA))
                 return
             }
-            Instnt.shared.uploadAttachment(transactionID: transactionID, data: captureResult.selfieData, completion: { result in
+            Instnt.shared.uploadAttachment(instnttxnid: transactionID, data: captureResult.selfieData, completion: { result in
                 switch result {
                 case .success(_):
                     if captureResult.farSelfieData != nil {
-                        Instnt.shared.uploadAttachment(transactionID: transactionID, data: captureResult.selfieData, isFarSelfieData: true, completion:  { result in
+                        Instnt.shared.uploadAttachment(instnttxnid: transactionID, data: captureResult.selfieData, isFarSelfieData: true, completion:  { result in
                             self.transactionID = nil
                             SVProgressHUD.dismiss()
                             switch result {

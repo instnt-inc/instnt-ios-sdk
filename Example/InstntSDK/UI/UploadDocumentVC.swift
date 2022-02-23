@@ -73,7 +73,7 @@ class UploadDocumentVC: BaseViewController {
                 self.instntDidSubmitFailure(error: InstntError(errorConstant: .error_INVALID_TRANSACTION_ID))
                 return
             }
-            Instnt.shared.scanDocument(transactionID: transactionID, licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
+            Instnt.shared.scanDocument(instnttxnid: transactionID, licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
         })
         self.stackView.addOptionalArrangedSubview(buttonView)
     }
@@ -122,7 +122,7 @@ class UploadDocumentVC: BaseViewController {
                 self.instntDidSubmitFailure(error: InstntError(errorConstant: .error_INVALID_TRANSACTION_ID))
                 return
             }
-            Instnt.shared.submitData(transactionID: transactionID, data: ExampleShared.shared.formData, completion: { result in
+            Instnt.shared.submitData(instnttxnid: transactionID, data: ExampleShared.shared.formData, completion: { result in
                 SVProgressHUD.dismiss()
                 switch result {
                 case .success(let response):
@@ -224,7 +224,7 @@ extension UploadDocumentVC: InstntDelegate {
             })
             return
         }
-        Instnt.shared.verifyDocuments(transactionID: transactionID, completion: { result in
+        Instnt.shared.verifyDocuments(instnttxnid: transactionID, completion: { result in
             DispatchQueue.main.async {
                 SVProgressHUD.dismiss()
                 switch result {
@@ -256,11 +256,11 @@ extension UploadDocumentVC: InstntDelegate {
         } else if imageResult.documentSide == .front {
             DispatchQueue.main.async {
                 let documentSettings = DocumentSettings(documentType: .license, documentSide: .back, captureMode: .manual, isAutoUpload: self.isAutoUpload ?? true)
-                Instnt.shared.scanDocument(transactionID: transactionID,  licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
+                Instnt.shared.scanDocument(instnttxnid: transactionID,  licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
             }
         } else if imageResult.documentSide == .back {
             DispatchQueue.main.async {
-                Instnt.shared.scanSelfie(from: self, transactionID: transactionID, farSelfie: self.isFarSelfie ?? false, isAutoUpload: self.isAutoUpload ?? true)
+                Instnt.shared.scanSelfie(from: self, instnttxnid: transactionID, farSelfie: self.isFarSelfie ?? false, isAutoUpload: self.isAutoUpload ?? true)
             }
         }
     }
@@ -278,11 +278,11 @@ extension UploadDocumentVC: InstntDelegate {
         }
         SVProgressHUD.show()
         
-        Instnt.shared.uploadAttachment(transactionID: transactionID, data: captureResult.selfieData, completion: { result in
+        Instnt.shared.uploadAttachment(instnttxnid: transactionID, data: captureResult.selfieData, completion: { result in
             switch result {
             case .success(_):
                 if captureResult.farSelfieData != nil {
-                    Instnt.shared.uploadAttachment(transactionID: transactionID, data: captureResult.selfieData, isFarSelfieData: true, completion:  { result in
+                    Instnt.shared.uploadAttachment(instnttxnid: transactionID, data: captureResult.selfieData, isFarSelfieData: true, completion:  { result in
                         switch result {
                         case .success():
                             self.verifyDocument()
@@ -328,18 +328,18 @@ extension UploadDocumentVC: InstntDelegate {
             })
             return
         }
-        Instnt.shared.uploadAttachment(transactionID: transactionID, data: captureResult.resultBase64, completion: { result in
+        Instnt.shared.uploadAttachment(instnttxnid: transactionID, data: captureResult.resultBase64, completion: { result in
             SVProgressHUD.dismiss()
             switch result {
             case .success(_):
                 if captureResult.documentSide == .front {
                     DispatchQueue.main.async {
                         let documentSettings = DocumentSettings(documentType: .license, documentSide: .back, captureMode: .manual, isAutoUpload: self.isAutoUpload ?? true)
-                        Instnt.shared.scanDocument(transactionID: transactionID, licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
+                        Instnt.shared.scanDocument(instnttxnid: transactionID, licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
                     }
                 } else if captureResult.documentSide == .back {
                     DispatchQueue.main.async {
-                        Instnt.shared.scanSelfie(from: self, transactionID: transactionID, farSelfie: self.isFarSelfie ?? false, isAutoUpload: self.isAutoUpload ?? true)
+                        Instnt.shared.scanSelfie(from: self, instnttxnid: transactionID, farSelfie: self.isFarSelfie ?? false, isAutoUpload: self.isAutoUpload ?? true)
                     }
 
                 }

@@ -1,18 +1,10 @@
 # Instnt iOS SDK
 
-This documentation covers the basics of the Instnt iOS SDK 2.0.0. iOS SDK provides functions and libraries for seamless integration with your front-end application. For a detailed overview of Instnt's functionality, visit the [Instnt documentation hub](https://support.instnt.org/hc/en-us/articles/360055345112-Integration-Overview)
-
-
-# Requirements
-
-| iOS  | Swift |
-|------|-------|
-| 11.0 |  5.0  |
-
-
+This documentation covers the basics of the Instnt iOS SDK. iOS SDK provides functions and libraries for seamless integration with your front-end application. For a detailed overview of Instnt's functionality, visit the [Instnt documentation hub](https://support.instnt.org/hc/en-us/articles/360055345112-Integration-Overview)
 # Table of Contents
 
 - [Prerequisites](#prerequisites)
+- [Requirements](#requirements)
 - [Getting started](#getting-started)
 - [Document verification](#document-verification)
     * [Document verification pre-requisites](#document-verification-pre-requisites)
@@ -33,6 +25,22 @@ Refer [Quick start guide](https://support.instnt.org/hc/en-us/articles/440878113
 
 **Note:** Your implementation with Instnt's SDK may diverge from the integration shown in the sample app. Please get in touch with the Instnt support team for additional questions related to Integration.
 
+# Requirements
+
+| iOS  | Swift | Xcode |
+|------|-------|-------
+| 12+ |  5.0  | 11+    |
+
+## Minimum Supported Devices
+* iPhone 6 and 6plus
+
+* iPad mini 4
+
+* iPad Air 2
+
+* iPad Pro (1st generation)
+
+* iPad 5th generation
 
 # Getting started
 
@@ -46,7 +54,7 @@ Note that a **Workflow ID** is required to execute this function properly. For m
 2. Install InstntSDK through [CocoaPods](https://cocoapods.org) by adding the following line to your Podfile:
 
 ```ruby
-  'InstntSDK', :path => '../'
+  pod 'InstntSDK', :git => 'https://github.com/instnt-inc/instnt-ios-sdk.git'
 ```
 
 ## Initialize transaction
@@ -73,16 +81,18 @@ import InstntSDK
 
 ```swift
 Instnt.shared.setup(with: formKey, endPOint: self.endPoint?.textField.text ?? "", completion: { result in
-                    SVProgressHUD.dismiss()
-                    switch result {
-                    case .success(let transactionID):
-                        self.addResponse()
-                        self.getFormAfterSuccess()
-                        self.lblView?.lblText.text = "Set up is succeded with transaction Id \(transactionID)"
-                    case .failure(let error):
-                        self.lblView?.lblText.text = "Set up is failed with \(error.localizedDescription), please try again later"
-                    }
-                })
+    SVProgressHUD.dismiss()
+    switch result {
+    case .success(let transactionID):
+        ExampleShared.shared.transactionID = transactionID
+        self.addResponse()
+        self.getFormAfterSuccess()
+        self.lblView?.lblText.text = "Set up is succeded with transaction Id \(transactionID)"
+    case .failure(let error):
+        self.addResponse()
+        self.lblView?.lblText.text = "Set up is failed with \(error.message ?? ""), please try again later"
+    }
+})
 
 ```
 
@@ -104,7 +114,7 @@ When this feature is enabled, the physical capture and verification of selfies a
 The document verification has an auto-upload feature which is turned on by default. It uploads the image to Instnt cloud storage once the image gets captured successfully.
 
 ```swift
-Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: documentSettings)
+Instnt.shared.scanDocument(instnttxnid: transactionID, licenseKey: self.licenseKey, from: self, settings: documentSettings)
 
 ```
 **licenseKey:** License key
@@ -118,43 +128,53 @@ Instnt.shared.scanDocument(licenseKey: self.licenseKey, from: self, settings: do
 The following sample code demonstrates the upload attachment process:
 
 ```swift
-Instnt.shared.uploadAttachment(data: captureResult.selfieData, completion: { result in
-            SVProgressHUD.dismiss()
-            switch result {
-            case .success(_):
-                Instnt.shared.verifyDocuments(completion: { result in
-                    switch result {
-                    case .success():
-                        self.instntDocumentVerified()
-                    case .failure(let error):
-                        self.showSimpleAlert("Documen verification failed with error: \(error.localizedDescription)", target: self)
-                    }
-                })
-            case .failure(let error):
-                print("uploadAttachment error \(error.localizedDescription)")
-                self.instntDocumentScanError()
-            }
-        })
+Instnt.shared.uploadAttachment(instnttxnid: transactionID, data: captureResult.selfieData, completion: { result in
+    switch result {
+    case .success(_):
+        if captureResult.farSelfieData != nil {
+            Instnt.shared.uploadAttachment(instnttxnid: transactionID, data: captureResult.selfieData, isFarSelfieData: true, completion:  { result in
+                switch result {
+                case .success():
+                    self.verifyDocument()
+                case .failure(let error):
+                    SVProgressHUD.dismiss()
+                    print("uploadAttachment error \(error.localizedDescription)")
+                    self.instntDocumentScanError()
+                }
+            })
+        } else {
+            self.verifyDocument()
+        }
+        
+    case .failure(let error):
+        SVProgressHUD.dismiss()
+        print("uploadAttachment error \(error.localizedDescription)")
+        self.instntDocumentScanError()
+    }
+})
 ```
 
 3. Next, verify the documents that were uploaded. Once all the documents are uploaded, call verifyDocuments function to verify the documents.
 
 ```swift
-  Instnt.shared.verifyDocuments(completion: { result in
-    switch result {
-    case .success():
-      self.instntDocumentVerified()
-    case .failure(let error):
-      self.showSimpleAlert("Documen verification failed with error: \(error.localizedDescription)", target: self)
-    }
-  })
+  Instnt.shared.verifyDocuments(instnttxnid: transactionID, completion: { result in
+        DispatchQueue.main.async {
+            SVProgressHUD.dismiss()
+            switch result {
+            case .success():
+                self.instntDocumentVerified()
+            case .failure(let error):
+                self.showSimpleAlert("Document verification failed with error: \(error.message ?? "Technical Difficulties")", target: self)
+            }
+        }
+    })
            
 ```
 
-4. In the Instnt iOS SDK, we provide another functionality for selfie scan/capture. It is similar to the document scan and upload process. Pass the `UIViewController` as the argument.
+4. In the Instnt iOS SDK, we provide another functionality for selfie scan/capture. It is similar to the document scan and upload process. Pass the `UIViewController` type as the argument. It also takes a far Selfie as a second check but this can be disabled by setting farSelfie false as argument.
 
 ```swift
-Instnt.shared.scanSelfie(from: self)
+Instnt.shared.scanSelfie(from: self, instnttxnid: transactionID, farSelfie: self.isFarSelfie ?? false, isAutoUpload: self.isAutoUpload ?? true)
 ```
 
 # OTP (One-Time Passcode)
@@ -174,42 +194,42 @@ Instnt SDK provides two [library functions](#library-functions) to enable OTP. w
 1. sendOTP (mobileNumber)
 
 ```swift
-Instnt.shared.sendOTP(phoneNumber: phone, completion: { result in
-                SVProgressHUD.dismiss()
-                switch result {
-                case .success:
-                    ExampleShared.shared.formData["mobileNumber"] = self.phone?.textField.text
-                    ExampleShared.shared.formData["email"] = self.email?.textField.text
-                    guard let vc = Utils.getStoryboardInitialViewController("VerifyOTP") as? VerifyOTPVC else {
-                        return
-                    }
-                    vc.presenter?.phoneNumber = phone
-                    self.vc?.navigationController?.pushViewController(vc, animated: true)
-                case .failure( let error):
-                    if let vc = self.vc {
-                        self.vc?.showSimpleAlert(error.message ?? "Error getting the OTP", target: vc)
-                    }
-                }
-            })
+Instnt.shared.sendOTP(instnttxnid: transactionID, phoneNumber: phone, completion: { result in
+        SVProgressHUD.dismiss()
+        switch result {
+        case .success:
+            ExampleShared.shared.formData["mobileNumber"] = self.phone?.textField.text
+            ExampleShared.shared.formData["email"] = self.email?.textField.text
+            guard let vc = Utils.getStoryboardInitialViewController("VerifyOTP") as? VerifyOTPVC else {
+                return
+            }
+            vc.presenter?.phoneNumber = phone
+            self.vc?.navigationController?.pushViewController(vc, animated: true)
+        case .failure( let error):
+            if let vc = self.vc {
+                self.vc?.showSimpleAlert(error.message ?? "Error getting the OTP", target: vc)
+            }
+        }
+    })
 ```
 2. verifyOTP(mobileNumber, otpCode)
 
 ```swift
-Instnt.shared.verifyOTP(phoneNumber: phone, otp: otp, completion: { result in
-                SVProgressHUD.dismiss()
-                switch result {
-                case .success:
-                    ExampleShared.shared.formData["otpCode"] = self.otp?.textField.text
-                    guard let vc = Utils.getStoryboardInitialViewController("Address") as? AddressVC else {
-                        return
-                    }
-                    self.vc?.navigationController?.pushViewController(vc, animated: true)
-                case .failure(let error):
-                    if let vc = self.vc {
-                        self.vc?.showSimpleAlert(error.message ?? "Invalid OTP", target: vc)
-                    }
-                }
-            })
+Instnt.shared.verifyOTP(instnttxnid: transactionID, phoneNumber: phone, otp: otp, completion: { result in
+        SVProgressHUD.dismiss()
+        switch result {
+        case .success:
+            ExampleShared.shared.formData["otpCode"] = self.otp?.textField.text
+            guard let vc = Utils.getStoryboardInitialViewController("Address") as? AddressVC else {
+                return
+            }
+            self.vc?.navigationController?.pushViewController(vc, animated: true)
+        case .failure(let error):
+            if let vc = self.vc {
+                self.vc?.showSimpleAlert(error.message ?? "Invalid OTP", target: vc)
+            }
+        }
+    })
 ```
 # Submit form data
 
@@ -218,27 +238,27 @@ After gathering all the relevant end-user information and processing the documen
 See the sample code of the implementation:
 
 ```swift
-Instnt.shared.submitData(ExampleShared.shared.formData, completion: { result in
-                SVProgressHUD.dismiss()
-                switch result {
-                case .success(let response):
-                    if response.success == true,
-                       let decision = response.decision,
-                       let jwt = response.jwt {
-                        self.instntDidSubmitSuccess(decision: decision, jwt: jwt)
-                    } else {
-                        if let msg = response.message {
-                            self.instntDidSubmitFailure(error: InstntError(errorConstant: .error_FORM_SUBMIT, message: msg))
-                        } else {
-                            self.instntDidSubmitFailure(error: InstntError(errorConstant: .error_FORM_SUBMIT))
-                        }
-                        
-                    }
-                case .failure(let error):
-                    self.instntDidSubmitFailure(error: error)
-                }
-               
-            })
+Instnt.shared.submitData(instnttxnid: transactionID, data: ExampleShared.shared.formData, completion: { result in
+    SVProgressHUD.dismiss()
+    switch result {
+    case .success(let response):
+        if response.success == true,
+            let decision = response.decision,
+            let jwt = response.jwt {
+            self.instntDidSubmitSuccess(decision: decision, jwt: jwt)
+        } else {
+            if let msg = response.message {
+                self.instntDidSubmitFailure(error: InstntError(errorConstant: .error_FORM_SUBMIT, message: msg))
+            } else {
+                self.instntDidSubmitFailure(error: InstntError(errorConstant: .error_FORM_SUBMIT))
+            }
+            
+        }
+    case .failure(let error):
+        self.instntDidSubmitFailure(error: error)
+    }
+    
+})
 ```
 
 The completion block that is passed as an argument when submitdata fuction is called can be implemented as you want. 
@@ -252,13 +272,16 @@ The following parameter are returned:
 Instnt SDK provides `InstntDelegate` which has the delegate fuctions as shown below. Implement the `InstntDelegate` Protocol:
 
 ```swift
-    public protocol InstntDelegate: NSObjectProtocol {
+public protocol InstntDelegate: NSObjectProtocol {
 
     func onDocumentScanFinish(captureResult: CaptureResult)
     func onDocumentScanCancelled(error: InstntError)
+    
     func onSelfieScanCancelled()
-    func onSelfieScanFinish(captureResult: CFASelfieScanData)
+    func onSelfieScanFinish(captureResult: CaptureSelfieResult)
     func onSelfieScanError(error: InstntError)
+    
+    func onDocumentUploaded(imageResult: InstntImageData, error: InstntError?)
 }
 ```
 - **onDocumentScanFinish:** This function is called when a document scan is successfully completed.
@@ -298,38 +321,38 @@ setup
 <tr><td class="confluenceTd"><p> <a id="user-content-scanDocument" class="anchor" aria-hidden="true" href="#scanDocument">
 
 scanDocument
-</p></td><td class="confluenceTd"><p> (licenseKey: String, from vc: UIViewController, settings: DocumentSettings)</p></td><td class="confluenceTd"><p>Enables a document scan.</p></td></tr>
+</p></td><td class="confluenceTd"><p> (instnttxnid: transactionID, licenseKey: String, from vc: UIViewController, settings: DocumentSettings)</p></td><td class="confluenceTd"><p>Enables a document scan.</p></td></tr>
 
 <tr><td class="confluenceTd"><p> <a id="user-content-scanSelfie" class="anchor" aria-hidden="true" href="#scanSelfie">
 
 scanSelfie</p>
-</p></td><td class="confluenceTd"><p>(from vc: UIViewController, farSelfie: bool)</p></td><td class="confluenceTd"><p> Enables a selfie scan/capture.</p></td></tr>
+</p></td><td class="confluenceTd"><p>(from vc: UIViewController, instnttxnid: transactionID, farSelfie: bool)</p></td><td class="confluenceTd"><p> Enables a selfie scan/capture.</p></td></tr>
 
 <tr><td class="confluenceTd"><p> <a id="user-content-uploadAttachment" class="anchor" aria-hidden="true" href="#uploadAttachment">
 
 uploadAttachment
-</p></td><td class="confluenceTd"><p>(data: Data, completion: @escaping(Result<Void, InstntError>) -> Void)</p></td><td class="confluenceTd"><p>Upload a document file to Instnt server.</p></td></tr>
+</p></td><td class="confluenceTd"><p>(instnttxnid: transactionID, data: Data, completion: @escaping(Result<Void, InstntError>) -> Void)</p></td><td class="confluenceTd"><p>Upload a document file to Instnt server.</p></td></tr>
 
 <tr><td class="confluenceTd"><p> <a id="user-content-verifyDocuments" class="anchor" aria-hidden="true" href="#verifyDocuments">
 
 verifyDocuments
-</p></td><td class="confluenceTd"><p>(completion: @escaping(Result<Void, InstntError>) -> Void) </p></td><td class="confluenceTd"><p>Initiate document verification on Instnt server.</p></td></tr>
+</p></td><td class="confluenceTd"><p>(instnttxnid: transactionID, completion: @escaping(Result<Void, InstntError>) -> Void) </p></td><td class="confluenceTd"><p>Initiate document verification on Instnt server.</p></td></tr>
 
 <tr><td class="confluenceTd"><p> <a id="user-content-submitData" class="anchor" aria-hidden="true" href="#submitData">
 
 submitData
-</p></td><td class="confluenceTd"><p>(_ data: [String: Any], completion: @escaping(Result<FormSubmitResponse, InstntError>) -> Void)</p></td><td class="confluenceTd"><p>Submit the user entered data and the documents uploaded to the Instnt server and initiate customer approval process.</p></td></tr>
+</p></td><td class="confluenceTd"><p>(instnttxnid: transactionID, data: [String: Any], completion: @escaping(Result<FormSubmitResponse, InstntError>) -> Void)</p></td><td class="confluenceTd"><p>Submit the user entered data and the documents uploaded to the Instnt server and initiate customer approval process.</p></td></tr>
 
 <tr><td class="confluenceTd"><p> <a id="user-content-sendOTP" class="anchor" aria-hidden="true" href="#sendOTP">
 <p>
 sendOTP
-</p></td><td class="confluenceTd"><p>(phoneNumber: String, completion: @escaping(Result<Void, InstntError>) -> Void)</p></td><td class="confluenceTd"><p>Sends one-time password to the mobile number provided.</p></td></tr>
+</p></td><td class="confluenceTd"><p>(instnttxnid: transactionID, phoneNumber: String, completion: @escaping(Result<Void, InstntError>) -> Void)</p></td><td class="confluenceTd"><p>Sends one-time password to the mobile number provided.</p></td></tr>
 
 <tr><td class="confluenceTd"><p><a id="user-content-verifyOTP" class="anchor" aria-hidden="true" href="#verifyOTP">
 
 verifyOTP
 
-</p></td><td class="confluenceTd"><p>(phoneNumber: String, otp: String, completion: @escaping(Result<Void, InstntError>) -> Void)</p></td><td class="confluenceTd"><p>Verifies one-time password that was sent to the provided mobile number.</p></td></tr>
+</p></td><td class="confluenceTd"><p>(instnttxnid: transactionID, phoneNumber: String, otp: String, completion: @escaping(Result<Void, InstntError>) -> Void)</p></td><td class="confluenceTd"><p>Verifies one-time password that was sent to the provided mobile number.</p></td></tr>
 
 </tbody></table>
 

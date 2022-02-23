@@ -20,7 +20,7 @@ class APIClient: NSObject {
     
     // MARK: - Submit
     func submitForm(to endpoint: String, formData: [String: Any], completion: @escaping(Result<FormSubmitResponse, InstntError>) -> Void) {
-        let request = ConnectionRequest(urlString: endpoint, method: .POST)
+        let request = ConnectionRequest(urlString: endpoint, method: .PUT)
         if let jsonData = try? JSONSerialization.data(withJSONObject:formData) {
             request.postData = jsonData
             ConnectionManager().sendRequest(request, success: { response in

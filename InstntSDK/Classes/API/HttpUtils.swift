@@ -9,7 +9,7 @@
 import Foundation
 let baseUrl = "http://api.qafilah.sa/mobile/CustomerAppServices.svc/"
 public enum HttpMethod: String {
-    case GET, POST
+    case GET, POST, PUT
 }
 public enum ConfigurationType {
     case `default`, ephemeral, background

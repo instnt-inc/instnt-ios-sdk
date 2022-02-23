@@ -33,6 +33,6 @@ Pod::Spec.new do |s|
   s.dependency 'DeviceKit', '~> 4.0'
   s.dependency 'SVProgressHUD', '~> 2.2'
   s.dependency 'SnapKit', '~> 5.0'
-  s.vendored_frameworks = 'CFDocumentScanSDK.framework', 'IDMetricsSelfieCapture.framework'
+  s.vendored_frameworks =  'InstntSDK/CFDocumentScanSDK.xcframework', 'InstntSDK/IDMetricsSelfieCapture.xcframework'
   
 end

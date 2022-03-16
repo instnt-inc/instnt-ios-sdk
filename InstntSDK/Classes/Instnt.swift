@@ -8,8 +8,7 @@
 
 import UIKit
 import SVProgressHUD
-import IDMetricsSelfieCapture
-
+//import BehavioSecIOSSDK
 
 public protocol InstntDelegate: NSObjectProtocol {
 
@@ -39,7 +38,6 @@ public class Instnt: NSObject {
     public var isDocumentVerificationEnabled: Bool?
     private var fingerprint: String = ""
     private var serviceURL: String = ""
-    private var submitURL: String = ""
     private var documentType: DocumentType = .license
     private var documentSide: DocumentSide = .front
     private var isSelfie: Bool = false
@@ -90,7 +88,7 @@ public class Instnt: NSObject {
         deviceInfo["serial"] = "\(Utils.getSerialNumber())"
         formData["mobileDeviceInfo"] = deviceInfo
         
-        APIClient.shared.submitForm(to: self.submitURL, formData: formData, completion: completion)
+        APIClient.shared.submitForm(instnttxnid: instnttxnid, formData: formData, completion: completion)
     }
     
     public func scanDocument(instnttxnid: String, licenseKey: String, from vc: UIViewController, settings: DocumentSettings, isAutoUpload: Bool? = true) {
@@ -118,7 +116,6 @@ public class Instnt: NSObject {
                 self.isOTPverificationEnabled = resultTransation.otp_verification
                 self.fingerprint = resultTransation.fingerprintjs_browser_token
                 self.serviceURL = resultTransation.backend_service_url
-                self.submitURL = resultTransation.signed_submit_form_url
                 self.isDocumentVerificationEnabled = resultTransation.document_verification
                 completion(.success(transactionID))
             case .failure(let error):

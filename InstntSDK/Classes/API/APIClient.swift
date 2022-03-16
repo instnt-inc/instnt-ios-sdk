@@ -19,7 +19,8 @@ class APIClient: NSObject {
     }
     
     // MARK: - Submit
-    func submitForm(to endpoint: String, formData: [String: Any], completion: @escaping(Result<FormSubmitResponse, InstntError>) -> Void) {
+    func submitForm(instnttxnid: String, formData: [String: Any], completion: @escaping(Result<FormSubmitResponse, InstntError>) -> Void) {
+        let endpoint = "\(baseEndpoint)/transactions/\(instnttxnid)"
         let request = ConnectionRequest(urlString: endpoint, method: .PUT)
         if let jsonData = try? JSONSerialization.data(withJSONObject:formData) {
             request.postData = jsonData
@@ -47,7 +48,7 @@ class APIClient: NSObject {
                     completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT, message: message)))
                 } else {
                     completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT)))
-                }                
+                }
             })
         } else {
             completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT)))

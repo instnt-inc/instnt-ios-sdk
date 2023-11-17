@@ -54,7 +54,7 @@ Note that a **Workflow ID** is required to execute this function properly. For m
 2. Install InstntSDK through [CocoaPods](https://cocoapods.org) by adding the following line to your Podfile:
 
 ```ruby
-  pod 'InstntSDK', :git => 'https://github.com/instnt-inc/instnt-ios-sdk.git'
+  pod 'InstntSDK'
 ```
 
 ## Initialize transaction
@@ -101,6 +101,8 @@ Instnt.shared.setup(with: formKey, endPOint: self.endPoint?.textField.text ?? ""
 Document verification feature comes into the picture if you have enabled it during the workflow creation in our dashboard.
 
 When this feature is enabled, the physical capture and verification of selfies and Government-issued identification documents such as Passports and Driver's Licenses are available.
+
+Add "Privacy - Camera Usage Description" in info.plist file for camera access permission.
 
 **Note:** Document Verification feature usage in your implementation via SDK requires a **License** **key**. Please contact the support at the email support@instnt.org for further assistance.
 ## Document verification pre-requisites
@@ -365,6 +367,3 @@ verifyOTP
 # License
 
 The instnt-iOS SDK is under MIT license.
-
-
-

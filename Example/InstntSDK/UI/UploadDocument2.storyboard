@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="eVC-C1-3p2">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Upload Document2-->
+        <scene sceneID="g9R-Xe-hgg">
+            <objects>
+                <viewController id="eVC-C1-3p2" customClass="UploadDocument2" customModule="InstntSDK_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="yrI-tg-yuo">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zQw-Sk-p7N">
+                                <rect key="frame" x="0.0" y="48" width="414" height="814"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="3Mt-mj-BxG">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="814"/>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="3Mt-mj-BxG" firstAttribute="top" secondItem="zQw-Sk-p7N" secondAttribute="top" id="9VV-Yf-Ysw"/>
+                                    <constraint firstItem="3Mt-mj-BxG" firstAttribute="centerY" secondItem="zQw-Sk-p7N" secondAttribute="centerY" placeholder="YES" id="MLh-Iq-QV9"/>
+                                    <constraint firstAttribute="trailing" secondItem="3Mt-mj-BxG" secondAttribute="trailing" id="MeU-8X-VJM"/>
+                                    <constraint firstItem="3Mt-mj-BxG" firstAttribute="leading" secondItem="zQw-Sk-p7N" secondAttribute="leading" id="Qtl-TS-HWL"/>
+                                    <constraint firstAttribute="bottom" secondItem="3Mt-mj-BxG" secondAttribute="bottom" id="W8t-t8-7dv"/>
+                                    <constraint firstItem="3Mt-mj-BxG" firstAttribute="centerX" secondItem="zQw-Sk-p7N" secondAttribute="centerX" id="pAO-gA-FNK"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="3lH-sK-e6X"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="zQw-Sk-p7N" firstAttribute="top" secondItem="3lH-sK-e6X" secondAttribute="top" id="CPu-4t-rAo"/>
+                            <constraint firstItem="zQw-Sk-p7N" firstAttribute="leading" secondItem="3lH-sK-e6X" secondAttribute="leading" id="KyJ-SV-GFp"/>
+                            <constraint firstItem="3lH-sK-e6X" firstAttribute="trailing" secondItem="zQw-Sk-p7N" secondAttribute="trailing" id="f40-FF-wT9"/>
+                            <constraint firstItem="3lH-sK-e6X" firstAttribute="bottom" secondItem="zQw-Sk-p7N" secondAttribute="bottom" id="h0k-hY-95e"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="osh-YL-Rpt"/>
+                    <connections>
+                        <outlet property="contentscrollView" destination="zQw-Sk-p7N" id="7Nh-tc-8n4"/>
+                        <outlet property="stackView" destination="3Mt-mj-BxG" id="tP1-Vf-DDc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="v4k-Tw-XJC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="860.86956521739137" y="134.59821428571428"/>
+        </scene>
+    </scenes>
+</document>

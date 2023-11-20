@@ -17,6 +17,12 @@ class FirstLastNamePresenter: BasePresenter {
         guard let view = Utils.getViewFromNib(name: "TextFieldView") as? TextFieldView  else {
             return nil
         }
+        
+        //view.textField.setValuesForKeys(["behavioTrackingId":"firstName"])
+        view.textField.accessibilityLabel = "firstName"
+        view.textField.accessibilityIdentifier = "firstName"
+        
+        view.textField.text = ExampleShared.shared.formData["firstName"] as? String
         return view
     }()
 
@@ -24,6 +30,12 @@ class FirstLastNamePresenter: BasePresenter {
         guard let view = Utils.getViewFromNib(name: "TextFieldView") as? TextFieldView  else {
             return nil
         }
+        
+        //view.textField.setValuesForKeys(["behavioTrackingId":"surName"])
+        view.textField.accessibilityLabel = "surName"
+        view.textField.accessibilityIdentifier = "surName"
+        
+        view.textField.text = ExampleShared.shared.formData["surName"] as? String
         return view
     }()
     
@@ -33,15 +45,27 @@ class FirstLastNamePresenter: BasePresenter {
         }
         return view
     }()
+    
+    lazy var skipBtnView: ButtonView? = {
+        guard let view = Utils.getViewFromNib(name: "ButtonView") as? ButtonView  else {
+            return nil
+        }
+        return view
+    }()
+    
     override func presentScene() {
         super.presentScene()
         self.buildView()
     }
-
+ 
     func buildView() {
         addFirstName()
         addlastName()
         addNextButton()
+        
+        if SignUpManager.shared.type == .resumeSignUp {
+            addSkipButton()
+        }
     }
     
     func addFirstName() {
@@ -53,9 +77,26 @@ class FirstLastNamePresenter: BasePresenter {
         lastNameView?.decorateTextField(textfieldType: .lastName)
         self.vc?.stackView.addOptionalArrangedSubview(lastNameView)
     }
-    
     func addNextButton() {
-        buttonView?.decorateView(type: .next, completion: {
+        
+       
+        
+        buttonView?.decorateView(type: .next, completion: { [weak self] in
+            
+            guard let `self` = self else { return }
+            
+            
+            guard self.firstNameView?.validate(textfieldType: .firstName, text: self.firstNameView?.textField.text ?? "") == true else {
+                self.showSimpleAlert(with: "FirstName is Invalid")
+                return
+            }
+            
+            guard self.lastNameView?.validate(textfieldType: .lastName, text: self.lastNameView?.textField.text ?? "") == true else {
+                self.showSimpleAlert(with: "LastName is Invalid")
+                return
+            }
+            
+            
             ExampleShared.shared.formData["firstName"] = self.firstNameView?.textField.text
             ExampleShared.shared.formData["surName"] = self.lastNameView?.textField.text
             
@@ -64,6 +105,23 @@ class FirstLastNamePresenter: BasePresenter {
             }
             self.vc?.navigationController?.pushViewController(vc, animated: true)
         })
+        buttonView?.button.accessibilityIdentifier = "nextBtnFirstLastName"
         self.vc?.stackView.addOptionalArrangedSubview(buttonView)
+    }
+    
+    
+    func showSimpleAlert(with msg: String) {
+        guard let vc = vc else { return }
+        vc.showSimpleAlert(msg, target: vc, completed: {})
+    }
+    
+    func addSkipButton() {
+        skipBtnView?.decorateView(type: .skip, completion: {            
+            guard let vc = Utils.getStoryboardInitialViewController("EmailPhone") as? EmailPhoneVC else {
+                return
+            }
+            self.vc?.navigationController?.pushViewController(vc, animated: true)
+        })
+        self.vc?.stackView.addOptionalArrangedSubview(skipBtnView)
     }
 }

@@ -20,4 +20,10 @@ enum TextFieldTypes {
     case country
     case formKey
     case endPoint
+    case transactionID
+    case password
+    case amount
+    case notes
+    case dob
+    case nationalId
 }

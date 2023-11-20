@@ -18,6 +18,12 @@ class EmailPhonePresenter: BasePresenter {
         guard let view = Utils.getViewFromNib(name: "TextFieldView") as? TextFieldView  else {
             return nil
         }
+        
+        //view.textField.setValuesForKeys(["behavioTrackingId":"email"])
+        view.textField.accessibilityLabel = "email"
+        view.textField.accessibilityIdentifier = "email"
+        
+        view.textField.text = ExampleShared.shared.formData["email"] as? String
         return view
     }()
 
@@ -25,6 +31,13 @@ class EmailPhonePresenter: BasePresenter {
         guard let view = Utils.getViewFromNib(name: "TextFieldView") as? TextFieldView  else {
             return nil
         }
+        
+        //view.textField.setValuesForKeys(["behavioTrackingId":"mobileNumber"])
+        view.textField.accessibilityLabel = "mobileNumber"
+        view.textField.accessibilityIdentifier = "mobileNumber"
+        
+        view.textField.text = ExampleShared.shared.formData["mobileNumber"] as? String ?? ""
+        //+12064512559
         return view
     }()
     lazy var buttonView: ButtonView? = {
@@ -33,6 +46,14 @@ class EmailPhonePresenter: BasePresenter {
         }
         return view
     }()
+    
+    lazy var skipBtnView: ButtonView? = {
+        guard let view = Utils.getViewFromNib(name: "ButtonView") as? ButtonView  else {
+            return nil
+        }
+        return view
+    }()
+    
     override func presentScene() {
         super.presentScene()
         self.buildView()
@@ -42,6 +63,10 @@ class EmailPhonePresenter: BasePresenter {
         addEmail()
         addPhone()
         addButton()
+        
+        if SignUpManager.shared.type == .resumeSignUp {
+            addSkipButton()
+        }
     }
     
     func addEmail() {
@@ -56,7 +81,20 @@ class EmailPhonePresenter: BasePresenter {
     
     func addButton() {
         if Instnt.shared.isOTPverificationEnabled == false  {
-            buttonView?.decorateView(type: .next, completion: {
+            buttonView?.decorateView(type: .next, completion: {[weak self] in
+                
+                guard let `self` = self else { return }
+                
+                guard self.email?.validate(textfieldType: .email, text: self.email?.textField.text ?? "") == true else {
+                    self.showSimpleAlert(with: "Email is Invalid")
+                    return
+                }
+                
+                guard self.phone?.validate(textfieldType: .mobile, text: self.phone?.textField.text ?? "") == true else {
+                    self.showSimpleAlert(with: "Phone is Invalid")
+                    return
+                }
+                
                 ExampleShared.shared.formData["mobileNumber"] = self.phone?.textField.text
                 ExampleShared.shared.formData["email"] = self.email?.textField.text
                 if Instnt.shared.isOTPverificationEnabled == false {
@@ -66,11 +104,23 @@ class EmailPhonePresenter: BasePresenter {
                     self.vc?.navigationController?.pushViewController(vc, animated: true)
                 }
             })
+            buttonView?.button.accessibilityIdentifier = "nextBtnEmailPhone"
             self.vc?.stackView.addOptionalArrangedSubview(buttonView)
             return
         }
         
-        buttonView?.decorateView(type: .submitOTP, completion: {
+        buttonView?.decorateView(type: .submitOTP, completion: { [weak self] in
+            guard let `self` = self else { return }
+            
+            guard self.email?.validate(textfieldType: .email, text: self.email?.textField.text ?? "") == true else {
+                self.showSimpleAlert(with: "Email is Invalid")
+                return
+            }
+            guard self.phone?.validate(textfieldType: .mobile, text: self.phone?.textField.text ?? "") == true else {
+                self.showSimpleAlert(with: "Phone is Invalid")
+                return
+            }
+            
             let phone = self.phone?.textField.text ?? ""
             SVProgressHUD.show()
             guard let transactionID = ExampleShared.shared.transactionID else {
@@ -99,4 +149,38 @@ class EmailPhonePresenter: BasePresenter {
         })
         self.vc?.stackView.addOptionalArrangedSubview(buttonView)
     }
+    
+    
+    func showSimpleAlert(with msg: String) {
+        guard let vc = vc else { return }
+        vc.showSimpleAlert(msg, target: vc, completed: {})
+    }
+    
+    
+    func addSkipButton() {
+        if Instnt.shared.isOTPverificationEnabled == false  {
+            skipBtnView?.decorateView(type: .skip, completion: {
+                    guard let vc = Utils.getStoryboardInitialViewController("Address") as? AddressVC else {
+                        return
+                    }
+                    self.vc?.navigationController?.pushViewController(vc, animated: true)
+                
+            })
+            self.vc?.stackView.addOptionalArrangedSubview(skipBtnView)
+            return
+        }
+        
+        skipBtnView?.decorateView(type: .skip, completion: {
+            let phone = self.phone?.textField.text ?? ""
+            SVProgressHUD.show()
+            
+            guard let vc = Utils.getStoryboardInitialViewController("VerifyOTP") as? VerifyOTPVC else {
+                return
+            }
+            vc.presenter?.phoneNumber = phone
+            self.vc?.navigationController?.pushViewController(vc, animated: true)
+        })
+        self.vc?.stackView.addOptionalArrangedSubview(skipBtnView)
+    }
+    
 }

@@ -18,8 +18,21 @@ public struct DocumentSettings {
     public let captureMode: CaptureMode
 }
 
+public struct SelfieSettings {
+    public let isFarSelfie: Bool
+    public let isAutoCapture: Bool
+    public let isAutoUpload: Bool
+    public init(isFarSelfie: Bool, isAutoCapture: Bool, isAutoUpload: Bool) {
+        self.isFarSelfie = isFarSelfie
+        self.isAutoCapture = isAutoCapture
+        self.isAutoUpload = isAutoUpload
+    }
+}
+
+
 public enum DocumentType: String {
     case license = "License"
+    case passport = "Passport"
 }
 
 public enum DocumentSide  {
@@ -33,24 +46,28 @@ public enum SelfieType  {
 }
 
 public enum CaptureMode {
-    case automatic
+    case auto
     case manual
 }
 
 public class CaptureResult {    
     public var resultBase64: Data
-    let isFaceFaceDetected: Bool?
-    let isBarcodeDetected: Bool?
+    public let isFaceFaceDetected: Bool?
+    public let isBarcodeDetected: Bool?
+    public let isMrzDetected: Bool?
+    public let documentType: DocumentType?
     public let documentSide: DocumentSide?
     public let isAutoUpload: Bool?
     
     
-    init(resultBase64: Data, isFaceFaceDetected:Bool, isBarcodeDetected:Bool, documentSide: DocumentSide, isAutoUpload: Bool) {
+    init(resultBase64: Data, isFaceFaceDetected:Bool, isBarcodeDetected:Bool?, documentSide: DocumentSide, isAutoUpload: Bool, isMrzDetected: Bool?, documentType: DocumentType) {
         self.resultBase64 = resultBase64
         self.isFaceFaceDetected = isFaceFaceDetected
         self.isBarcodeDetected = isBarcodeDetected
         self.documentSide = documentSide
         self.isAutoUpload = isAutoUpload
+        self.isMrzDetected = isMrzDetected
+        self.documentType = documentType
     }
 }
 

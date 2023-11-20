@@ -13,4 +13,9 @@ enum ButtonTypes {
     case verifyOTP
     case setUp
     case submitForm
+    case skip
+    case resumeSignUp
+    case verify
+    case newTransaction
+
 }

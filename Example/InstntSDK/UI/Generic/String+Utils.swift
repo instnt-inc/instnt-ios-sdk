@@ -14,4 +14,15 @@ extension String {
         let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: self)
     }
+    
+    
+    //validate name logic
+        func isValidName() -> Bool {
+            //Declaring the rule of characters to be used. Applying rule to current state. Verifying the result.
+            let regex = "[A-Za-z]{2,}"
+            let test = NSPredicate(format: "SELF MATCHES %@", regex)
+            let result = test.evaluate(with: self)
+            
+            return result
+        }
 }

@@ -35,9 +35,19 @@ class ButtonView: UIView {
             button .setTitle(NSLocalizedString("Set Up", comment: ""), for: .normal)
         case .submitForm:
             button.backgroundColor = UIColor.black
-            button .setTitle(NSLocalizedString("Submit Form", comment: ""), for: .normal)
-            
-        
+            button .setTitle(NSLocalizedString("Submit", comment: ""), for: .normal)
+        case .skip:
+            button.backgroundColor = UIColor.black
+            button .setTitle(NSLocalizedString("Skip", comment: ""), for: .normal)
+        case .resumeSignUp:
+            button.backgroundColor = UIColor.black
+            button .setTitle(NSLocalizedString("Resume SignUp", comment: ""), for: .normal)
+        case .newTransaction:
+            button.backgroundColor = UIColor.black
+            button .setTitle(NSLocalizedString("Send Money", comment: ""), for: .normal)
+        case .verify:
+            button.backgroundColor = UIColor.black
+            button.setTitle("Verify Documents", for: .normal)
         }
     }
 

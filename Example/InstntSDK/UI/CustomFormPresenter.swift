@@ -57,21 +57,19 @@ class CustomFormPresenter: BasePresenter {
     }
     
     private func buildView() {
-        //addFormKey()
-        //addEndPoint()
+        
         if SignUpManager.shared.type == .resumeSignUp {
             addTransactionId()
         }
-        //addSandboxSwitch()
+        
         self.vc?.stackView.addSpacerView()
         addSetUpButton()
     }
     
     private func addFormKey() {
         formKey?.decorateTextField(textfieldType: .formKey)
-        //v163875646772327
-        //v1639687041590101
-        formKey?.textField.text = "v1652789756489859" //v1639687041590101"
+        
+        formKey?.textField.text = "v1652789756489859"
         self.vc?.stackView.addOptionalArrangedSubview(formKey)
     }
     
@@ -83,8 +81,7 @@ class CustomFormPresenter: BasePresenter {
     
     private func addTransactionId() {
         transactionId?.decorateTextField(textfieldType: .transactionID)
-        //v163875646772327
-        //v1639687041590101
+        
         transactionId?.textField.text = "2b58f07e-d34c-49c8-ae39-ec98c06ab5ce"
         self.vc?.stackView.addOptionalArrangedSubview(transactionId)
     }
@@ -119,8 +116,6 @@ class CustomFormPresenter: BasePresenter {
                         
                     }
                 case .resumeSignUp:
-                    print("resumeSignup initiating.....")
-                    //if let formKey = self.formKey?.textField.text,let instnttxnid = self.transactionId?.textField.text {
                     
                     if let formKey = UserDefaults.standard.value(forKey: "form_key"), let instnttxnid = self.transactionId?.textField.text {
                         
@@ -162,11 +157,6 @@ class CustomFormPresenter: BasePresenter {
     
     private func getFormAfterSuccess() {
         self.gotoFirstName()
-        
-//        guard  let uploadDocFinal = Utils.getStoryboardInitialViewController("UploadDocument") as? UploadDocumentVC else {
-//            return
-//        }
-//        self.vc?.navigationController?.pushViewController(uploadDocFinal, animated: true)
     }
     
     private func gotoFirstName() {

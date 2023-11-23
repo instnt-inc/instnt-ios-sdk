@@ -19,7 +19,6 @@ class EmailPhonePresenter: BasePresenter {
             return nil
         }
         
-        //view.textField.setValuesForKeys(["behavioTrackingId":"email"])
         view.textField.accessibilityLabel = "email"
         view.textField.accessibilityIdentifier = "email"
         
@@ -32,12 +31,11 @@ class EmailPhonePresenter: BasePresenter {
             return nil
         }
         
-        //view.textField.setValuesForKeys(["behavioTrackingId":"mobileNumber"])
         view.textField.accessibilityLabel = "mobileNumber"
         view.textField.accessibilityIdentifier = "mobileNumber"
         
         view.textField.text = ExampleShared.shared.formData["mobileNumber"] as? String ?? ""
-        //+12064512559
+        
         return view
     }()
     lazy var buttonView: ButtonView? = {

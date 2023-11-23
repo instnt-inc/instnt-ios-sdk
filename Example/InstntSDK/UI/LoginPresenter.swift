@@ -42,7 +42,6 @@ class LoginPresenter: BasePresenter {
         guard let view = Utils.getViewFromNib(name: "TextFieldView") as? TextFieldView  else {
             return nil
         }
-        //view.textField.text = ExampleShared.shared.formData["email"] as? String
         return view
     }()
     
@@ -50,7 +49,6 @@ class LoginPresenter: BasePresenter {
         guard let view = Utils.getViewFromNib(name: "TextFieldView") as? TextFieldView  else {
             return nil
         }
-        //view.textField.text = ExampleShared.shared.formData["password"] as? String
         return view
     }()
     
@@ -77,11 +75,6 @@ class LoginPresenter: BasePresenter {
     }
 
     private func buildView() {
-        
-        //addLoginLbl()
-        
-        //addFormKey()
-        //addEndPoint()
         
         addEmail()
         addPassword()
@@ -117,7 +110,7 @@ class LoginPresenter: BasePresenter {
     
     private func addPassword() {
         password?.decorateTextField(textfieldType: .password)
-        password?.textField.text = "eea33f30-21db-4755-9b8e-357394ec7649" //2b58f07e-d34c-49c8-ae39-ec98c06ab5ce"
+        password?.textField.text = "eea33f30-21db-4755-9b8e-357394ec7649"
         self.vc?.stackView.addOptionalArrangedSubview(password)
     }
     
@@ -125,8 +118,6 @@ class LoginPresenter: BasePresenter {
             self.buttonView?.decorateView(type: .next, completion: {
                 
                 Instnt.shared.transactionID = self.password?.textField.text
-                //APIClient.shared.baseEndpoint = self.endPoint?.textField.text
-                //APIClient.shared.formKey = self.formKey?.textField.text
                 
                 guard let vc = self.vc else {
                     return

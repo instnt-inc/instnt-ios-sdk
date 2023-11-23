@@ -77,33 +77,11 @@ final class Verify_And_OTP_Test: XCTestCase {
                 
             case .success:
                 
-                /*
-                 ExampleShared.shared.formData["mobileNumber"] = phone
-                 
-                 ExampleShared.shared.formData["email"] = email
-                 
-                 guard let vc = Utils.getStoryboardInitialViewController("VerifyOTP") as? VerifyOTPVC else {
-                 
-                 return
-                 
-                 }
-                 
-                 vc.presenter?.phoneNumber = phone
-                 */
-                
                 expectation.fulfill()
                 
                 self.testSuccessfull = true
                 
             case .failure( let error):
-                
-                /*
-                 
-                 if let vc = self.vc {
-                 
-                 //Error getting the OTP
-                 
-                 }*/
                 
                 print(error)
                 

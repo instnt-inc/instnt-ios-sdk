@@ -43,10 +43,6 @@ class VerifyDataPresenter: BasePresenter {
         guard let view = Utils.getViewFromNib(name: "TextFieldView") as? TextFieldView  else {
             return nil
         }
-        //view.textField.text = ExampleShared.shared.formData["email"] as? String
-        
-        //view.textField.setValuesForKeys(["behavioTrackingId":"firstName"])
-        //view.textField.accessibilityLabel = "firstName"
         view.textField.accessibilityIdentifier = "firstName"
         
         return view
@@ -56,10 +52,6 @@ class VerifyDataPresenter: BasePresenter {
         guard let view = Utils.getViewFromNib(name: "TextFieldView") as? TextFieldView  else {
             return nil
         }
-        //view.textField.text = ExampleShared.shared.formData["email"] as? String
-        
-        //view.textField.setValuesForKeys(["behavioTrackingId":"surName"])
-        //view.textField.accessibilityLabel = "surName"
         view.textField.accessibilityIdentifier = "surName"
         
         return view
@@ -69,10 +61,6 @@ class VerifyDataPresenter: BasePresenter {
         guard let view = Utils.getViewFromNib(name: "TextFieldView") as? TextFieldView  else {
             return nil
         }
-        //view.textField.text = ExampleShared.shared.formData["password"] as? String
-        
-        //view.textField.setValuesForKeys(["behavioTrackingId":"amount"])
-        //view.textField.accessibilityLabel = "amount"
         view.textField.accessibilityIdentifier = "amount"
         
         return view
@@ -82,10 +70,6 @@ class VerifyDataPresenter: BasePresenter {
         guard let view = Utils.getViewFromNib(name: "TextFieldView") as? TextFieldView  else {
             return nil
         }
-        //view.textField.text = ExampleShared.shared.formData["password"] as? String
-        
-        //view.textField.setValuesForKeys(["behavioTrackingId":"phone"])
-        //view.textField.accessibilityLabel = "phone"
         view.textField.accessibilityIdentifier = "phone"
         
         return view
@@ -103,9 +87,6 @@ class VerifyDataPresenter: BasePresenter {
         guard let view = Utils.getViewFromNib(name: "TextFieldView") as? TextFieldView  else {
             return nil
         }
-        
-        //view.textField.setValuesForKeys(["behavioTrackingId":"notes"])
-        //view.textField.accessibilityLabel = "notes"
         view.textField.accessibilityIdentifier = "notes"
         
         return view
@@ -140,14 +121,11 @@ class VerifyDataPresenter: BasePresenter {
 
     private func buildView() {
         
-        //addTitleLbl()
-        //addSendMoneyLbl()
-        
         addFirstName()
         addLastName()
         addAmount()
         addPhone()
-        //addDate()
+        
         addNotes()
         
         addButton()
@@ -160,8 +138,6 @@ class VerifyDataPresenter: BasePresenter {
     private func initTransaction() {
         
         let transactionID = Instnt.shared.transactionID
-        //let formID = "v1639687041590101"
-        //let enPoint = "https://dev2-api.instnt.org/public"
         
         let formID = UserDefaults.standard.value(forKey: "form_key") as? String ?? ""
         let enPoint = UserDefaults.standard.value(forKey: "end_point")
@@ -173,12 +149,6 @@ class VerifyDataPresenter: BasePresenter {
                 case .success(let transactionID):
                     ExampleShared.shared.transactionID = transactionID
                     
-                //self.addResponse()
-                    
-                print("successs")
-                
-                //self.lblView?.lblText.text = "Set up is succeded with transaction Id \(transactionID)"
-
                 case .failure(let error):
                     
                 print(error)
@@ -262,13 +232,7 @@ class VerifyDataPresenter: BasePresenter {
             return
         }
         vc.showSimpleAlert("Form submission is failed with error: \(error.message ?? "")", target: vc, completed: {
-//            guard let nvc = Utils.getStoryboardInitialViewController("CustomForm") as? UINavigationController else {
-//                return
-//            }
-//            guard let vc = nvc.viewControllers.first else {
-//                return
-//            }
-//            self.navigationController?.pushViewController(vc, animated: true)
+
         })
     }
     
@@ -276,7 +240,6 @@ class VerifyDataPresenter: BasePresenter {
             self.buttonView?.decorateView(type: .submitForm, completion: {
                 
                 let transactionID = Instnt.shared.transactionID
-                //let transactionID = "f5e407e2-97f7-4845-87c9-49e874229909"
                 
                 guard let vc = self.vc else {
                     return
@@ -319,24 +282,18 @@ class VerifyDataPresenter: BasePresenter {
                     case .success(let response):
                         
                         
-                        //if response.success == true,
-                          // let decision = response.decision,
-                           //let jwt = response.jwt {
-                        
                         var myResponse: [String: Any]?
                         
                         myResponse = response.rawJSON
                         
                         if let decision = myResponse?["decision"] {
-                            
-                            //self.instntDidSubmitSuccess(decision: , jwt: "")
-                            
+                                                        
                             self.instntDidSubmitSuccess(decision: decision as! String, jwt: "")
                             
                         } else {
                             print("response - \(response)")
                             if let msg = response.decision {
-                                //self.instntDidSubmitFailure(error: InstntError(errorConstant: .error_FORM_SUBMIT, message: msg))
+                                
                                 self.vc?.showSimpleAlert(msg, target: vc)
                                 
                             } else {

@@ -21,7 +21,6 @@ class AddressPresenter: BasePresenter, UITextFieldDelegate {
             return nil
         }
         
-        //view.textField.setValuesForKeys(["behavioTrackingId":"physicalAddress"])
         view.textField.accessibilityLabel = "physicalAddress"
         view.textField.accessibilityIdentifier = "physicalAddress"
         
@@ -47,7 +46,6 @@ class AddressPresenter: BasePresenter, UITextFieldDelegate {
             return nil
         }
         
-        //view.textField.setValuesForKeys(["behavioTrackingId":"state"])
         view.textField.accessibilityLabel = "state"
         view.textField.accessibilityIdentifier = "state"
         
@@ -60,7 +58,6 @@ class AddressPresenter: BasePresenter, UITextFieldDelegate {
             return nil
         }
         
-        //view.textField.setValuesForKeys(["behavioTrackingId":"zip"])
         view.textField.accessibilityLabel = "zip"
         view.textField.accessibilityIdentifier = "zip"
         
@@ -73,7 +70,6 @@ class AddressPresenter: BasePresenter, UITextFieldDelegate {
             return nil
         }
         
-        //view.textField.setValuesForKeys(["behavioTrackingId":"country"])
         view.textField.accessibilityLabel = "country"
         view.textField.accessibilityIdentifier = "country"
         

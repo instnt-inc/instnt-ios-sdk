@@ -21,8 +21,6 @@ class VerifyOTPPresenter: BasePresenter {
             return nil
         }
         
-        // check this one
-        //view.textField.setValuesForKeys(["behavioTrackingId":"otp"])
         view.textField.accessibilityLabel = "otp"
         view.textField.accessibilityIdentifier = "otp"
         

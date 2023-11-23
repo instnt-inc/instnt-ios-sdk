@@ -47,7 +47,6 @@ final class SDK_Setup_Test: XCTestCase {
                 
                 expectation.fulfill()
                 
-                //self.lblView?.lblText.text = "Set up is succeded with transaction Id \(transactionID)"
             case .failure(let error):
                 
                 print(error)
@@ -55,9 +54,6 @@ final class SDK_Setup_Test: XCTestCase {
                 myResult = false
                 
                 expectation.fulfill()
-                
-                //self.addResponse()
-                //self.lblView?.lblText.text = "Set up is failed with \(error.message ?? ""), please try again later"
 
             }
         })

@@ -52,8 +52,6 @@ class DashboardPresenter: BasePresenter {
     private func initTransaction() {
         
         let transactionID = Instnt.shared.transactionID
-        //let formID = "v1639687041590101"
-        //let enPoint = "https://dev2-api.instnt.org/public"
         
         let formID = UserDefaults.standard.value(forKey: "form_key") as? String ?? ""
         let enPoint = UserDefaults.standard.value(forKey: "end_point")
@@ -64,12 +62,6 @@ class DashboardPresenter: BasePresenter {
             switch result {
                 case .success(let transactionID):
                     ExampleShared.shared.transactionID = transactionID
-                    
-                //self.addResponse()
-                    
-                print("successs")
-                
-                //self.lblView?.lblText.text = "Set up is succeded with transaction Id \(transactionID)"
 
                 case .failure(let error):
                     

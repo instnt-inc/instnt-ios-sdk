@@ -18,7 +18,6 @@ class FirstLastNamePresenter: BasePresenter {
             return nil
         }
         
-        //view.textField.setValuesForKeys(["behavioTrackingId":"firstName"])
         view.textField.accessibilityLabel = "firstName"
         view.textField.accessibilityIdentifier = "firstName"
         
@@ -31,7 +30,6 @@ class FirstLastNamePresenter: BasePresenter {
             return nil
         }
         
-        //view.textField.setValuesForKeys(["behavioTrackingId":"surName"])
         view.textField.accessibilityLabel = "surName"
         view.textField.accessibilityIdentifier = "surName"
         

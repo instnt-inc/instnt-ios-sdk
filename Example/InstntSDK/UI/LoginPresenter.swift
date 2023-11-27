@@ -73,7 +73,7 @@ class LoginPresenter: BasePresenter {
         super.presentScene()
         self.buildView()
     }
-
+    
     private func buildView() {
         
         addEmail()
@@ -81,7 +81,7 @@ class LoginPresenter: BasePresenter {
         
         addButton()
         addButton2()
-
+        
     }
     
     private func addLoginLbl() {
@@ -115,30 +115,30 @@ class LoginPresenter: BasePresenter {
     }
     
     private func addButton() {
-            self.buttonView?.decorateView(type: .next, completion: {
+        self.buttonView?.decorateView(type: .next, completion: {
+            
+            Instnt.shared.transactionID = self.password?.textField.text
+            
+            guard let vc = self.vc else {
+                return
+            }
+            
+            guard self.password?.validate(textfieldType: .password, text: self.password?.textField.text ?? "") == true else {
                 
-                Instnt.shared.transactionID = self.password?.textField.text
-                
-                guard let vc = self.vc else {
-                    return
-                }
-                
-                guard self.password?.validate(textfieldType: .password, text: self.password?.textField.text ?? "") == true else {
-                    
-                    vc.showSimpleAlert("Enter password", target: vc)
-                    return
-                }
-                
-                self.getScreenAfterSuccess()
-            })
-            self.vc?.stackView.addOptionalArrangedSubview(buttonView)
+                vc.showSimpleAlert("Enter password", target: vc)
+                return
+            }
+            
+            self.getScreenAfterSuccess()
+        })
+        self.vc?.stackView.addOptionalArrangedSubview(buttonView)
     }
     
     private func addButton2() {
-            self.buttonView2?.decorateView(type: .next, completion: {
-                        
-            })
-            self.vc?.stackView.addOptionalArrangedSubview(buttonView2)
+        self.buttonView2?.decorateView(type: .next, completion: {
+            
+        })
+        self.vc?.stackView.addOptionalArrangedSubview(buttonView2)
     }
     
     func getScreenAfterSuccess() {
@@ -149,5 +149,5 @@ class LoginPresenter: BasePresenter {
         self.vc?.navigationController?.pushViewController(vc, animated: true)
         
     }
-
+    
 }

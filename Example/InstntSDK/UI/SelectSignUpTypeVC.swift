@@ -10,8 +10,6 @@ import UIKit
 import InstntSDK
 import SVProgressHUD
 
-
-
 class SelectSignUpTypeVC: BaseViewController {
     
     var signUPType: SignUPType = .signup
@@ -67,8 +65,8 @@ class SelectSignUpTypeVC: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.stackView.addSpacerView()
-        print("store signup type  : \(SignUpManager.shared.type.name)")
-        //making signUpBtn initially selecte
+        
+        //making signUpBtn initially selected
         signUpBtn.isSelected = true
         SignUpManager.shared.signUpType = signUPType.rawValue
         addNextButton()
@@ -79,7 +77,7 @@ class SelectSignUpTypeVC: BaseViewController {
         buttonView?.decorateView(type: .next, completion: { [weak self] in
             SignUpManager.shared.signUpType = self?.signUPType.rawValue ?? 0
             self?.redirectToNextScreen()
-                        
+            
         })
         buttonView?.button.accessibilityIdentifier = "nextBtnHome"
         self.stackView.addOptionalArrangedSubview(buttonView)
@@ -104,7 +102,7 @@ class SelectSignUpTypeVC: BaseViewController {
     @IBAction private func onClickResumeSignUp(_ sender: UIButton){
         
         signUPType = .resumeSignUp
-
+        
         uncheck()
         sender.checkboxAnimation {
             print(sender.titleLabel?.text ?? "")
@@ -115,17 +113,16 @@ class SelectSignUpTypeVC: BaseViewController {
     @IBAction func onClickDoHandShakeBtn(_ sender: UIButton) {
         
         signUPType = .doHandShake
-
+        
         uncheck()
         sender.checkboxAnimation {
             print(sender.titleLabel?.text ?? "")
             print(sender.isSelected)
         }
-
+        
     }
     
     func redirectToNextScreen() {
-        print("redirectToNextScreen")
         
         ExampleShared.shared.formData = [:]
         
@@ -150,30 +147,30 @@ class SelectSignUpTypeVC: BaseViewController {
             if let formKey = self.formIDFld.text {
                 SVProgressHUD.show()
                 ExampleShared.shared.transactionID = nil
-
-            
-            Instnt.shared.setup(with: formKey, endPOint: self.endPointFld?.text ?? "", completion: { result in
-                SVProgressHUD.dismiss()
-                switch result {
-                case .success(let transactionID):
-                    print("transactionID : \(transactionID)")
-                    ExampleShared.shared.transactionID = transactionID
-                    //self.addResponse()
-                    self.gotoFirstName()
-                    //self.lblView?.lblText.text = "Set up is succeded with transaction Id \(transactionID)"
-                case .failure(let error):
-                    print("error - \(error)")
-                    
-                    let errorMsg = "Setup is failed due to error - \(error.message ?? "Failed")"
-                    
-                    let alert = UIAlertController(title: "Failed", message: errorMsg, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                    
-                    //self.addResponse()
-                    //self.lblView?.lblText.text = "Set up is failed with \(error.message ?? ""), please try again later"
-                }
-            })
+                
+                
+                Instnt.shared.setup(with: formKey, endPOint: self.endPointFld?.text ?? "", completion: { result in
+                    SVProgressHUD.dismiss()
+                    switch result {
+                    case .success(let transactionID):
+                        print("transactionID : \(transactionID)")
+                        ExampleShared.shared.transactionID = transactionID
+                        //self.addResponse()
+                        self.gotoFirstName()
+                        //self.lblView?.lblText.text = "Set up is succeded with transaction Id \(transactionID)"
+                    case .failure(let error):
+                        print("error - \(error)")
+                        
+                        let errorMsg = "Setup is failed due to error - \(error.message ?? "Failed")"
+                        
+                        let alert = UIAlertController(title: "Failed", message: errorMsg, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                        
+                        //self.addResponse()
+                        //self.lblView?.lblText.text = "Set up is failed with \(error.message ?? ""), please try again later"
+                    }
+                })
                 
             }
             

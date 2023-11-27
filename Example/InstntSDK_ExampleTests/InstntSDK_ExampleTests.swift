@@ -15,18 +15,18 @@ final class InstntSDK_ExampleTests: XCTestCase {
     let endPoint = "https://dev2-api.instnt.org/public"
     var testSuccessfull = false
     var transactionIDReturn = ""
-
+    
     override func setUpWithError() throws {
         
         test_SDKSetup()
         
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-
+    
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
+    
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
@@ -85,7 +85,7 @@ final class InstntSDK_ExampleTests: XCTestCase {
         XCTAssertTrue(myResult)
         
         return transactionIDReturn
-    
+        
     }
     
     // Test case to check Instnt SDK setup using form key and endpoint
@@ -111,7 +111,7 @@ final class InstntSDK_ExampleTests: XCTestCase {
                 self.transactionIDReturn = transactionID
                 
                 expectation.fulfill()
-
+                
             case .failure(let error):
                 
                 print(error)
@@ -129,7 +129,7 @@ final class InstntSDK_ExampleTests: XCTestCase {
         XCTAssertTrue(myResult)
         
         return transactionIDReturn
-    
+        
     }
     
     // Test case for send OTP method
@@ -145,7 +145,7 @@ final class InstntSDK_ExampleTests: XCTestCase {
         let expectation = XCTestExpectation(description: #function)
         
         Instnt.shared.sendOTP(instnttxnid: transactionID, phoneNumber: phone, completion: { result in
-                        
+            
             switch result {
                 
             case .success:
@@ -186,7 +186,7 @@ final class InstntSDK_ExampleTests: XCTestCase {
         let expectation = XCTestExpectation(description: #function)
         
         Instnt.shared.sendOTP(instnttxnid: transactionID, phoneNumber: phone, completion: { result in
-                        
+            
             switch result {
                 
             case .success:
@@ -216,25 +216,23 @@ final class InstntSDK_ExampleTests: XCTestCase {
         XCTAssertTrue(self.testSuccessfull)
         
     }
-        
+    
     // negative testing of verify OPT
     // Test case for verify OTP
     func test_verifyOTP() {
         
         let transactionID = self.test_SDKSetup()
-                
+        
         let otp = "111111"
         let phone = "+12012121212"
         
         let expectation = XCTestExpectation(description: #function)
-                
+        
         Instnt.shared.verifyOTP(instnttxnid: transactionID, phoneNumber: phone, otp: otp, completion: { result in
             
             switch result {
                 
             case .success:
-                
-                print("step 5")
                 
                 expectation.fulfill()
                 
@@ -244,8 +242,6 @@ final class InstntSDK_ExampleTests: XCTestCase {
             case .failure(let error):
                 
                 print(error)
-                
-                print("step 3")
                 
                 expectation.fulfill()
                 
@@ -257,14 +253,14 @@ final class InstntSDK_ExampleTests: XCTestCase {
             
             // result should be false or error
             
-            print("step 4 - \(self.testSuccessfull)")
+            print("check - \(self.testSuccessfull)")
             
             //XCTAssertFalse(OTPsentSuccessfully)
             
         })
         
         wait(for: [expectation], timeout: 10.0)
-
+        
         XCTAssertFalse(self.testSuccessfull)
         
     }
@@ -284,7 +280,7 @@ final class InstntSDK_ExampleTests: XCTestCase {
         
         ExampleShared.shared.formData["firstName"] = "John"
         ExampleShared.shared.formData["surName"] = "Doe"
-                
+        
         let expectation = XCTestExpectation(description: #function)
         
         Instnt.shared.submitData(instnttxnid: transactionID, data: ExampleShared.shared.formData, completion: { result in
@@ -309,7 +305,7 @@ final class InstntSDK_ExampleTests: XCTestCase {
                 self.testSuccessfull = false
                 expectation.fulfill()
             }
-           
+            
         })
         
         wait(for: [expectation], timeout: 15.0)
@@ -323,7 +319,7 @@ final class InstntSDK_ExampleTests: XCTestCase {
         let transactionID = self.test_SDKSetup()
         
         var formFieldsDic: [String: String] = [:]
-                
+        
         formFieldsDic["phone"] = "+12067564535"
         formFieldsDic["amount"] = "10"
         formFieldsDic["firstName"] = "John"
@@ -366,7 +362,7 @@ final class InstntSDK_ExampleTests: XCTestCase {
                 self.testSuccessfull = false
                 expectation.fulfill()
             }
-           
+            
         })
         
         wait(for: [expectation], timeout: 15.0)
@@ -407,7 +403,7 @@ final class InstntSDK_ExampleTests: XCTestCase {
             }
         }
     }
-
+    
     func test_verifyDocuments() {
         
         test_DocumentUpload()
@@ -436,7 +432,7 @@ final class InstntSDK_ExampleTests: XCTestCase {
         
         test_SignupSubmit()
     }
-
+    
     //TODO: Selfie, document upload, behavsec testing
     
     func testPerformanceExample() throws {
@@ -471,16 +467,12 @@ final class InstntSDK_ExampleTests: XCTestCase {
                 
                 expectation.fulfill()
                 
-
+                
             }
         })
         
         wait(for: [expectation], timeout: 10.0)
         
-//        XCTAssertTrue(myResult)
-        
-//        return transactionIDReturn
-    
     }
     
     func test_verifyDocuments_Negative() {
@@ -510,7 +502,7 @@ final class InstntSDK_ExampleTests: XCTestCase {
             switch result {
             case .success(_):
                 XCTFail("Expected error on incorrect FormKey & transactionID but got succeed")
-
+                
             case .failure(_):
                 
                 XCTAssert(true, "Successfully found an Error")
@@ -521,12 +513,11 @@ final class InstntSDK_ExampleTests: XCTestCase {
         
         
         wait(for: [expectation], timeout: 10.0)
-    
+        
     }
     
     func test_SignupSubmit_Negative() {
         
-                
         let expectation = XCTestExpectation(description: #function)
         
         Instnt.shared.submitData(instnttxnid: self.transactionIDReturn, data: ["":""], completion: { result in
@@ -537,7 +528,7 @@ final class InstntSDK_ExampleTests: XCTestCase {
                 XCTAssert(true, "Successfully found an Error when empty Data")
                 expectation.fulfill()
             }
-           
+            
         })
         
         wait(for: [expectation], timeout: 15.0)
@@ -545,8 +536,6 @@ final class InstntSDK_ExampleTests: XCTestCase {
     }
     
     func test_VerifyTransaction_Negative() {
-        
-            
         
         let expectation = XCTestExpectation(description: #function)
         
@@ -561,12 +550,12 @@ final class InstntSDK_ExampleTests: XCTestCase {
                 XCTAssert(true, "Successfully found an Error when wrong Data")
                 expectation.fulfill()
             }
-           
+            
         })
         
         wait(for: [expectation], timeout: 20.0)
         
         
     }
-
+    
 }

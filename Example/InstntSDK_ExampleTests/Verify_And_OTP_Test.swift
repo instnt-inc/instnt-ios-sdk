@@ -113,8 +113,6 @@ final class Verify_And_OTP_Test: XCTestCase {
                 
             case .success:
                 
-                print("step 5")
-                
                 expectation.fulfill()
                 
                 self.testSuccessfull = true
@@ -123,8 +121,6 @@ final class Verify_And_OTP_Test: XCTestCase {
             case .failure(let error):
                 
                 print(error)
-                
-                print("step 3")
                 
                 expectation.fulfill()
                 
@@ -136,7 +132,7 @@ final class Verify_And_OTP_Test: XCTestCase {
             
             // result should be false or error
             
-            print("step 4 - \(self.testSuccessfull)")
+            print("check - \(self.testSuccessfull)")
             
             //XCTAssertFalse(OTPsentSuccessfully)
             

@@ -24,7 +24,7 @@ class FirstLastNamePresenter: BasePresenter {
         view.textField.text = ExampleShared.shared.formData["firstName"] as? String
         return view
     }()
-
+    
     lazy var lastNameView: TextFieldView? = {
         guard let view = Utils.getViewFromNib(name: "TextFieldView") as? TextFieldView  else {
             return nil
@@ -55,7 +55,7 @@ class FirstLastNamePresenter: BasePresenter {
         super.presentScene()
         self.buildView()
     }
- 
+    
     func buildView() {
         addFirstName()
         addlastName()
@@ -77,7 +77,7 @@ class FirstLastNamePresenter: BasePresenter {
     }
     func addNextButton() {
         
-       
+        
         
         buttonView?.decorateView(type: .next, completion: { [weak self] in
             
@@ -114,7 +114,7 @@ class FirstLastNamePresenter: BasePresenter {
     }
     
     func addSkipButton() {
-        skipBtnView?.decorateView(type: .skip, completion: {            
+        skipBtnView?.decorateView(type: .skip, completion: {
             guard let vc = Utils.getStoryboardInitialViewController("EmailPhone") as? EmailPhoneVC else {
                 return
             }

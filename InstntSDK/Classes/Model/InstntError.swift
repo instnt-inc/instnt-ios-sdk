@@ -8,6 +8,10 @@
 import Foundation
 public enum ErrorConstants: Int {
     case error_DOCUMENT_CAPTURE
+    case error_DOCUMENT_CAPTURE_CANCELLED
+    case error_BARCODE_UNDETECTED
+    case error_MRZ_UNDETECTED
+    case error_FACE_UNDETECTED
     case error_SELFIE_CAPTURE
     case error_SETUP
     case error_FORM_SUBMIT    
@@ -39,6 +43,14 @@ open class InstntError: Error {
         switch constant {
         case .error_DOCUMENT_CAPTURE:
             message = NSLocalizedString("Error capturing document, Please try again", comment: "")
+        case .error_DOCUMENT_CAPTURE_CANCELLED:
+            message = NSLocalizedString("Cancelled capturing document, Please try again", comment: "")
+        case .error_BARCODE_UNDETECTED:
+            message = NSLocalizedString("Barcode is not detected, Please try again", comment: "")
+        case .error_FACE_UNDETECTED:
+            message = NSLocalizedString("Face is not detected, Please try again", comment: "")
+        case .error_MRZ_UNDETECTED:
+            message = NSLocalizedString("Passport MRZ is not detected, Please try again", comment: "")
         case .error_SELFIE_CAPTURE:
             message = NSLocalizedString("Error capturing selfie, please try again", comment: "")
         case .error_FORM_SUBMIT:

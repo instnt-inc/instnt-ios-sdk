@@ -42,39 +42,31 @@
 		</data>
 		<key>Headers/CFDocumentScanSDK-Swift.h</key>
 		<data>
-		9vu/o+7nMnpeQV1+er5eEQj+EWs=
+		9bdSx3ySGOUB3ayDSyxi3nBGqsk=
 		</data>
 		<key>Headers/CFDocumentScanSDK.h</key>
 		<data>
-		yBfQ5kRXRRBZA2XHxyMkTW9nMxA=
+		JUBFn9bq6cZlwHlxs4CwqVuIDKo=
+		</data>
+		<key>Headers/DynamicCaptureFeedbackEnforcedDetectors.h</key>
+		<data>
+		68IK8J9+4JhPi0ca2B4EdhCJtQU=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		2l4xizugp4odjE/DQdbuSxVks3k=
+		7hNwuHcb5af0LCOcOoXnnLBcV+8=
 		</data>
 		<key>Modules/CFDocumentScanSDK.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		dYCgkiKkkkOuwsBwppzF1HqwdnA=
+		e56Tx7cYrWV1Hloc+f+K+L4o5kc=
 		</data>
 		<key>Modules/CFDocumentScanSDK.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		mXO4HKBnRHcpWFTv0qKtTbhO+bY=
+		9cKgdqZdNw1FTFEbGrK7xzjJW18=
 		</data>
 		<key>Modules/CFDocumentScanSDK.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		tGfMEyABPv1fRiXwZ36Kp5zXCHE=
-		</data>
-		<key>Modules/CFDocumentScanSDK.swiftmodule/arm64.swiftdoc</key>
-		<data>
-		dYCgkiKkkkOuwsBwppzF1HqwdnA=
-		</data>
-		<key>Modules/CFDocumentScanSDK.swiftmodule/arm64.swiftinterface</key>
-		<data>
-		mXO4HKBnRHcpWFTv0qKtTbhO+bY=
-		</data>
-		<key>Modules/CFDocumentScanSDK.swiftmodule/arm64.swiftmodule</key>
-		<data>
-		tGfMEyABPv1fRiXwZ36Kp5zXCHE=
+		iOobqW/N3g80fEm7T3P7PFvovNo=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -82,7 +74,43 @@
 		</data>
 		<key>Modules/module.private.modulemap</key>
 		<data>
-		4lhJg9PmGfsOJCRSNHiLjNCrlnk=
+		2jmj7l5rSw0yVb/vlWAYkK/YBwk=
+		</data>
+		<key>PillStatusView.nib</key>
+		<data>
+		FwDO2h37nTXYdy1jGFteUMcZppc=
+		</data>
+		<key>RegNetX002Quantized021122.mlmodelc/analytics/coremldata.bin</key>
+		<data>
+		KztfCl0zgfpbHaVYyCH+OulRy/Y=
+		</data>
+		<key>RegNetX002Quantized021122.mlmodelc/coremldata.bin</key>
+		<data>
+		tk9AAwotdEoqpgaZMXQSh9x6Blw=
+		</data>
+		<key>RegNetX002Quantized021122.mlmodelc/metadata.json</key>
+		<data>
+		loaOy7w/BV2YB9GTPb8e9w4HrQY=
+		</data>
+		<key>RegNetX002Quantized021122.mlmodelc/model.espresso.net</key>
+		<data>
+		KEEAa6SoHwrofwfkKWAGJpO1L8I=
+		</data>
+		<key>RegNetX002Quantized021122.mlmodelc/model.espresso.shape</key>
+		<data>
+		4JtniJzcRKz72/0euc3sY7Iocqo=
+		</data>
+		<key>RegNetX002Quantized021122.mlmodelc/model.espresso.weights</key>
+		<data>
+		WTdHfXHpDms5PqIE4OKMACAlYLE=
+		</data>
+		<key>RegNetX002Quantized021122.mlmodelc/model/coremldata.bin</key>
+		<data>
+		gJX0YKS/QpkJOpgQI0kBg1KdDfg=
+		</data>
+		<key>RegNetX002Quantized021122.mlmodelc/neural_network_optionals/coremldata.bin</key>
+		<data>
+		F4eV5mXReQYVzJ6dkMJcS5UbxSA=
 		</data>
 		<key>ReviewCaptureViewController.nib</key>
 		<data>
@@ -90,39 +118,7 @@
 		</data>
 		<key>ScanViewController.nib</key>
 		<data>
-		i6ZQMQFU8+x4n0bGjXfe9F72mkA=
-		</data>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/analytics/coremldata.bin</key>
-		<data>
-		vY35iIH9FGTQWf/2Lg3R4lIjLKs=
-		</data>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/coremldata.bin</key>
-		<data>
-		zYzXjABmzrWOq3dnHdaq9kew+ok=
-		</data>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/metadata.json</key>
-		<data>
-		ZZlg1ZqrgasbJWtwPGkC0AH/LJs=
-		</data>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/model.espresso.net</key>
-		<data>
-		uM+ht2Kwvoh4cYLJT6pQ+PUS74U=
-		</data>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/model.espresso.shape</key>
-		<data>
-		EvXmyuvCmWck8pdq5YFJRzeNVtw=
-		</data>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/model.espresso.weights</key>
-		<data>
-		0kBPc/VCGsDAxEdtG3yABtYXFJ4=
-		</data>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/model/coremldata.bin</key>
-		<data>
-		Ib7oSTzxXp6rfl+vSJdMxA9bPGM=
-		</data>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/neural_network_optionals/coremldata.bin</key>
-		<data>
-		uA3l0Th1hUHF8FJlrRRKufqG0ds=
+		B/7rWeanjD5GYTAubad41OuPZig=
 		</data>
 		<key>UIConfigurations.json</key>
 		<data>
@@ -132,6 +128,15 @@
 		<data>
 		SnBgGgRRnn3XqR29jpdQrfuyudY=
 		</data>
+		<key>en.lproj/Localizable.strings</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			wmvX+7keB5/NjdJteG21WC9KMME=
+			</data>
+			<key>optional</key>
+			<true/>
+		</dict>
 	</dict>
 	<key>files2</key>
 	<dict>
@@ -202,56 +207,42 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			HzyKOLBabPdnEZgzMeDgLeTBxs8UymyGVYX7lZSGOkw=
+			eX2xuJdGiIOfH5MtXPMAeBjhuEt6/xh1O3uXP9RwivI=
 			</data>
 		</dict>
 		<key>Headers/CFDocumentScanSDK.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			PrXdDOSQDyk276AHwHraVRHWQTOQ4ilN48gcY9dsm9s=
+			bLS3BtysW0DP7YUB6qrySvHg4dNzHFCr/1oQQLwy7uk=
+			</data>
+		</dict>
+		<key>Headers/DynamicCaptureFeedbackEnforcedDetectors.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			r7xU0ywaWupqxj76Idnisv2zL3RGx6UkMh1Fz47ptC8=
 			</data>
 		</dict>
 		<key>Modules/CFDocumentScanSDK.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			bUuKIUZUtKxL/NPLy0ntK6d99J77Fra5PVIPGhB/f5s=
+			Wf5XerzCAGq3DUB6H0ieFfi7z/4QhFnYimVtMdL8ErA=
 			</data>
 		</dict>
 		<key>Modules/CFDocumentScanSDK.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			dtvbXvrBR9QNCDT5p3vkAaq0h7HSTesxi8zNWk3fx7Y=
+			IKPe/Ciht/HX+lFEs1Ih2wpU3Y0A7UfvhwTnOySxL4E=
 			</data>
 		</dict>
 		<key>Modules/CFDocumentScanSDK.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			0D9gAtk4l+gA0XJ81lnb/UmA02gkgaxpozQU9L14oLQ=
-			</data>
-		</dict>
-		<key>Modules/CFDocumentScanSDK.swiftmodule/arm64.swiftdoc</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			bUuKIUZUtKxL/NPLy0ntK6d99J77Fra5PVIPGhB/f5s=
-			</data>
-		</dict>
-		<key>Modules/CFDocumentScanSDK.swiftmodule/arm64.swiftinterface</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			dtvbXvrBR9QNCDT5p3vkAaq0h7HSTesxi8zNWk3fx7Y=
-			</data>
-		</dict>
-		<key>Modules/CFDocumentScanSDK.swiftmodule/arm64.swiftmodule</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			0D9gAtk4l+gA0XJ81lnb/UmA02gkgaxpozQU9L14oLQ=
+			ud0/BVHKZdp0x/iYPyxeyg+WKmw0+pqJkBk5b4bT9TQ=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -265,7 +256,70 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			UzijsiGGMXlkTVLwN43qNQEuvs933kzRIXoPeK7Wnh4=
+			47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=
+			</data>
+		</dict>
+		<key>PillStatusView.nib</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			OrEY+00QhSF38fZPLYMN7nowyb5iZxTdlRGvJr0lHX8=
+			</data>
+		</dict>
+		<key>RegNetX002Quantized021122.mlmodelc/analytics/coremldata.bin</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			K1IDcR+LwsEWFOa5xq+kOJIcPFelErvtlNWoHHba77g=
+			</data>
+		</dict>
+		<key>RegNetX002Quantized021122.mlmodelc/coremldata.bin</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			GS6PHMjSTUrdVxfSeRt83FvNbmdPpP1zowhs2F/Hv/A=
+			</data>
+		</dict>
+		<key>RegNetX002Quantized021122.mlmodelc/metadata.json</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			vbTSkvHIrU86V8po4zoooBY1Gk+/KdmzJXR6LisXgO4=
+			</data>
+		</dict>
+		<key>RegNetX002Quantized021122.mlmodelc/model.espresso.net</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			cku4LBx25zdTzYKop7bW1iW5DHLOaXJfL8iWhr+0goo=
+			</data>
+		</dict>
+		<key>RegNetX002Quantized021122.mlmodelc/model.espresso.shape</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			7bVIMs0DFU2zZNgLyEMOiGhO0ZdZrnWXKVvSjPHADJc=
+			</data>
+		</dict>
+		<key>RegNetX002Quantized021122.mlmodelc/model.espresso.weights</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			/XUnIwvDbSpcpwkZMqYkZzQD90kYy2J9BFNRFWhk5kM=
+			</data>
+		</dict>
+		<key>RegNetX002Quantized021122.mlmodelc/model/coremldata.bin</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			x71Q7o7RUS/vMlmhAmMb25Q1DbpZL5ufqmzpRzB1Zvg=
+			</data>
+		</dict>
+		<key>RegNetX002Quantized021122.mlmodelc/neural_network_optionals/coremldata.bin</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			fqS+FcI4rEwuh08zvYHDQXdsHxzEcqyRceEHSzm0arE=
 			</data>
 		</dict>
 		<key>ReviewCaptureViewController.nib</key>
@@ -279,63 +333,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			aR1hUVb2nTVJSoAlsCFsSe3BgSziqdCfHrDXD92aiNo=
-			</data>
-		</dict>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/analytics/coremldata.bin</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			sAjIPo+mdoEAGDqLHHdeVotbN0ZzTnZqx9yeEto1lzE=
-			</data>
-		</dict>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/coremldata.bin</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			zKhgei4KGS7ikQjZ6IdZc1Xs1bSBZzKbsK24qQuBvz4=
-			</data>
-		</dict>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/metadata.json</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			e3FzdrRTTzMvLO3Vmk1bQehwW1lb3gZxgHgruZq+ayo=
-			</data>
-		</dict>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/model.espresso.net</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			ux3UPAEyOTJEayBnmmWtHZ8zdlkqMNVy223C33WK9go=
-			</data>
-		</dict>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/model.espresso.shape</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Em1o+zJG2IMxFOzLLEEMWj9zsHvmhT8jkeJdjGJwrJE=
-			</data>
-		</dict>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/model.espresso.weights</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			VImmUxaUlMBPrsoeUAmTP+iqfy4Z+ncPy704hEsCZQI=
-			</data>
-		</dict>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/model/coremldata.bin</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			5+ej3vYte2eDnL6zdIdWVSzuRF1QKm5jt2KtUquutdY=
-			</data>
-		</dict>
-		<key>SegmenterArgMax_7157k_CVBuffer_linear_8.mlmodelc/neural_network_optionals/coremldata.bin</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			LDTOHfI7g4xavyp/ZDfMo9MGftUJ/yXxHfaxG1grUes=
+			5GACDIQWOezx85NMXCRChzHrr7FCrSQV5jwqsJe59Ts=
 			</data>
 		</dict>
 		<key>UIConfigurations.json</key>
@@ -351,6 +349,15 @@
 			<data>
 			pw8pNU2wdKgh3ZofkT8keuSDMj/ry7GREZcAsL8EJv4=
 			</data>
+		</dict>
+		<key>en.lproj/Localizable.strings</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ImHFl0Qfg1IEU45Hw2x2Hv14wovaoRonE4LniBiAKCM=
+			</data>
+			<key>optional</key>
+			<true/>
 		</dict>
 	</dict>
 	<key>rules</key>

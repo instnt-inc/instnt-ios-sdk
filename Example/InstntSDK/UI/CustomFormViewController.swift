@@ -11,6 +11,7 @@ import InstntSDK
 import SVProgressHUD
 
 class CustomFormViewController: BaseViewController {
+        
     var presenter: CustomFormPresenter? {
         return presenterObject as? CustomFormPresenter
     }
@@ -18,6 +19,8 @@ class CustomFormViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter?.presentScene()
+        
+        print("CustomeFormView : viewDidLoad : signUpType : \(SignUpManager.shared.type.name)")
     }
 }
 

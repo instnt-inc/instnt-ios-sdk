@@ -12,28 +12,56 @@ import SVProgressHUD
 
 
 class UploadDocumentVC: BaseViewController {
-    var isFarSelfie: Bool? = false
-    var isAutoUpload: Bool? = true
-    let licenseKey = "AwG5mCdqXkmCj9oNEpGV8UauciP8s4cqFT848FfjUjwAZQJfa8ZvrEpmYsPME0RTo/Q0kRowDCGz7HPhfSdyeE7rOLtB3JAhuABdQ2R7dGhVy2EUdt5ENQBBIoveIZdf1pwVY2EUgDoGm8REDU+rr2C2"
+    var isFarSelfie: Bool = false
+    var isSelfie: Bool = false
+    var isAutoUpload: Bool = true
+    var isAutoCapture: Bool = false
+    let licenseKey = "AwF9un9folYArdZfq8gZ3dwNUARG9lop7ljR7ogi+5LzH5zJt0/xytKk3Le/P7fLai/SnAbdX4fso8jHlsb0VO+C5zNdwL3R8x6tZgf+31ZLe8vZ8/ivGjOLKsIKMsvZRo1kSUoWw7Pq5OUfdE40Q2aq"
+    var documentType: DocumentType?
     
-    @IBOutlet private var driverLicenceBtn: UIButton! {
-        didSet{
-            driverLicenceBtn.tintColor = .black
-            driverLicenceBtn.setImage(UIImage(named:"circle_radio_unselected"), for: .normal)
-            driverLicenceBtn.setImage(UIImage(named:"circle_radio_selected"), for: .selected)
+    lazy var titleView: LabelView? = {
+        guard let view = Utils.getViewFromNib(name: "LabelView") as? LabelView  else {
+            return nil
         }
-    }
+        view.lblText.text = "Choose the document type"
+        return view
+    }()
     
-    @IBOutlet private var passportBtn: UIButton! {
-        didSet{
-            passportBtn.tintColor = .black
-            passportBtn.setImage(UIImage(named:"circle_radio_unselected"), for: .normal)
-            passportBtn.setImage(UIImage(named:"circle_radio_selected"), for: .selected)
+    
+    lazy var subTitleView: LabelView? = {
+        guard let view = Utils.getViewFromNib(name: "LabelView") as? LabelView  else {
+            return nil
         }
-    }
-
-
-    @IBOutlet weak var docView: UIView!
+        view.lblText.text = "As an added layer of security , we need to verify your identity before approving your application."
+        return view
+    }()
+    
+    lazy var driverLicenceBtn: RadioButton? = {
+        guard let view = Utils.getViewFromNib(name: "RadioButton") as? RadioButton  else {
+            return nil
+        }
+        view.btnSelect.isSelected = true
+        view.completionBlock = {
+            self.uncheck()
+            view.btnSelect.checkboxAnimation {
+                self.documentType = .license
+            }
+        }
+        return view
+    }()
+    
+    lazy var passportBtn: RadioButton? = {
+        guard let view = Utils.getViewFromNib(name: "RadioButton") as? RadioButton  else {
+            return nil
+        }
+        view.completionBlock = {
+            self.uncheck()
+            view.btnSelect.checkboxAnimation {
+                self.documentType = .license
+            }
+        }
+        return view
+    }()
     
     lazy var buttonView: ButtonView? = {
         guard let view = Utils.getViewFromNib(name: "ButtonView") as? ButtonView  else {
@@ -41,8 +69,15 @@ class UploadDocumentVC: BaseViewController {
         }
         return view
     }()
+
+    lazy var isSelfieSwitchView: SwitchView? = {
+        guard let view = Utils.getViewFromNib(name: "SwitchView") as? SwitchView  else {
+            return nil
+        }
+        return view
+    }()
     
-    lazy var switchView: SwitchView? = {
+    lazy var isFarSelfieSwitchView: SwitchView? = {
         guard let view = Utils.getViewFromNib(name: "SwitchView") as? SwitchView  else {
             return nil
         }
@@ -56,65 +91,123 @@ class UploadDocumentVC: BaseViewController {
         return view
     }()
     
+    lazy var autoCaptureSwitchView: SwitchView? = {
+        guard let view = Utils.getViewFromNib(name: "SwitchView") as? SwitchView  else {
+            return nil
+        }
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.stackView.addSpacerView()
+        addTitle()
+        self.stackView.addSpacerView()
+        addSubtitle()
+        self.stackView.addSpacerView()
+        addDriverLicenceBtn()
+        addPassportButton()
+        self.stackView.addSpacerView()
+        addSelfieSwitch()
         addFarSelfieSwitch()
         addAutoUploadSwitch()
+        addCaptureSwitch()
         addNextButton()
+        self.stackView.addSpacerView(height: 100)
+        
         Instnt.shared.delegate = self
+    }
+    
+    private func addTitle() {
+        self.stackView.addOptionalArrangedSubview(titleView)
+        
+    }
+    
+    private func addSubtitle() {
+
+        self.stackView.addOptionalArrangedSubview(subTitleView)
+        
+    }
+    private func addDriverLicenceBtn() {
+        driverLicenceBtn?.lblTitle.text = "Driver's License"
+        self.stackView.addOptionalArrangedSubview(driverLicenceBtn)
+        
+    }
+    
+    private func addPassportButton() {
+        passportBtn?.lblTitle.text = "Passport"
+        self.stackView.addOptionalArrangedSubview(passportBtn)
     }
     
     private func addNextButton() {
         self.stackView.addSpacerView()
         buttonView?.decorateView(type: .next, completion: {
-            let documentSettings = DocumentSettings(documentType: .license, documentSide: .front, captureMode: .manual, isAutoUpload: self.isAutoUpload ?? true)
-            guard let transactionID = ExampleShared.shared.transactionID else {
-                self.instntDidSubmitFailure(error: InstntError(errorConstant: .error_INVALID_TRANSACTION_ID))
-                return
+            if self.isAutoUpload {
+                let documentSettings = DocumentSettings(documentType: self.documentType ?? .license, documentSide: .front, captureMode: self.isAutoCapture ? .auto: .manual, isAutoUpload: self.isAutoUpload)
+                guard let transactionID = ExampleShared.shared.transactionID else {
+                    self.instntDidSubmitFailure(error: InstntError(errorConstant: .error_INVALID_TRANSACTION_ID))
+                    return
+                }
+                self.autoUploadSwitchView?.isHidden = true
+                self.autoCaptureSwitchView?.isHidden = true
+                self.isFarSelfieSwitchView?.isHidden = true
+                self.isSelfieSwitchView?.isHidden = true
+
+                Instnt.shared.scanDocument(instnttxnid: transactionID, licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload)
+            } else {
+                guard  let uploadDocFinal = Utils.getStoryboardInitialViewController("UploadDocument2") as? UploadDocument2 else {
+                    return
+                }
+                self.navigationController?.pushViewController(uploadDocFinal, animated: true)
             }
-            Instnt.shared.scanDocument(instnttxnid: transactionID, licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
+           
         })
+        buttonView?.button.accessibilityIdentifier = "signupSubmit"
         self.stackView.addOptionalArrangedSubview(buttonView)
     }
     
     private func addFarSelfieSwitch() {
-        switchView?.decorateView(title: "Far Selfie", completion: { isOn in
+        isFarSelfieSwitchView?.decorateView(title: "Far Selfie", completion: { isOn in
             self.isFarSelfie = isOn
         })
-        switchView?.uiswitch.isOn = false
-        self.stackView.addOptionalArrangedSubview(switchView)
+        isFarSelfieSwitchView?.uiswitch.isOn = isFarSelfie
+        self.stackView.addOptionalArrangedSubview(isFarSelfieSwitchView)
     }
     
+    private func addSelfieSwitch() {
+        isSelfieSwitchView?.decorateView(title: "Selfie", completion: { isOn in
+            if !isOn {
+                self.isFarSelfieSwitchView?.uiswitch.isOn = false
+            }
+            self.isSelfie = isOn
+        })
+        isSelfieSwitchView?.uiswitch.isOn = isSelfie
+        self.stackView.addOptionalArrangedSubview(isSelfieSwitchView)
+    }
+    
+    
     private func addAutoUploadSwitch() {
-        switchView?.decorateView(title: "Auto Upload", completion: { isOn in
+        autoUploadSwitchView?.decorateView(title: "Auto Upload", completion: { isOn in
             self.isAutoUpload = isOn
         })
-        switchView?.uiswitch.isOn = true
-        self.stackView.addOptionalArrangedSubview(switchView)
+        autoUploadSwitchView?.uiswitch.isOn = isAutoUpload
+        self.stackView.addOptionalArrangedSubview(autoUploadSwitchView)
+    }
+    
+    private func addCaptureSwitch() {
+        autoCaptureSwitchView?.decorateView(title: "Auto Capture", completion: { isOn in
+            self.isAutoCapture = isOn
+        })
+        autoCaptureSwitchView?.uiswitch.isOn = isAutoCapture
+        self.stackView.addOptionalArrangedSubview(autoCaptureSwitchView)
     }
     
     func uncheck(){
-        driverLicenceBtn.isSelected = false
-        passportBtn.isSelected = false
+        driverLicenceBtn?.btnSelect.isSelected = false
+        passportBtn?.btnSelect.isSelected = false
     }
     
-    @IBAction private func onClickLicence(_ sender: UIButton){
-        uncheck()
-        sender.checkboxAnimation {
-            print(sender.titleLabel?.text ?? "")
-            print(sender.isSelected)
-        }
-    }
-    
-    @IBAction private func onClickPassport(_ sender: UIButton){
-        uncheck()
-        sender.checkboxAnimation {
-            print(sender.titleLabel?.text ?? "")
-            print(sender.isSelected)
-        }
-    }
-    func instntDocumentVerified() {
+    private func instntDocumentVerified() {
         self.showSimpleAlert("Document was uploaded successfully, please submit now", target: self)
         self.buttonView?.decorateView(type: .submitForm, completion: {
             SVProgressHUD.show()
@@ -129,6 +222,7 @@ class UploadDocumentVC: BaseViewController {
                     if response.success == true,
                        let decision = response.decision,
                        let jwt = response.jwt {
+                        ExampleShared.shared.formData = [:]
                         self.instntDidSubmitSuccess(decision: decision, jwt: jwt)
                     } else {
                         if let msg = response.message {
@@ -146,35 +240,22 @@ class UploadDocumentVC: BaseViewController {
         })
     }
     
-    func instntDocumentScanError() {
+    private func instntDocumentScanError() {
         self.showSimpleAlert("Document scan failed, please try again later", target: self, completed: {
             self.navigationController?.popViewController(animated: true)
         })
     }
     
-    func instntDidSubmitSuccess(decision: String, jwt: String) {
+    private func instntDidSubmitSuccess(decision: String, jwt: String) {
         print("instntDidSubmitSuccess")
         self.showSimpleAlert("Form is submitted and decision is \(decision)", target: self, completed: {
-            guard let nvc = Utils.getStoryboardInitialViewController("CustomForm") as? UINavigationController else {
-                return
-            }
-            guard let vc = nvc.viewControllers.first else {
-                return
-            }
-            self.navigationController?.pushViewController(vc, animated: true)
+            self.navigationController?.popToRootViewController(animated: true)
         })
     }
     
-    func instntDidSubmitFailure(error: InstntError) {
+    private func instntDidSubmitFailure(error: InstntError) {
         print("instntDidSubmitFailure")
         self.showSimpleAlert("Form submission is failed with error: \(error.message ?? "")", target: self, completed: {
-//            guard let nvc = Utils.getStoryboardInitialViewController("CustomForm") as? UINavigationController else {
-//                return
-//            }
-//            guard let vc = nvc.viewControllers.first else {
-//                return
-//            }
-//            self.navigationController?.pushViewController(vc, animated: true)
         })
     }
     
@@ -216,6 +297,14 @@ extension UIButton {
 }
 
 extension UploadDocumentVC: InstntDelegate {
+    func onDocumentScanFinish(captureResult: CaptureResult) {
+        
+    }
+    
+    func onSelfieScanFinish(captureResult: CaptureSelfieResult) {
+        
+    }
+    
     
     private func verifyDocument() {
         guard let transactionID = ExampleShared.shared.transactionID else {
@@ -227,6 +316,10 @@ extension UploadDocumentVC: InstntDelegate {
         Instnt.shared.verifyDocuments(instnttxnid: transactionID, completion: { result in
             DispatchQueue.main.async {
                 SVProgressHUD.dismiss()
+                self.autoUploadSwitchView?.isHidden = true
+                self.autoCaptureSwitchView?.isHidden = true
+                self.isFarSelfieSwitchView?.isHidden = true
+                self.isSelfieSwitchView?.isHidden = true
                 switch result {
                 case .success():
                     self.instntDocumentVerified()
@@ -250,63 +343,40 @@ extension UploadDocumentVC: InstntDelegate {
             })
             return
         }
-        
         if imageResult.isSelfie == true  {
             self.verifyDocument()
-        } else if imageResult.documentSide == .front {
+        } else if (self.documentType == .passport) {
             DispatchQueue.main.async {
-                let documentSettings = DocumentSettings(documentType: .license, documentSide: .back, captureMode: .manual, isAutoUpload: self.isAutoUpload ?? true)
-                Instnt.shared.scanDocument(instnttxnid: transactionID,  licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
-            }
-        } else if imageResult.documentSide == .back {
-            DispatchQueue.main.async {
-                Instnt.shared.scanSelfie(from: self, instnttxnid: transactionID, farSelfie: self.isFarSelfie ?? false, isAutoUpload: self.isAutoUpload ?? true)
-            }
-        }
-    }
-   
-    
-    func onSelfieScanFinish(captureResult: CaptureSelfieResult) {
-        guard let transactionID = ExampleShared.shared.transactionID else {
-            self.showSimpleAlert("Invalid transacation ID, please try again later.", target: self, completed: {
-                self.navigationController?.popViewController(animated: true)
-            })
-            return
-        }
-        if captureResult.isAutoUpload == true {
-            return
-        }
-        SVProgressHUD.show()
-        
-        Instnt.shared.uploadAttachment(instnttxnid: transactionID, data: captureResult.selfieData, completion: { result in
-            switch result {
-            case .success(_):
-                if captureResult.farSelfieData != nil {
-                    Instnt.shared.uploadAttachment(instnttxnid: transactionID, data: captureResult.selfieData, isFarSelfieData: true, completion:  { result in
-                        switch result {
-                        case .success():
-                            self.verifyDocument()
-                        case .failure(let error):
-                            SVProgressHUD.dismiss()
-                            print("uploadAttachment error \(error.localizedDescription)")
-                            self.instntDocumentScanError()
-                        }
-                    })
+                let settings = SelfieSettings(isFarSelfie: self.isFarSelfie, isAutoCapture: true, isAutoUpload: self.isAutoUpload)
+                if self.isSelfie {
+                    Instnt.shared.scanSelfie(from: self, instnttxnid: transactionID, settings: settings)
                 } else {
                     self.verifyDocument()
                 }
-                
-            case .failure(let error):
-                SVProgressHUD.dismiss()
-                print("uploadAttachment error \(error.localizedDescription)")
-                self.instntDocumentScanError()
             }
-        })
+        } else if imageResult.documentSide == .front {
+            DispatchQueue.main.async {
+                let documentSettings = DocumentSettings(documentType: .license, documentSide: .back, captureMode: self.isAutoCapture ? .auto: .manual, isAutoUpload: self.isAutoUpload)
+                Instnt.shared.scanDocument(instnttxnid: transactionID,  licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload)
+            }
+        } else if imageResult.documentSide == .back {
+            DispatchQueue.main.async {
+                let settings = SelfieSettings(isFarSelfie: self.isFarSelfie, isAutoCapture: self.isAutoCapture, isAutoUpload: self.isAutoUpload)
+                if self.isSelfie {
+                    Instnt.shared.scanSelfie(from: self, instnttxnid: transactionID, settings: settings)
+                } else {
+                    self.verifyDocument()
+                }
+            }
+        }
     }
     
     func onSelfieScanCancelled() {
         self.showSimpleAlert("Selfie scan failed, please try again later", target: self, completed: {
-            self.navigationController?.popViewController(animated: true)
+            self.autoUploadSwitchView?.isHidden = false
+            self.autoCaptureSwitchView?.isHidden = false
+            self.isFarSelfieSwitchView?.isHidden = false
+            self.isSelfieSwitchView?.isHidden = false
         })
     }
     
@@ -316,48 +386,32 @@ extension UploadDocumentVC: InstntDelegate {
         })
     }
     
-    
-    func onDocumentScanFinish(captureResult: CaptureResult) {
-        if captureResult.isAutoUpload == true {
-            return
-        }
-        SVProgressHUD.show()
-        guard let transactionID = ExampleShared.shared.transactionID else {
-            self.showSimpleAlert("Invalid transacation ID, please try again later.", target: self, completed: {
-                self.navigationController?.popViewController(animated: true)
-            })
-            return
-        }
-        Instnt.shared.uploadAttachment(instnttxnid: transactionID, data: captureResult.resultBase64, completion: { result in
-            SVProgressHUD.dismiss()
-            switch result {
-            case .success(_):
-                if captureResult.documentSide == .front {
-                    DispatchQueue.main.async {
-                        let documentSettings = DocumentSettings(documentType: .license, documentSide: .back, captureMode: .manual, isAutoUpload: self.isAutoUpload ?? true)
-                        Instnt.shared.scanDocument(instnttxnid: transactionID, licenseKey: self.licenseKey, from: self, settings: documentSettings, isAutoUpload: self.isAutoUpload ?? true)
-                    }
-                } else if captureResult.documentSide == .back {
-                    DispatchQueue.main.async {
-                        Instnt.shared.scanSelfie(from: self, instnttxnid: transactionID, farSelfie: self.isFarSelfie ?? false, isAutoUpload: self.isAutoUpload ?? true)
-                    }
-
-                }
-            case .failure(let error):
-                print("uploadAttachment error \(String(describing: error.message))")
-                DispatchQueue.main.async {
-                    self.showSimpleAlert(error.localizedDescription, target: self, completed: {
-                        self.navigationController?.popViewController(animated: true)
-                    })
-                }
-                
-            }
+    func onSelfieScanFailedVerification(error: InstntError) {
+        self.showSimpleAlert(error.message ?? "Selfie scan verification failed, please try again later", target: self, completed: {
+            self.navigationController?.popViewController(animated: true)
         })
     }
     
     func onDocumentScanCancelled(error: InstntError) {
-        self.showSimpleAlert(error.localizedDescription, target: self, completed: {
+        self.showSimpleAlert(error.message ?? "Document scan cancelled, please try again later", target: self, completed: {
+            self.autoUploadSwitchView?.isHidden = false
+            self.autoCaptureSwitchView?.isHidden = false
+            self.isFarSelfieSwitchView?.isHidden = false
+            self.isSelfieSwitchView?.isHidden = false
+            
+        })
+    }
+    
+    func onDocumentScanFailedVerification(error: InstntError) {
+        self.showSimpleAlert(error.message ?? "Document scan verification failed, please try again later", target: self, completed: {
             self.navigationController?.popViewController(animated: true)
         })
     }
+    
+    func onDocumentScanError(error: InstntError) {
+        self.showSimpleAlert(error.message ?? "Document scan failed, please try again later", target: self, completed: {
+            self.navigationController?.popViewController(animated: true)
+        })
+    }
+    
 }

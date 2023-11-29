@@ -1,15 +1,17 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.5 (swiftlang-1300.0.31.1 clang-1300.0.29.1)
-// swift-module-flags: -target arm64-apple-ios12.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name CFDocumentScanSDK
+// swift-compiler-version: Apple Swift version 5.6 (swiftlang-5.6.0.323.62 clang-1316.0.20.8)
+// swift-module-flags: -target arm64-apple-ios13.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name CFDocumentScanSDK
 import AVFoundation
+import AVKit
 import Accelerate
 @_exported import CFDocumentScanSDK
-import CFDocumentScanSDK_Private
 import CommonCrypto
+import CoreGraphics
 import CoreImage
 import CoreLocation
 import CoreML
 import CoreNFC
+import CoreVideo
 import Foundation
 import ImageIO
 import Metal
@@ -22,10 +24,11 @@ import UIKit
 import Vision
 import VisionKit
 import _Concurrency
+import Accelerate.vImage
 extension UIKit.UIImage {
   public class func gif(data: Foundation.Data) -> UIKit.UIImage?
   public class func gif(url: Swift.String) -> UIKit.UIImage?
-  public class func gif(name: Swift.String, viewcontroller: UIKit.UIViewController) -> UIKit.UIImage?
+  public class func gif(name: Swift.String, viewcontroller: UIKit.UIViewController, from bundle: Foundation.Bundle? = nil) -> UIKit.UIImage?
   @available(iOS 9.0, *)
   public class func gif(asset: Swift.String) -> UIKit.UIImage?
 }
@@ -164,12 +167,28 @@ extension Foundation.Data {
   @objc override public init(options: CFDocumentScanSDK.DSOptions)
   @objc deinit
 }
-@objc public enum DSCaptureMode : Swift.Int {
-  case Manual
-  case Auto
-  public init?(rawValue: Swift.Int)
-  public typealias RawValue = Swift.Int
-  public var rawValue: Swift.Int {
+@_inheritsConvenienceInitializers @objc public class DynamicCaptureFeedbackOptions : ObjectiveC.NSObject {
+  @objc public var isDynamicFeedbackEnabled: Swift.Bool
+  @objc public var detectionOptions: CFDocumentScanSDK.DynamicCaptureFeedbackDetectionOptions
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc public class DynamicCaptureFeedbackDetectionOptions : ObjectiveC.NSObject {
+  @objc public var licenseFrontDetectors: CFDocumentScanSDK.DynamicCaptureFeedbackEnforcedDetectors
+  @objc public var licenseBackDetectors: CFDocumentScanSDK.DynamicCaptureFeedbackEnforcedDetectors
+  @objc public var passportCardFrontDetectors: CFDocumentScanSDK.DynamicCaptureFeedbackEnforcedDetectors
+  @objc public var passportCardBackDetectors: CFDocumentScanSDK.DynamicCaptureFeedbackEnforcedDetectors
+  @objc public var passportDetectors: CFDocumentScanSDK.DynamicCaptureFeedbackEnforcedDetectors
+  @objc override dynamic public init()
+  @objc deinit
+}
+extension CFDocumentScanSDK.DynamicCaptureFeedbackDetectionOptions {
+  @objc override dynamic public var debugDescription: Swift.String {
+    @objc get
+  }
+}
+extension CFDocumentScanSDK.DynamicCaptureFeedbackEnforcedDetectors : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
     get
   }
 }
@@ -206,13 +225,52 @@ extension Foundation.Data {
     @objc get
     @objc set
   }
+  public var autoCaptureImageSource: CFDocumentScanSDK.DSAutoCaptureImageSource
+  @objc public var dynamicCaptureFeedbackOptions: CFDocumentScanSDK.DynamicCaptureFeedbackOptions
   @objc required override dynamic public init()
   @objc deinit
 }
 @_inheritsConvenienceInitializers @objc public class DSPassportOptions : CFDocumentScanSDK.DSOptions {
-  @objc public var detectMRZ: Swift.Bool
+  @available(*, deprecated, message: "Use mrzCaptureMethod instead")
+  @objc public var detectMRZ: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var mrzCaptureMethod: CFDocumentScanSDK.DSMRZCaptureMethod
   @objc required dynamic public init()
   @objc deinit
+}
+@_inheritsConvenienceInitializers @objc public class DSID1Options : CFDocumentScanSDK.DSOptions {
+  @available(*, deprecated, message: "Use mrzCaptureMethod and detectBarcode instead")
+  @objc public var detectBarcodeOrMRZ: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc public var detectFace: Swift.Bool
+  @objc public var side: CFDocumentScanSDK.DSSide
+  @objc public var type: CFDocumentScanSDK.DSID1Type
+  @objc public var detectBarcode: Swift.Bool
+  @objc public var mrzCaptureMethod: CFDocumentScanSDK.DSMRZCaptureMethod
+  @objc required dynamic public init()
+  @objc deinit
+}
+@objc public enum DSCaptureMode : Swift.Int {
+  case Manual
+  case Auto
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum DSAutoCaptureImageSource : Swift.Int {
+  case stillPhotoCapture
+  case videoFrameGrab
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
 }
 @objc public enum DSSide : Swift.Int {
   case Front
@@ -232,13 +290,15 @@ extension Foundation.Data {
     get
   }
 }
-@_inheritsConvenienceInitializers @objc public class DSID1Options : CFDocumentScanSDK.DSOptions {
-  @objc public var detectBarcodeOrMRZ: Swift.Bool
-  @objc public var detectFace: Swift.Bool
-  @objc public var side: CFDocumentScanSDK.DSSide
-  @objc public var type: CFDocumentScanSDK.DSID1Type
-  @objc required dynamic public init()
-  @objc deinit
+@objc public enum DSMRZCaptureMethod : Swift.Int {
+  case ignore
+  case detect
+  case recognize
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
 }
 @objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class ScanViewController : UIKit.UIViewController {
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
@@ -273,6 +333,49 @@ public typealias CFDocumentScan = CFDocumentScanSDK.DSCapture
   @objc override dynamic public init()
   @objc deinit
 }
+public func clamp<T>(_ x: T, min: T, max: T) -> T where T : Swift.Comparable
+public protocol MultiArrayType : Swift.Comparable {
+  static var multiArrayDataType: CoreML.MLMultiArrayDataType { get }
+  static func + (lhs: Self, rhs: Self) -> Self
+  static func - (lhs: Self, rhs: Self) -> Self
+  static func * (lhs: Self, rhs: Self) -> Self
+  static func / (lhs: Self, rhs: Self) -> Self
+  init(_: Swift.Int)
+  var toUInt8: Swift.UInt8 { get }
+}
+extension Swift.Double : CFDocumentScanSDK.MultiArrayType {
+  public static var multiArrayDataType: CoreML.MLMultiArrayDataType {
+    get
+  }
+  public var toUInt8: Swift.UInt8 {
+    get
+  }
+}
+extension Swift.Float : CFDocumentScanSDK.MultiArrayType {
+  public static var multiArrayDataType: CoreML.MLMultiArrayDataType {
+    get
+  }
+  public var toUInt8: Swift.UInt8 {
+    get
+  }
+}
+extension Swift.Int32 : CFDocumentScanSDK.MultiArrayType {
+  public static var multiArrayDataType: CoreML.MLMultiArrayDataType {
+    get
+  }
+  public var toUInt8: Swift.UInt8 {
+    get
+  }
+}
+extension CoreML.MLMultiArray {
+  public func cgImage(min: Swift.Double = 0, max: Swift.Double = 255, channel: Swift.Int? = nil, axes: (Swift.Int, Swift.Int, Swift.Int)? = nil) -> CoreGraphics.CGImage?
+  public func toRawBytes<T>(min: T, max: T, channel: Swift.Int? = nil, axes: (Swift.Int, Swift.Int, Swift.Int)? = nil) -> (bytes: [Swift.UInt8], width: Swift.Int, height: Swift.Int, channels: Swift.Int)? where T : CFDocumentScanSDK.MultiArrayType
+}
+public func createCGImage(fromFloatArray features: CoreML.MLMultiArray, min: Swift.Float = 0, max: Swift.Float = 255) -> CoreGraphics.CGImage?
+extension CoreML.MLMultiArray {
+  public func image(min: Swift.Double = 0, max: Swift.Double = 255, channel: Swift.Int? = nil, axes: (Swift.Int, Swift.Int, Swift.Int)? = nil) -> UIKit.UIImage?
+}
+public func createUIImage(fromFloatArray features: CoreML.MLMultiArray, min: Swift.Float = 0, max: Swift.Float = 255) -> UIKit.UIImage?
 @_inheritsConvenienceInitializers @objc open class CaptureAnalysis : ObjectiveC.NSObject {
   @objc open var distanceConfidence: Swift.Double {
     get
@@ -355,6 +458,12 @@ public typealias CFDocumentScan = CFDocumentScanSDK.DSCapture
     @objc get
   }
   @objc public var line3: Swift.String? {
+    @objc get
+  }
+  @objc public var mrz: Swift.String? {
+    @objc get
+  }
+  @objc public var mrzInformationKey: Swift.String? {
     @objc get
   }
   @objc override dynamic open var description: Swift.String {
@@ -452,18 +561,29 @@ extension UIKit.UIImageView {
 @objc public protocol DSDocumentData : ObjectiveC.NSObjectProtocol {
   @objc var rawDocumentData: [Swift.String : Swift.String] { get }
 }
+extension CoreGraphics.CGImage {
+  @nonobjc public func toByteArrayRGBA() -> [Swift.UInt8]
+  @nonobjc public class func fromByteArrayRGBA(_ bytes: [Swift.UInt8], width: Swift.Int, height: Swift.Int) -> CoreGraphics.CGImage?
+  @nonobjc public class func fromByteArrayGray(_ bytes: [Swift.UInt8], width: Swift.Int, height: Swift.Int) -> CoreGraphics.CGImage?
+}
 extension CFDocumentScanSDK.DSError.ErrorType : Swift.Equatable {}
 extension CFDocumentScanSDK.DSError.ErrorType : Swift.Hashable {}
 extension CFDocumentScanSDK.DSError.ErrorType : Swift.RawRepresentable {}
-extension CFDocumentScanSDK.DSCaptureMode : Swift.Equatable {}
-extension CFDocumentScanSDK.DSCaptureMode : Swift.Hashable {}
-extension CFDocumentScanSDK.DSCaptureMode : Swift.RawRepresentable {}
 extension CFDocumentScanSDK.DSOptions.FlashCapture : Swift.Equatable {}
 extension CFDocumentScanSDK.DSOptions.FlashCapture : Swift.Hashable {}
 extension CFDocumentScanSDK.DSOptions.FlashCapture : Swift.RawRepresentable {}
+extension CFDocumentScanSDK.DSCaptureMode : Swift.Equatable {}
+extension CFDocumentScanSDK.DSCaptureMode : Swift.Hashable {}
+extension CFDocumentScanSDK.DSCaptureMode : Swift.RawRepresentable {}
+extension CFDocumentScanSDK.DSAutoCaptureImageSource : Swift.Equatable {}
+extension CFDocumentScanSDK.DSAutoCaptureImageSource : Swift.Hashable {}
+extension CFDocumentScanSDK.DSAutoCaptureImageSource : Swift.RawRepresentable {}
 extension CFDocumentScanSDK.DSSide : Swift.Equatable {}
 extension CFDocumentScanSDK.DSSide : Swift.Hashable {}
 extension CFDocumentScanSDK.DSSide : Swift.RawRepresentable {}
 extension CFDocumentScanSDK.DSID1Type : Swift.Equatable {}
 extension CFDocumentScanSDK.DSID1Type : Swift.Hashable {}
 extension CFDocumentScanSDK.DSID1Type : Swift.RawRepresentable {}
+extension CFDocumentScanSDK.DSMRZCaptureMethod : Swift.Equatable {}
+extension CFDocumentScanSDK.DSMRZCaptureMethod : Swift.Hashable {}
+extension CFDocumentScanSDK.DSMRZCaptureMethod : Swift.RawRepresentable {}

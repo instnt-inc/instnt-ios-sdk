@@ -14,8 +14,12 @@ public struct FormSubmitResponse {
     public var jwt: String?
     public var decision: String?
     public var message: String?
+    public var rawJSON: [String: Any]?
     
     init?(JSON: [String: Any]) {
+        
+        rawJSON = JSON
+        
         let dataJSON = JSON["data"] as? [String: Any]
         let status = dataJSON?["status"] as? String
         let url = dataJSON?["url"] as? String

@@ -33,6 +33,12 @@ class TextFieldView: UIView {
         case .mobile:
             textField.keyboardType = .phonePad
             textField.placeholder = NSLocalizedString("Phone Number", comment: "")
+        case .amount:
+            textField.keyboardType = .phonePad
+            textField.placeholder = NSLocalizedString("Amount", comment: "")
+        case .notes:
+            textField.keyboardType = .default
+            textField.placeholder = NSLocalizedString("Notes", comment: "")
         case .otp:
             if #available(iOS 12.0, *) {
                 textField.textContentType = .oneTimeCode
@@ -54,26 +60,52 @@ class TextFieldView: UIView {
             textField.placeholder = NSLocalizedString("Zip code", comment: "")
         case .country:
             textField.keyboardType = .default
-            textField.placeholder = NSLocalizedString("Coutry", comment: "")
+            textField.placeholder = NSLocalizedString("Country", comment: "")
+        case .dob:
+            textField.keyboardType = .default
+            textField.placeholder = NSLocalizedString("DOB", comment: "")
+        case .nationalId:
+            textField.keyboardType = .numberPad
+            textField.placeholder = NSLocalizedString("National Id", comment: "")
         case .formKey:
             textField.keyboardType = .default
             textField.placeholder = NSLocalizedString("FormKey", comment: "")
         case .endPoint:
             textField.keyboardType = .default
             textField.placeholder = NSLocalizedString("EndPoint", comment: "")
-            
+        case .transactionID:
+            textField.keyboardType = .default
+            textField.placeholder = NSLocalizedString("TrabsactionID", comment: "")
+        case .password:
+            textField.keyboardType = .default
+            textField.isSecureTextEntry = true
+            textField.placeholder = NSLocalizedString("password", comment: "")
         }
     }
     func validate(textfieldType: TextFieldTypes, text: String) -> Bool {
         switch textfieldType {
-        case .firstName, .lastName, .address, .city, .state, .zipcode, .country, .formKey, .endPoint:
+        case .firstName, .lastName:
+            return text.isValidName()
+        case .address, .city, .state, .zipcode, .country, .formKey, .endPoint:
             return text.count > 0
         case .otp:
             return text.count == 6
+        case .password:
+            return text.count > 5
         case .email:
             return text.isEmailValid() 
         case .mobile:
-            return text.count > 10
+            return text.count == 12 && text.prefix(2) == "+1"
+        case .transactionID:
+            return true
+        case .notes:
+            return true
+        case .amount:
+            return text.count > 0
+        case .dob:
+            return true
+        case .nationalId:
+            return text.count == 11
         }
     }
 

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Verify DataVC-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController id="Y6W-OH-hqX" customClass="VerifyDataVC" customModule="InstntSDK_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="jhr-5h-URO">
+                                <rect key="frame" x="0.0" y="175" width="414" height="703"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="WeG-cD-XJw">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="703"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="55" id="sCQ-70-LFe"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <viewLayoutGuide key="safeArea" id="hts-7J-Unq"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="WeG-cD-XJw" secondAttribute="bottom" id="FZ1-Y0-q32"/>
+                                    <constraint firstItem="WeG-cD-XJw" firstAttribute="centerX" secondItem="jhr-5h-URO" secondAttribute="centerX" id="LbZ-eb-6wC"/>
+                                    <constraint firstItem="WeG-cD-XJw" firstAttribute="top" secondItem="jhr-5h-URO" secondAttribute="top" id="QIx-EQ-e1Z"/>
+                                    <constraint firstItem="WeG-cD-XJw" firstAttribute="leading" secondItem="jhr-5h-URO" secondAttribute="leading" id="Rg9-HW-BKU"/>
+                                    <constraint firstItem="WeG-cD-XJw" firstAttribute="centerY" secondItem="jhr-5h-URO" secondAttribute="centerY" id="ciY-Pv-VbT"/>
+                                    <constraint firstAttribute="trailing" secondItem="WeG-cD-XJw" secondAttribute="trailing" id="yVi-jo-w6M"/>
+                                </constraints>
+                            </scrollView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send Money" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4wP-dR-AH1">
+                                <rect key="frame" x="129.5" y="70" width="155" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="155" id="eZd-eN-b6y"/>
+                                    <constraint firstAttribute="height" constant="21" id="zwB-NO-92v"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Balance: 10000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c0f-yM-5ER">
+                                <rect key="frame" x="129.5" y="98" width="155" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="155" id="LUi-Eg-rQl"/>
+                                    <constraint firstAttribute="height" constant="24" id="hkt-wl-dPY"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                <color key="textColor" systemColor="systemGrayColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="c0f-yM-5ER" firstAttribute="top" secondItem="4wP-dR-AH1" secondAttribute="bottom" constant="7" id="1VV-9T-jIO"/>
+                            <constraint firstItem="4wP-dR-AH1" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="9rV-hk-uUh"/>
+                            <constraint firstItem="4wP-dR-AH1" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="22" id="hLM-ur-BJg"/>
+                            <constraint firstItem="c0f-yM-5ER" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="tzp-s6-c83"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contentscrollView" destination="jhr-5h-URO" id="CW0-CY-oQK"/>
+                        <outlet property="presenterObject" destination="Sci-A1-3gd" id="vHC-24-NVS"/>
+                        <outlet property="stackView" destination="WeG-cD-XJw" id="P1F-sy-2sW"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <customObject id="Sci-A1-3gd" customClass="VerifyDataPresenter" customModule="InstntSDK_Example" customModuleProvider="target">
+                    <connections>
+                        <outlet property="viewControllerObject" destination="Y6W-OH-hqX" id="gBy-PK-eb0"/>
+                    </connections>
+                </customObject>
+            </objects>
+            <point key="canvasLocation" x="34.782608695652179" y="34.821428571428569"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

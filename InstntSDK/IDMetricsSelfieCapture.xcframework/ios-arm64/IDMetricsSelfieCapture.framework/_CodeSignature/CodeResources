@@ -6,15 +6,15 @@
 	<dict>
 		<key>Assets.car</key>
 		<data>
-		5kF1HzEyeKlzfWHi5cAOj2ACTSc=
+		NyjyBRwvO471CwpTgB4r9uSPqaQ=
 		</data>
 		<key>Avatar.nib</key>
 		<data>
-		ei06Zq4qEim1xzXgGSpO0tC90Fk=
+		/xZkS/15vuRIWpXkD8uuCOMg0Po=
 		</data>
 		<key>FarSelfieOverlay.nib</key>
 		<data>
-		zaqSC8m7vV6kGTJiIf1JgEnTPdU=
+		6tdIetOQ32nkLSTdPMNzGOsFOJ4=
 		</data>
 		<key>Headers/CFADirectSelfieSettings.h</key>
 		<data>
@@ -22,7 +22,7 @@
 		</data>
 		<key>Headers/CFAFarSelfieSettings.h</key>
 		<data>
-		6wTNaN07Ppz1rBd2PmthbIAAbOs=
+		F78IiqrxmK0EZcxLSbDP9prK/vQ=
 		</data>
 		<key>Headers/CFASelfieCapturedDelegate.h</key>
 		<data>
@@ -66,7 +66,7 @@
 		</data>
 		<key>Headers/CFASelfieSettings.h</key>
 		<data>
-		ipnwcNpUfuQtoesxF48N9s1TFqA=
+		6Zq7NHzbCkDBtsBy5YPDQZyIRJQ=
 		</data>
 		<key>Headers/IDMetricsSelfieCapture-Prefix.pch</key>
 		<data>
@@ -74,7 +74,7 @@
 		</data>
 		<key>Headers/IDMetricsSelfieCapture-Swift.h</key>
 		<data>
-		Gt/q4FbaEiPZevqGIUv7/NNWfE8=
+		mkBkvcaFaXqZb2cUwgAYsL5QEHk=
 		</data>
 		<key>Headers/IDMetricsSelfieCapture.h</key>
 		<data>
@@ -82,39 +82,31 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		FuOZ2LXvJcSz07hIUMN35Dw5LGI=
-		</data>
-		<key>Modules/IDMetricsSelfieCapture.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
-		<data>
-		8zBSo1wpWSZQqaPsvE79un4PEXU=
-		</data>
-		<key>Modules/IDMetricsSelfieCapture.swiftmodule/Project/arm64.swiftsourceinfo</key>
-		<data>
-		8zBSo1wpWSZQqaPsvE79un4PEXU=
+		WQ2tv4CVZJDj2Narmp8c3EIwKG8=
 		</data>
 		<key>Modules/IDMetricsSelfieCapture.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		1o+rBQSAreNlry7uGgTf897N0r4=
+		B69iDgW+vnrDyu6/B7UNU67Jwao=
 		</data>
 		<key>Modules/IDMetricsSelfieCapture.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		20I84HbWXvZE3svzvc/riqrK53w=
+		+4kpv2JOGl5Yoj3J5GsY8RvUxO8=
 		</data>
 		<key>Modules/IDMetricsSelfieCapture.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		im5M4zplpMNBRpw88CBHIneeMcU=
+		yqmQofIuDZF7uWGxqCtsk3kdqU8=
 		</data>
 		<key>Modules/IDMetricsSelfieCapture.swiftmodule/arm64.swiftdoc</key>
 		<data>
-		1o+rBQSAreNlry7uGgTf897N0r4=
+		B69iDgW+vnrDyu6/B7UNU67Jwao=
 		</data>
 		<key>Modules/IDMetricsSelfieCapture.swiftmodule/arm64.swiftinterface</key>
 		<data>
-		20I84HbWXvZE3svzvc/riqrK53w=
+		+4kpv2JOGl5Yoj3J5GsY8RvUxO8=
 		</data>
 		<key>Modules/IDMetricsSelfieCapture.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		im5M4zplpMNBRpw88CBHIneeMcU=
+		yqmQofIuDZF7uWGxqCtsk3kdqU8=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -126,47 +118,47 @@
 		</data>
 		<key>Selfie.storyboardc/7EF-n4-0ej-view-gCL-t1-pHQ.nib</key>
 		<data>
-		wHJ+r9DY063OG8epmEOi9QO1nFY=
+		Fui3KwI/yelaEPvSu/yOX7UwfQY=
 		</data>
 		<key>Selfie.storyboardc/BlankViewController.nib</key>
 		<data>
-		lPWDibErYFgkYlWYfMQif8aXs8E=
+		5VSOMiYDp33l9tSoh6Ig/1DonnM=
 		</data>
 		<key>Selfie.storyboardc/CaptureFaceViewController.nib</key>
 		<data>
-		uUxSBVVxE+hVHt3zquke3ui8xM0=
+		Hz72v3eXSXjtc3qT1VVPzhVTBn0=
 		</data>
 		<key>Selfie.storyboardc/Info.plist</key>
 		<data>
-		BJircvKp05247uReZIYbwC5QSzM=
+		7EwwCNAe013vEwIGsW5NmbJj+A4=
 		</data>
 		<key>Selfie.storyboardc/TakeSelfieViewController.nib</key>
 		<data>
-		nFRne+Yin6NLT9DG6ppvLF9zsRc=
+		2zTNdeUPW/ZAuOKgmeUJhlSEeQ4=
 		</data>
 		<key>Selfie.storyboardc/qHT-5T-85S-view-X0C-DS-ERm.nib</key>
 		<data>
-		+Ljd17vV69fQ4asZWjt23dMTFb8=
+		WEycmYzPovsNZWbf0fKyUKcvcK8=
 		</data>
 		<key>Selfie.storyboardc/xtV-WA-85X-view-g4z-I7-5mo.nib</key>
 		<data>
-		3J/tvtwSHpsC+/bl/nje5DRgmg4=
+		GzrCDm3HL00FUeuysqsNhJJu3CY=
 		</data>
 		<key>SelfieConfirmationScreenView.nib</key>
 		<data>
-		fnD3uXAer61trtUuOfZ1w0x+wuI=
+		X4Gs2dqLVfYmDzkDtgdKdFWnfFc=
 		</data>
 		<key>SelfieHelpOverlay.nib</key>
 		<data>
-		YmH7vktN61ZY0PdI64ljws3wsic=
+		/c9PUbJjnnjRiIKbI3kDqSfbDBU=
 		</data>
 		<key>SelfiePortraitCustomAlertView.nib</key>
 		<data>
-		5VZv35BkfPJIPOQqGp4FTdVhOlg=
+		p/hqI7qPEZ//+n/1jiro1AM6mF4=
 		</data>
 		<key>SelfieTooltipView.nib</key>
 		<data>
-		FQr/Zzw+12sI5+6VXokNoEiTS6M=
+		4OxKzK0gqoIAuHBYafkequyHls0=
 		</data>
 		<key>cascades/bigvision_haarcascade_openeye.xml</key>
 		<data>
@@ -176,6 +168,14 @@
 		<data>
 		qcn16fWVjZTyYHVuapvs8Z4aK0Q=
 		</data>
+		<key>far-selfie.gif</key>
+		<data>
+		DgPR5mqeVcP2oh1M2WexBKVbRD8=
+		</data>
+		<key>farSelfie.gif</key>
+		<data>
+		tyjpoOLVY/zyjsQSA9Ba3SLK0D0=
+		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
@@ -183,21 +183,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			fd++1x5BCq7nQ83CRMCWFFCkUhbk6q005fWCpvZbrxY=
+			cWxVYMBb0MxlYP4X5l5Wc+Ty2VVPOZDUqseE932K4fM=
 			</data>
 		</dict>
 		<key>Avatar.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			cfrl/o3THpiHUFXyht+s8xiiI/LnRV6loiLzmqcBtBk=
+			YnmgJG7TkcZz9wjiVNcKZenIQlDhBnzOzw2935/nL9A=
 			</data>
 		</dict>
 		<key>FarSelfieOverlay.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			JLeKyhu68wFrovbxbEOzY5m+IkwmqVLLdn4wAL6ytm8=
+			AEEYqveV2454m1lMwpTw356TJSSMreFPR+65OXmamuk=
 			</data>
 		</dict>
 		<key>Headers/CFADirectSelfieSettings.h</key>
@@ -211,7 +211,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			6L6quEg0Aw+KHX7JWjk98cABWb8t1qzd10pcBtaSRog=
+			4M4cCPx9Paj5c6/hubnUwcXCf9wOHzW8XsPNg4e5QCg=
 			</data>
 		</dict>
 		<key>Headers/CFASelfieCapturedDelegate.h</key>
@@ -288,7 +288,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			+Tn4AnbzhxGl4P2BSKZHJWWnq4YiJj500Bqk+d7jxrc=
+			scHecdpmMEeIKWb/xhxsb8AGWsfUXigHjP01fy4otkc=
 			</data>
 		</dict>
 		<key>Headers/IDMetricsSelfieCapture-Prefix.pch</key>
@@ -302,7 +302,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			hBQnQzHs1SD6LCnlZ6bFqC2DunJDSzJip8q+1PDDxpA=
+			Ifft+phjoFcdhdSdHqClTssIPfrsrfLVKpxHdAWOUtA=
 			</data>
 		</dict>
 		<key>Headers/IDMetricsSelfieCapture.h</key>
@@ -312,60 +312,46 @@
 			dEiUW56Mc3UGgQPGqUVMgnyWSI7bers/VLpqUGqdvNk=
 			</data>
 		</dict>
-		<key>Modules/IDMetricsSelfieCapture.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Prv9o+ewvChdU53XSSIpV9jdNOXappq2h3Uekn/DSFc=
-			</data>
-		</dict>
-		<key>Modules/IDMetricsSelfieCapture.swiftmodule/Project/arm64.swiftsourceinfo</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Prv9o+ewvChdU53XSSIpV9jdNOXappq2h3Uekn/DSFc=
-			</data>
-		</dict>
 		<key>Modules/IDMetricsSelfieCapture.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			lq9iNGBrXZm9rrMHfAeboMXhBWgZ2x3chh6kFsMLIwE=
+			pQu0avgcy/0SrA8L42gQmR1QsR5U/v7JRaOnPdCfqoo=
 			</data>
 		</dict>
 		<key>Modules/IDMetricsSelfieCapture.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			S2eXbkFQm9Gz5v1vUnuTra6KmxtEXVSPC3CnOl7aozo=
+			dLCpTlz7Tjz2QPItpjxXQ4XVvlcr/dKuzCFJPlGyRpE=
 			</data>
 		</dict>
 		<key>Modules/IDMetricsSelfieCapture.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			WzNG/p44yLrWMXRyTkDtsrdy9+PM1sKm8gJBz9gwgeI=
+			LdMQ9FHRN8xamwsgNcQYLFRnmkRuiBLH1p6Y00wnrCE=
 			</data>
 		</dict>
 		<key>Modules/IDMetricsSelfieCapture.swiftmodule/arm64.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			lq9iNGBrXZm9rrMHfAeboMXhBWgZ2x3chh6kFsMLIwE=
+			pQu0avgcy/0SrA8L42gQmR1QsR5U/v7JRaOnPdCfqoo=
 			</data>
 		</dict>
 		<key>Modules/IDMetricsSelfieCapture.swiftmodule/arm64.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			S2eXbkFQm9Gz5v1vUnuTra6KmxtEXVSPC3CnOl7aozo=
+			dLCpTlz7Tjz2QPItpjxXQ4XVvlcr/dKuzCFJPlGyRpE=
 			</data>
 		</dict>
 		<key>Modules/IDMetricsSelfieCapture.swiftmodule/arm64.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			WzNG/p44yLrWMXRyTkDtsrdy9+PM1sKm8gJBz9gwgeI=
+			LdMQ9FHRN8xamwsgNcQYLFRnmkRuiBLH1p6Y00wnrCE=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -386,77 +372,77 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			+SUCo8KI43mKJSyALgdGfiPV58mJpqi3R0b6JWKR5IU=
+			4KVJQM9/v3EHtIA0Oh7sc/cA4g5OJ2p+OdfZcOgZ48U=
 			</data>
 		</dict>
 		<key>Selfie.storyboardc/BlankViewController.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			I00MR+AtO73jXZZFNCEROuV/wElWDVzQL5eVpmMB7aA=
+			VKXDMfH6I4DnAnaKkoiHmeI57BgD07EsISnrPi7F9xs=
 			</data>
 		</dict>
 		<key>Selfie.storyboardc/CaptureFaceViewController.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			HqiiXdLZJo/vfyN3tmDU2ohUHYElgD+l0ty5G1cQv3Y=
+			BaAd+va/Fj8nBBfGgrNfJMh1g7oyjtqQVEAArEQ0DW0=
 			</data>
 		</dict>
 		<key>Selfie.storyboardc/Info.plist</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			KSqahXcU4Ob/AU0tYAyhgORblmtKyU7iop44TzQYl8I=
+			GcAWQK6LpwVziJ7NYxZ4dOF41nRXMLWIHWgGjVvL23o=
 			</data>
 		</dict>
 		<key>Selfie.storyboardc/TakeSelfieViewController.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			l6QTXcUm9Yu8ftFCvFTRLte/eFHnyQVCXg70If6LiBI=
+			p4JspanxlGCxzEBbJCHSTMWqQ3AfxGi14KmE8WdSH80=
 			</data>
 		</dict>
 		<key>Selfie.storyboardc/qHT-5T-85S-view-X0C-DS-ERm.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			QfY4fg5qAalozpUWZ62U6wXvOLMpGKmUT3FpMWPt6HU=
+			K4DWeYfwW/pZWKRIxXaDYpVlyBGb/843tr1f0pSKJqY=
 			</data>
 		</dict>
 		<key>Selfie.storyboardc/xtV-WA-85X-view-g4z-I7-5mo.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Q7V5PLcxRAxDI//6GUM2xBpNf/t5InDIF1Otr6isbFM=
+			23F/cE5c4Si/v7KwlePHkWvBnQzY/pE0T9MasSjogcY=
 			</data>
 		</dict>
 		<key>SelfieConfirmationScreenView.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			4tdhL1l+Io+usjp3w34JtKfL5SPp7e3UKQpsbs1BBd8=
+			CTB3gZZhxjXrdlcTZKhvfFuj7Vn7A6OyYlW1evuoP6M=
 			</data>
 		</dict>
 		<key>SelfieHelpOverlay.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			laK7B1Zo1sEe5mf73WJ47RmYlR0PWWBoCnVZKZdp9qU=
+			X1CL8fTYy4n7nr2lvHBxiE9oP6hQYhUYx3QOElp6LSk=
 			</data>
 		</dict>
 		<key>SelfiePortraitCustomAlertView.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			IRDp6rgOomP5yV6ajyTRxFMV6AuUFBus71H76LTu5EM=
+			+BKXdIMLF7YIO1EOeBINl0o7xIAmraM4higxx2Tnudo=
 			</data>
 		</dict>
 		<key>SelfieTooltipView.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			hXGTJlNl4uHv39SpP1IArJzLZGjED4dm9TIyuAhDm5o=
+			+b+E4N2L/3OIx/EI5IDsF+hjb5wNKq7BsGg3+9vU0yQ=
 			</data>
 		</dict>
 		<key>cascades/bigvision_haarcascade_openeye.xml</key>
@@ -471,6 +457,20 @@
 			<key>hash2</key>
 			<data>
 			UhXGUFrKJIdvgnTKW2K0ejy1DyXjBsx+NCadKk4+57A=
+			</data>
+		</dict>
+		<key>far-selfie.gif</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ikjYurwXMnTA823acrVgoBqOXj1mmefdB4n8VU9EiLA=
+			</data>
+		</dict>
+		<key>farSelfie.gif</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			kMRbM6kM9vNHTtHByT6/vpVx1SpRsZNNeVeI7mDh5kI=
 			</data>
 		</dict>
 	</dict>

@@ -55,6 +55,97 @@ class APIClient: NSObject {
         }
     }
     
+    // MARK: - verify transaction
+    // Need to send instnt ID / transaction ID
+    // Init verify transaction or reinit transaction first
+    func submitVerifyData(instnttxnid: String, formData: [String: Any], completion: @escaping(Result<FormSubmitResponse, InstntError>) -> Void) {
+        var endpoint = "\(baseEndpoint)/verify/\(instnttxnid)/?format=json"
+        var request = ConnectionRequest(urlString: endpoint, method: .POST)
+        
+        ConnectionManager().sendRequest(request, success: { response in
+            //let responseData: [String: Any] = response.data
+                        
+            guard let responseJSON = BaseEntity.parseJSON(response.data) as? [String : Any] else {
+                //completion(.failure(InstntError(errorConstant:.error_FORM_SUBMIT)))
+                return
+            }
+
+            let verifyID = (responseJSON["verify_id"] as! String)
+                        
+            endpoint = "\(self.baseEndpoint)/verify/\(verifyID)/?format=json"
+            request = ConnectionRequest(urlString: endpoint, method: .PUT)
+            
+            if let jsonData = try? JSONSerialization.data(withJSONObject:formData) {
+                request.postData = jsonData
+                ConnectionManager().sendRequest(request, success: { response in
+                    let responseData = response.data
+                    guard let responseJSON = BaseEntity.parseJSON(responseData) as? [String : Any] else {
+                        completion(.failure(InstntError(errorConstant:.error_FORM_SUBMIT)))
+                        return
+                    }
+                    if let responseData = FormSubmitResponse(JSON: responseJSON) {
+                        completion(.success(responseData))
+                    } else {
+                        completion(.failure(InstntError(errorConstant: .error_PARSER)))
+                    }
+                    
+                }, failure: { error in
+                    guard let responseData = error.connectionResponse?.data,
+                            let responseJSON = BaseEntity.parseJSON(responseData) as? [String : Any] else {
+                        completion(.failure(InstntError(errorConstant:.error_FORM_SUBMIT)))
+                        return
+                    }
+                    if let message = responseJSON["message"] as? String {
+                        completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT, message: message)))
+                    } else if let message = responseJSON["errorMessage"] as? String {
+                        completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT, message: message)))
+                    } else {
+                        completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT)))
+                    }
+                })
+            } else {
+                completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT)))
+            }
+            
+        }, failure: { error in
+            guard let responseData = error.connectionResponse?.data,
+                    let responseJSON = BaseEntity.parseJSON(responseData) as? [String : Any] else {
+                completion(.failure(InstntError(errorConstant:.error_FORM_SUBMIT)))
+                return
+            }
+            if let message = responseJSON["message"] as? String {
+                completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT, message: message)))
+            } else if let message = responseJSON["errorMessage"] as? String {
+                completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT, message: message)))
+            } else {
+                completion(.failure(InstntError(errorConstant: .error_FORM_SUBMIT)))
+            }
+        })
+        
+        
+    }
+    
+    // need to pass instnt ID / trnsaction id to init existing customer transaction
+    func initLogin(data: ReInitializeTransaction, completion: @escaping(Result<ResultCreateTransaction, InstntError>) -> Void) {
+            let endpoint = "\(baseEndpoint)/transactions/"
+            let request = ConnectionRequest(urlString: endpoint, method: .POST)
+            guard let data = BaseEntity.getJSONData(object: data) else {
+                completion(.failure(InstntError(errorConstant: .error_SETUP)))
+                return
+            }
+            request.postData = data
+            ConnectionManager().sendRequest(request, success: { response in
+                if let createTransaction: ResultCreateTransaction = BaseEntity.parse(data: response.data) {
+                    completion(.success(createTransaction))
+                } else {
+                    completion(.failure(InstntError(errorConstant: .error_SETUP)))
+                }
+                
+            }, failure: { error in
+                completion(.failure(InstntError(errorConstant: .error_SETUP)))
+            })
+        }
+    
     func createTransaction(data: CreateTransaction, completion: @escaping(Result<ResultCreateTransaction, InstntError>) -> Void) {
         let endpoint = "\(baseEndpoint)/transactions/"
         let request = ConnectionRequest(urlString: endpoint, method: .POST)
@@ -74,6 +165,27 @@ class APIClient: NSObject {
             completion(.failure(InstntError(errorConstant: .error_SETUP)))
         })
     }
+    
+    func reInitializeTransaction(data: ReInitializeTransaction, completion: @escaping(Result<ResultCreateTransaction, InstntError>) -> Void) {
+            let endpoint = "\(baseEndpoint)/transactions/"
+            let request = ConnectionRequest(urlString: endpoint, method: .POST)
+            guard let data = BaseEntity.getJSONData(object: data) else {
+                completion(.failure(InstntError(errorConstant: .error_SETUP)))
+                return
+            }
+            request.postData = data
+            ConnectionManager().sendRequest(request, success: { response in
+                if let createTransaction: ResultCreateTransaction = BaseEntity.parse(data: response.data) {
+                    completion(.success(createTransaction))
+                } else {
+                    completion(.failure(InstntError(errorConstant: .error_SETUP)))
+                }
+                
+            }, failure: { error in
+                completion(.failure(InstntError(errorConstant: .error_SETUP)))
+            })
+        }
+    
     
     func getUploadUrl(transactionId: String, data: RequestGetUploadUrl, completion: @escaping(Result<String, InstntError>) -> Void) {
         let endpoint = "\(baseEndpoint)/transactions/\(transactionId)/attachments/"
@@ -121,7 +233,7 @@ class APIClient: NSObject {
                 if let data = data
                 {
                     let json = String(data: data, encoding: String.Encoding.utf8)
-                    print("Response data: \(String(describing: json))")
+                    print("Response data: \(String(describing: json)), statusCode: %i", urlresponse.statusCode)
                 }
                 if urlresponse.statusCode == 200 {
                     completion(.success((())))

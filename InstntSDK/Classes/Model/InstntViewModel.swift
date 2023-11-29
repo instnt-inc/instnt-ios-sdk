@@ -22,6 +22,24 @@ struct CreateTransaction: Encodable {
     }
 }
 
+
+struct ReInitializeTransaction: Encodable {
+    let formKey: String
+    let hideFormFields: Bool
+    let idmetricsVersion, format: String
+    let redirect: Bool
+    let instnttxnid: String
+    
+
+    enum CodingKeys: String, CodingKey {
+        case formKey = "form_key"
+        case hideFormFields = "hide_form_fields"
+        case idmetricsVersion = "idmetrics_version"
+        case format, redirect
+        case instnttxnid
+    }
+}
+
 struct ResultCreateTransaction: Decodable {
     let instnttxnid: String
     let otp_verification: Bool
@@ -29,6 +47,8 @@ struct ResultCreateTransaction: Decodable {
     let backend_service_url: String
     let signed_submit_form_url: String
     let document_verification: Bool
+    let behaviosec_api_url: String?
+    let behaviosec_tenant_id: String
     
     public init(from decoder:Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
@@ -38,6 +58,8 @@ struct ResultCreateTransaction: Decodable {
         fingerprintjs_browser_token = try values.decode(String.self, forKey: .fingerprintjs_browser_token)
         backend_service_url = try values.decode(String.self, forKey: .backend_service_url)
         signed_submit_form_url = try values.decode(String.self, forKey: .signed_submit_form_url)
+        behaviosec_api_url = try values.decodeIfPresent(String.self, forKey: .behaviosec_api_url)
+        behaviosec_tenant_id = try values.decode(String.self, forKey: .behaviosec_tenant_id)
     }
     
     enum CodingKeys: String, CodingKey {
@@ -47,6 +69,8 @@ struct ResultCreateTransaction: Decodable {
         case backend_service_url
         case signed_submit_form_url
         case document_verification
+        case behaviosec_api_url
+        case behaviosec_tenant_id
     }
 }
 

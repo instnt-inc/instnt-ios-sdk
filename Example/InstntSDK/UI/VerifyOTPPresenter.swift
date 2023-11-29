@@ -20,6 +20,10 @@ class VerifyOTPPresenter: BasePresenter {
         guard let view = Utils.getViewFromNib(name: "TextFieldView") as? TextFieldView  else {
             return nil
         }
+        
+        view.textField.accessibilityLabel = "otp"
+        view.textField.accessibilityIdentifier = "otp"
+        
         return view
     }()
     lazy var buttonView: ButtonView? = {
@@ -28,6 +32,14 @@ class VerifyOTPPresenter: BasePresenter {
         }
         return view
     }()
+    
+    lazy var skipBtnView: ButtonView? = {
+        guard let view = Utils.getViewFromNib(name: "ButtonView") as? ButtonView  else {
+            return nil
+        }
+        return view
+    }()
+    
     override func presentScene() {
         super.presentScene()
         self.buildView()
@@ -36,6 +48,10 @@ class VerifyOTPPresenter: BasePresenter {
     func buildView() {
         addVerifyOTP()
         addButton()
+      
+        if SignUpManager.shared.type == .resumeSignUp {
+            addSkipButton()
+        }
     }
     
     func addVerifyOTP() {
@@ -71,6 +87,23 @@ class VerifyOTPPresenter: BasePresenter {
                 }
             })
         })
+        buttonView?.button.accessibilityIdentifier = "nextBtnOTP"
         self.vc?.stackView.addOptionalArrangedSubview(buttonView)
+    }
+    
+    func addSkipButton() {
+        skipBtnView?.decorateView(type: .skip, completion: {
+            guard let transactionID = ExampleShared.shared.transactionID else {
+                if let vc = self.vc {
+                    self.vc?.showSimpleAlert("Invalid transacation ID, please try again later", target: vc)
+                }
+                return
+            }
+            guard let vc = Utils.getStoryboardInitialViewController("Address") as? AddressVC else {
+                return
+            }
+            self.vc?.navigationController?.pushViewController(vc, animated: true)
+        })
+        self.vc?.stackView.addOptionalArrangedSubview(skipBtnView)
     }
 }
